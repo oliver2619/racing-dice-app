@@ -1,0 +1,4 @@
+<button routerLink="/dice" routerLinkActive="checked"><img src="assets/icons/dice.png"></button>
+<button routerLink="/carSetup" routerLinkActive="checked"><img src="assets/icons/wrench_orange.png"></button>
+<button routerLink="/race" routerLinkActive="checked"><img src="assets/icons/steering_wheel_racing.png"></button>
+<button (click)="toggleFullscreen()"><img *ngIf="!fullscreen" src="assets/icons/panel_resize.png"><img *ngIf="fullscreen" src="assets/icons/panel_resize_actual.png"></button>

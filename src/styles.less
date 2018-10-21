@@ -1,0 +1,207 @@
+@fontFamily: Segoe UI, sans-serif;
+@fontSize: 1rem;
+@boxShadow: .2rem;
+@buttonTextShadow: .6rem;
+
+body {
+    font-family: @fontFamily;
+    font-size: @fontSize;
+    margin: 0px;
+    padding: 0px;
+}
+
+.app {
+    margin: 0px;
+    padding: 0rem;
+    background-image: url('assets/alu.jpg');
+    position: fixed;
+    overflow: scroll;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 1;
+}
+
+.page {
+    margin: 0px;
+    padding: .5rem;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 2;
+}
+
+.dialog {
+    background-image: url('assets/alu.jpg');
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    margin: 0rem;
+    padding: .5rem;
+    z-index: 3;
+
+    .buttonBar {
+        display: inline-block;
+        position: absolute;
+        margin: auto;
+        bottom: .5rem;
+    }
+}
+
+.dialog[hidden] {
+    display: none !important;
+}
+
+button, a.button {
+    color: black;
+    background-color: #b0b0b0;
+    min-height: 3rem;
+    min-width: 3rem;
+}
+
+img {
+    margin: 0px;
+    padding: 0px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+button.checked, a.button.checked {
+    background-color: white;
+    box-shadow: 0px 0px @boxShadow white;
+    border-color: white;
+}
+
+a.disabled, button.disabled, input.disabled {
+    opacity: .5;
+}
+
+input {
+    background-color: white;
+}
+
+input[type=number] {
+    text-align: right;
+}
+
+input, button, a.button {
+    border: 1px solid black;
+    border-radius: .25rem;
+    font-family: @fontFamily;
+    font-size: @fontSize;
+    margin: .4rem;
+    padding: .5rem;
+    display: inline-block;
+    box-shadow: .1rem .1rem @boxShadow black;
+    outline: 0px none black;
+}
+
+.yellow {
+    color: black;
+    background-color: #FFD400;
+}
+
+.yellow.checked {
+    background-color: #FFE57F;
+    border-color: #FFF1BF;
+    box-shadow: 0px 0px @boxShadow #FFF1BF;
+    text-shadow: 0px 0px @buttonTextShadow white;
+}
+
+.red {
+    color: black;
+    background-color: #FF0400;
+}
+
+.red.checked {
+    background-color: #FF8484;
+    border-color: #FFB2B2;
+    box-shadow: 0px 0px @boxShadow #FFB2B2;
+    text-shadow: 0px 0px @buttonTextShadow white;
+}
+
+.green {
+    color: black;
+    background-color: #15C200;
+}
+
+.green.checked {
+    background-color: #73D865;
+    border-color: #A3E599;
+    box-shadow: 0px 0px @boxShadow #A3E599;
+    text-shadow: 0px 0px @buttonTextShadow white;
+}
+
+.blue {
+    color: white;
+    background-color: #2C2FE0;
+}
+
+.blue.checked {
+    background-color: #8788E5;
+    border-color: #BFC0EF;
+    box-shadow: 0px 0px @boxShadow #BFC0EF;
+    text-shadow: 0px 0px @buttonTextShadow white;
+}
+
+.violet {
+    color: white;
+    background-color: #801AE0;
+}
+
+.violet.checked {
+    background-color: #B284E0;
+    border-color: #CEBAE2;
+    box-shadow: 0px 0px @boxShadow #CEBAE2;
+    text-shadow: 0px 0px @buttonTextShadow white;
+}
+
+.black {
+    color: white;
+    background-color: #000000
+}
+
+.black.checked {
+    background-color: #7F7F7F;
+    border-color: #CCCCCC;
+    box-shadow: 0px 0px @boxShadow #CCCCCC;
+    text-shadow: 0px 0px @buttonTextShadow white;
+}
+
+label, div.label {
+    font-family: @fontFamily;
+    font-size: @fontSize;
+    display: inline;
+    text-shadow: 1px 1px 1px white;
+    margin-right: .5rem;
+
+    img {
+        margin-right: .5rem;
+    }
+}
+
+p {
+    margin: 0px;
+    margin-top: 0.4rem;
+    margin-bottom: 0.4rem;
+    padding: 0px;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 0px;
+}
+
+tr {
+    padding: 0px;
+}
+
+td {
+    padding: 0px;
+}

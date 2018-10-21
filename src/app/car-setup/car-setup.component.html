@@ -1,0 +1,103 @@
+<app-nav-bar></app-nav-bar>
+
+<table>
+    <tr>
+        <td>
+            <label><img src="assets/icons/group.png">Team</label>
+        </td>
+        <td>
+            <app-team-select></app-team-select>
+        </td>
+        <td>
+            <button (click)="about('Teams')"><img src="assets/icons/help.png"></button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label><img src="assets/icons/tire.png">Tires</label>
+        </td>
+        <td>
+            <button [ngClass]="{checked: car.tires === 1}" (click)="car.tires = 1"><img src="assets/icons/weather_sun.png"></button>
+            <button [ngClass]="{checked: car.tires === 0}" (click)="car.tires = 0"><img src="assets/icons/weather_rain.png"></button>
+        </td>
+        <td>
+            <button (click)="about('Tires')"><img src="assets/icons/help.png"></button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label><img src="assets/icons/windy.png">Spoiler</label>
+        </td>
+        <td>
+            <button [ngClass]="{checked: car.flaps === 0}" (click)="car.flaps = 0">10 °</button>
+            <button [ngClass]="{checked: car.flaps === 1}" (click)="car.flaps = 1">20 °</button>
+            <button [ngClass]="{checked: car.flaps === 2}" (click)="car.flaps = 2">30 °</button>
+        </td>
+        <td>
+            <button (click)="about('Spoiler')"><img src="assets/icons/help.png"></button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label><img src="assets/icons/gear_in.png">Gear</label>
+        </td>
+        <td>
+            <button [ngClass]="{checked: car.gear === 0}" (click)="car.gear = 0">Acceleration</button>
+            <button [ngClass]="{checked: car.gear === 1}" (click)="car.gear = 1">Neutral</button>
+            <button [ngClass]="{checked: car.gear === 2}" (click)="car.gear = 2">Speed</button>
+        </td>
+        <td>
+            <button (click)="about('Gear')"><img src="assets/icons/help.png"></button>
+        </td>
+    </tr>
+    <tr hidden="hidden">
+        <td>
+            <label><img src="assets/icons/gas.png">Fuel</label>
+        </td>
+        <td>
+            <button [ngClass]="{disabled: !canDecFuel()}" (click)="decFuel()"><img src="assets/icons/delete.png"></button>
+            <input type="number" readonly="readonly" value="{{car.fuel}}" size="2">
+            <button [ngClass]="{disabled: !canIncFuel()}" (click)="incFuel()"><img src="assets/icons/add.png"></button>
+        </td>
+        <td>
+            <button><img src="assets/icons/help.png"></button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label><img src="assets/icons/fire.png">Quality</label>
+        </td>
+        <td>
+            <button [ngClass]="{checked: car.durability === 0}" (click)="car.durability = 0">Risky</button>
+            <button [ngClass]="{checked: car.durability === 1}" (click)="car.durability = 1">Neutral</button>
+            <button [ngClass]="{checked: car.durability === 2}" (click)="car.durability = 2">Durable</button>
+            <button *ngIf="needsRepair()" (click)="repair()"><img src="assets/icons/wrench_orange.png"> Repair</button>
+        </td>
+        <td>
+            <button (click)="about('Quality')"><img src="assets/icons/help.png"></button>
+        </td>
+    </tr>
+</table>
+<label><img src="assets/icons/dashboard.png">Max. speed</label><span>{{car.maxSpeed}}</span>
+<label><img src="assets/icons/dashboard.png">Avg. speed in curves</label><span>{{avgSpeedInCurve | number:'1.1-1'}}</span>
+<label><img src="assets/icons/dashboard.png">Avg. acceleration</label><span>{{avgAcceleration | number:'1.1-1'}}</span>
+<app-dialog title="Teams">
+    <p><b>Renault:</b> Better tires.</p>
+    <p><b>Ferrari:</b> Higher speed in curves.</p>
+    <p><b>Lotus:</b> Always starts first when another car is next to this one.</p>
+    <p><b>BMW:</b> Higher maximum speed.</p>
+    <p><b>Honda:</b> Higher acceleration.</p>
+    <p><b>Mercedes:</b> More durable car.</p>
+</app-dialog>
+<app-dialog title="Tires">
+    The car can accelerate and drive faster, when using tires suitable for the current weather conditions.
+</app-dialog>
+<app-dialog title="Spoiler">
+    The higher the value the faster the car is in curves but the lower the maximum speed is.
+</app-dialog>
+<app-dialog title="Gear">
+    The higher the value the faster the car can accelerate but the lower the maximum speed is.
+</app-dialog>
+<app-dialog title="Quality">
+    Driving a durable car means less acceleration and less high speed, but you will succeed more <img src="assets/icons/dynamite.png"> challenges.
+</app-dialog>

@@ -1,0 +1,9 @@
+<div class="dialog" [hidden]="!visible">
+    <h1>{{title}}</h1>
+    <div>
+    <ng-content></ng-content>
+    </div>
+    <div class="buttonBar">
+        <button (click)="close()"><img src="assets/icons/cross.png"></button>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+<app-nav-bar></app-nav-bar>
+<button [ngClass]="{checked: isHorn()}" (click)="horn()"><img src="assets/icons/horn.png"></button>
+<button (click)="reset()"><img src="assets/icons/traffic_lights_red.png"></button>
+<table>
+    <tr>
+        <td>
+            <label><img src="assets/icons/group.png">Team</label>
+        </td>
+        <td colspan="5">
+            <app-team-select></app-team-select>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label><img src="assets/icons/weather_cloudy.png">Weather</label>
+        </td>
+        <td colspan="5">
+            <button [ngClass]="{checked: weather === 0}" (click)="weather=0"><img src="assets/icons/weather_sun.png"></button>
+            <button [ngClass]="{checked: weather === 1}" (click)="weather=1"><img src="assets/icons/weather_cloudy.png"></button>
+            <button [ngClass]="{checked: weather === 2}" (click)="weather=2"><img src="assets/icons/weather_clouds.png"></button>
+            <button [ngClass]="{checked: weather === 3}" (click)="weather=3"><img src="assets/icons/weather_rain_little.png"></button>
+            <button [ngClass]="{checked: weather === 4}" (click)="weather=4"><img src="assets/icons/weather_rain.png"></button>
+            <button [ngClass]="{disabled: isShufflingWeather()}" (click)="shuffleWeather()"><img src="assets/icons/dice.png"></button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label><img src="assets/icons/arrow_turn_right.png">Curves</label>
+        </td>
+        <td colspan="5">
+            <button (click)="selectCurve()"><span *ngIf="currentCurve !== undefined">{{currentCurve}}</span><img *ngIf="currentCurve === undefined" src="assets/icons/arrow_up.png"></button>
+            <label>Max speed in curve: {{maxSpeedInCurve}}/{{maxSpeed}}</label>
+            <button [ngClass]="{checked: isCurvesJokerArmed()}" (click)="armCurvesJoker()"><img src="assets/icons/dynamite.png"></button>
+            <span *ngIf="curvesJokerNoFx"><img src="assets/icons/snail.png"></span>
+            <span *ngIf="curvesJokerFailure"><img src="assets/icons/caution_high_voltage.png"></span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label><img src="assets/icons/dashboard.png">Speed</label>
+        </td>
+        <td colspan="5">
+            <button *ngIf="!hasMaxAcceleration()" (click)="calcMaxAcceleration()"><img src="assets/icons/dice.png"></button>
+            <button *ngFor="let s of nextSpeedOptions" [ngClass]="{checked: nextSpeed === s}" (click)="nextSpeed = s">{{s}}</button>
+            <button [ngClass]="{checked: isSpeedJokerArmed()}" (click)="armSpeedJoker()"><img src="assets/icons/dynamite.png"></button>
+            <span *ngIf="speedJokerNoFx"><img src="assets/icons/snail.png"></span>
+            <span *ngIf="speedJokerFailure"><img src="assets/icons/caution_high_voltage.png"></span>
+            <button [ngClass]="{disabled: !canGo()}" (click)="go()"><img src="assets/icons/arrow_up.png">Go<img src="assets/icons/arrow_up.png"></button>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <label><img src="assets/icons/gas.png">Fuel</label><span>{{fuel}}</span>
+            <label><img src="assets/icons/heart.png">Motor</label>
+            <img *ngIf="motorHealth &gt; 4" src="assets/icons/temperature_cold.png">
+            <img *ngIf="motorHealth === 4" src="assets/icons/temperature_cool.png">
+            <img *ngIf="motorHealth === 3" src="assets/icons/temperature_normal.png">
+            <img *ngIf="motorHealth === 2" src="assets/icons/temperature_warm.png">
+            <img *ngIf="motorHealth === 1" src="assets/icons/temperature_hot.png">
+            <img *ngIf="motorHealth &lt; 1" src="assets/icons/fire.png">
+            <label><img src="assets/icons/tire.png">Tires</label>
+            <img *ngIf="tiresHealth &gt; 4" src="assets/icons/temperature_cold.png">
+            <img *ngIf="tiresHealth === 4" src="assets/icons/temperature_cool.png">
+            <img *ngIf="tiresHealth === 3" src="assets/icons/temperature_normal.png">
+            <img *ngIf="tiresHealth === 2" src="assets/icons/temperature_warm.png">
+            <img *ngIf="tiresHealth === 1" src="assets/icons/temperature_hot.png">
+            <img *ngIf="tiresHealth &lt; 1" src="assets/icons/fire.png">
+    </tr>
+</table>
+<app-dialog title="Curve">
+    <button *ngFor="let c of curves" [ngClass]="{checked: currentCurve === c}" (click)="currentCurve = c">{{c}}</button>
+    <button [ngClass]="{checked: currentCurve === undefined}" (click)="currentCurve = undefined"><img src="assets/icons/arrow_up.png"></button>
+</app-dialog>
