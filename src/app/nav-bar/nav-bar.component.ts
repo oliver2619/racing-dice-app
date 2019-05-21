@@ -1,26 +1,29 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
+import {AppService} from '../app.service';
+import {AudioService} from '../audio.service';
 
 @Component({
     selector: 'app-nav-bar',
     templateUrl: './nav-bar.component.html',
     styleUrls: ['./nav-bar.component.css']
 })
-export class NavBarComponent implements OnInit {
+export class NavBarComponent {
 
-    constructor() {}
+    constructor(private appService: AppService, private audioService: AudioService) {}
 
     get fullscreen(): boolean {
-        return document.webkitFullscreenElement !== null;
+        return this.appService.fullscreen;
     }
 
+    get soundLevel(): number {
+        return this.audioService.volumeLevel;
+    }
+    
     toggleFullscreen(): void {
-        if (!this.fullscreen)
-            document.getElementById('app').webkitRequestFullscreen();
-        else
-            document.webkitExitFullscreen();
-        window.setTimeout(()=>{}, 100);
+        this.appService.toggleFullscreen();
     }
-
-    ngOnInit() {
+    
+    toggleSoundLevel(): void {
+        this.audioService.toggleVolumeLevel();
     }
 }

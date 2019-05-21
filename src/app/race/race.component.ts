@@ -1,64 +1,27 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Team} from '../model/teams';
+import {Component, ViewChild} from '@angular/core';
 import {RaceService} from './race.service';
-import {Weather} from '../model/race';
 import {CarSetupService} from '../car-setup/car-setup.service';
 import {JokerState, CarSetup} from '../model/carSetup';
-import {TeamSelectComponent} from '../team-select/team-select.component';
 import {DialogComponent} from '../dialog/dialog.component';
+import {AudioService} from '../audio.service';
 
 @Component({
     selector: 'app-race',
     templateUrl: './race.component.html',
     styleUrls: ['./race.component.css']
 })
-export class RaceComponent implements OnInit {
+export class RaceComponent {
 
     @ViewChild(DialogComponent)
     private selectCurveDialog: DialogComponent;
 
     private _nextSpeed: number = 0;
-    private _weatherShuffleInterval: number;
-    private _weatherShuffleTimeout: number;
 
-    private _horn = new Audio('assets/sounds/horn.mp3');
-    private _hornPlayed = false;
-
-    constructor(private raceService: RaceService, private carSetupService: CarSetupService) {
-        this._horn.addEventListener('ended', (ev: MediaStreamErrorEvent) => {this._hornPlayed = false;});
-    }
-
-    ngOnInit() {
-    }
-
-    get weather(): Weather {
-        return this.raceService.weather;
-    }
-
-    set weather(weather: Weather) {
-        this.raceService.weather = weather;
+    constructor(private raceService: RaceService, private carSetupService: CarSetupService, private audioService: AudioService) {
     }
 
     get maxSpeedInCurve(): number {
-        return this.currentCar.getMaxSpeedInCurve(this.currentCurve, this.weather);
-    }
-
-    isShufflingWeather(): boolean {
-        return this._weatherShuffleTimeout !== undefined;
-    }
-
-    shuffleWeather(): void {
-        if (this.isShufflingWeather())
-            return;
-        this._weatherShuffleInterval = window.setInterval(() => {
-            this.raceService.shuffleWeather();
-        }, 100);
-        this._weatherShuffleTimeout = window.setTimeout(() => {
-            window.clearInterval(this._weatherShuffleInterval);
-            this._weatherShuffleInterval = undefined;
-            this._weatherShuffleTimeout = undefined;
-        }, 1000);
-
+        return this.currentCar.getMaxSpeedInCurve(this.currentCurve, this.raceService.weather);
     }
 
     get speed(): number {
@@ -77,7 +40,7 @@ export class RaceComponent implements OnInit {
         const ret: Array<number> = [];
         const car = this.currentCar;
         const minSpeed = car.nextMinSpeed;
-        const maxSpeed = car.getNextMaxSpeed(this.weather);
+        const maxSpeed = car.getNextMaxSpeed(this.raceService.weather);
         for (let i = minSpeed; i <= maxSpeed; ++i)
             ret.push(i);
         return ret;
@@ -96,7 +59,18 @@ export class RaceComponent implements OnInit {
     }
 
     armSpeedJoker(): void {
-        this.currentCar.armSpeedJoker();
+        if (!this.isSpeedJokerArmed()) {
+            this.currentCar.armSpeedJoker();
+            if (this.speedJokerNoFx)
+                this.audioService.motorFailure(false);
+            else if (this.speedJokerFailure) {
+                if (this.currentCar.totalHealth <= 0)
+                    this.audioService.crash();
+                else
+                    this.audioService.motorFailure(true);
+            } else
+                this.audioService.click();
+        }
     }
 
     isSpeedJokerArmed(): boolean {
@@ -140,8 +114,27 @@ export class RaceComponent implements OnInit {
         return this.currentCar.curvesJoker === JokerState.FAILURE;
     }
 
+    get currentSpeed(): number {
+        return this.currentCar.speed;
+    }
+
+    canArmCurvesJoker(): boolean {
+        return this.currentCar.canArmSpeedJoker(this.currentCar.currentCurve, this.raceService.weather);
+    }
+    
     armCurvesJoker(): void {
-        this.currentCar.armCurvesJoker();
+        if (!this.isCurvesJokerArmed()) {
+            this.currentCar.armCurvesJoker();
+            if (this.curvesJokerNoFx)
+                this.audioService.tireFailure(false);
+            else if (this.curvesJokerFailure) {
+                if (this.currentCar.totalHealth <= 0)
+                    this.audioService.crash();
+                else
+                    this.audioService.tireFailure(true);
+            }else
+                this.audioService.click();
+        }
     }
 
     isCurvesJokerArmed(): boolean {
@@ -161,28 +154,25 @@ export class RaceComponent implements OnInit {
     }
 
     canGo(): boolean {
-        return this.currentCar.canGo(this._nextSpeed, this.weather);
+        return this.currentCar.canGo(this._nextSpeed, this.raceService.weather);
     }
 
     go(): void {
-        this.currentCar.go(this._nextSpeed, this.weather);
+        this.currentCar.go(this._nextSpeed, this.raceService.weather);
     }
 
     horn(): void {
-        if (!this._hornPlayed) {
-            this._horn.play();
-            this._hornPlayed = true;
-        }
+        this.audioService.horn(this.carSetupService.team);
     }
 
     isHorn(): boolean {
-        return this._hornPlayed;
+        return this.audioService.hornPlayed;
     }
 
     reset(): void {
         this.currentCar.reset();
     }
-    
+
     private get currentCar(): CarSetup {
         return this.carSetupService.getSetup();
     }

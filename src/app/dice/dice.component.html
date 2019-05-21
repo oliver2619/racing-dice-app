@@ -1,12 +1,10 @@
-<app-nav-bar></app-nav-bar>
-
-<table>
-    <tr>
-        <td>
-            <label>Start</label>
-        </td>
-        <td>
-            <input type="number" readonly="readonly" value="{{startScore}}"><button (click)="getStartScore()" [ngClass]="{disabled: isGettingStartScore()}"><img src="assets/icons/dice.png"></button>
-        </td>
-    </tr>
-</table>
+<div class="page">
+    <div class="page-header">
+        <app-nav-bar></app-nav-bar>
+    </div>
+    <div class="page-content">
+        <h1>Würfel Challenge</h1>
+        <button (click)="getScore()" [ngClass]="{disabled: isGettingScore}"><img src="assets/icons/dice.png"></button>
+        <input type="number" readonly="readonly" value="{{score}}" class="challenge">
+    </div>
+</div>

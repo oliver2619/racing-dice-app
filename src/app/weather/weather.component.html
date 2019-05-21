@@ -1,0 +1,16 @@
+<div class="page">
+    <div class="page-header">
+        <app-nav-bar></app-nav-bar>
+    </div>
+    <div class="page-content">
+        <h1>Wetter ändern</h1>
+        <div class="btn-group">
+            <button [ngClass]="{checked: weather === 0}" (click)="weather=0"><img src="assets/icons/weather_sun.png"></button>
+            <button [ngClass]="{checked: weather === 1}" (click)="weather=1"><img src="assets/icons/weather_cloudy.png"></button>
+            <button [ngClass]="{checked: weather === 2}" (click)="weather=2"><img src="assets/icons/weather_clouds.png"></button>
+            <button [ngClass]="{checked: weather === 3}" (click)="weather=3"><img src="assets/icons/weather_rain_little.png"></button>
+            <button [ngClass]="{checked: weather === 4}" (click)="weather=4"><img src="assets/icons/weather_rain.png"></button>
+        </div>
+        <button [ngClass]="{disabled: isShufflingWeather()}" (click)="shuffleWeather()"><img src="assets/icons/dice.png"></button>
+    </div>
+</div>

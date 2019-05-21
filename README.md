@@ -2,9 +2,12 @@
 
 ## todo
 
-start / stop race collect statistics distance, avg. speed, efficiency
+* use localstore to autosave settings and states
 
-readonly text size
-responsive design
+## maybe
 
-fuel affect on properties, fuel flow
+* more balancing
+* background changes when selecting team
+* start / stop race collect statistics distance, avg. speed, efficiency
+* improve responsive design
+* fuel?

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChildren, QueryList} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {CarSetup} from '../model/carSetup';
 import {CarSetupService} from './car-setup.service';
 import {RaceService} from '../race/race.service';
@@ -9,17 +9,12 @@ import {DialogComponent} from '../dialog/dialog.component';
     templateUrl: './car-setup.component.html',
     styleUrls: ['./car-setup.component.css']
 })
-export class CarSetupComponent implements OnInit {
+export class CarSetupComponent {
 
-    @ViewChildren(DialogComponent)
-    private dlgTeams: QueryList<DialogComponent>;
-        
-    constructor(private carSetupService: CarSetupService, private raceService: RaceService) {
+    @ViewChild(DialogComponent)
+    private dlgTeams: DialogComponent;
 
-    }
-
-    ngOnInit() {
-    }
+    constructor(private carSetupService: CarSetupService, private raceService: RaceService) {}
 
     get avgSpeedInCurve(): number {
         return this.car.getAvgSpeedInCurve(this.raceService.weather);
@@ -58,8 +53,8 @@ export class CarSetupComponent implements OnInit {
     repair(): void {
         this.car.repair();
     }
-    
-    about(title: string): void {
-        this.dlgTeams.find(d => d.title === title).show();
+
+    about(): void {
+        this.dlgTeams.show();
     }
 }

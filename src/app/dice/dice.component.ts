@@ -1,35 +1,30 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
     selector: 'app-dice',
     templateUrl: './dice.component.html',
     styleUrls: ['./dice.component.css']
 })
-export class DiceComponent implements OnInit {
+export class DiceComponent {
 
-    private _startScore: number;
+    private _score: number;
     private _timeout: number;
 
-    constructor() {}
-
-    ngOnInit() {
+    get score(): number {
+        return this._score;
     }
 
-    get startScore(): number {
-        return this._startScore;
-    }
-
-    isGettingStartScore(): boolean {
+    get isGettingScore(): boolean {
         return this._timeout !== undefined;
     }
-    
-    getStartScore(): void {
-        if (this.isGettingStartScore())
+
+    getScore(): void {
+        if (this.isGettingScore)
             return;
-        this._startScore = undefined;
-        this._timeout = window.setTimeout(()=>{
-            this._startScore = Math.floor(Math.exp(Math.random() * Math.log(1001)) - 1);
+        this._score = undefined;
+        this._timeout = window.setTimeout(() => {
+            this._score = Math.floor(Math.exp(Math.random() * Math.log(1235)) - 1);
             this._timeout = undefined;
-        }, 1000);
+        }, 1200);
     }
 }

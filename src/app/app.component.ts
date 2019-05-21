@@ -1,4 +1,5 @@
-import {Component, ViewChild, ElementRef, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
+import {AppService} from './app.service';
 
 @Component({
     selector: 'app-root',
@@ -7,7 +8,18 @@ import {Component, ViewChild, ElementRef, OnInit} from '@angular/core';
 })
 export class AppComponent implements OnInit {
 
+    @ViewChild('app') element: ElementRef;
+    
+    constructor(private appService: AppService) {}
+    
     ngOnInit(): void {
-        
+        document.addEventListener("contextmenu", (ev: PointerEvent) => {
+            ev.preventDefault();
+        });
+        document.addEventListener("selectstart", (ev: Event) => {
+            ev.preventDefault();
+        });
+        this.appService.registerFullScreenElement(this.element.nativeElement);
     }
+
 }

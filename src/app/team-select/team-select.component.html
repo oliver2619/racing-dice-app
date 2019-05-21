@@ -1,6 +1,24 @@
-<button [ngClass]="{checked: team === 0}" (click)="team=0" class="yellow">Renault</button>
-<button [ngClass]="{checked: team === 1}" (click)="team=1" class="red">Ferrari</button>
-<button [ngClass]="{checked: team === 2}" (click)="team=2" class="green">Lotus</button>
-<button [ngClass]="{checked: team === 3}" (click)="team=3" class="blue">BMW</button>
-<button [ngClass]="{checked: team === 4}" (click)="team=4" class="violet">Honda</button>
-<button [ngClass]="{checked: team === 5}" (click)="team=5" class="black">Mercedes</button>
+<div class="page">
+    <div class="page-header">
+        <app-nav-bar><button (click)="about()"><img src="assets/icons/help.png"></button></app-nav-bar>
+    </div>
+    <div class="page-content">
+        <h1>Wähle dein Team</h1>
+        <div class="btn-group">
+            <button [ngClass]="{checked: team === 0}" (click)="team=0" class="yellow">Renault</button>
+            <button [ngClass]="{checked: team === 1}" (click)="team=1" class="red">Ferrari</button>
+            <button [ngClass]="{checked: team === 2}" (click)="team=2" class="green">Lotus</button>
+            <button [ngClass]="{checked: team === 3}" (click)="team=3" class="blue">BMW</button>
+            <button [ngClass]="{checked: team === 4}" (click)="team=4" class="violet">Honda</button>
+            <button [ngClass]="{checked: team === 5}" (click)="team=5" class="black">Mercedes</button>
+        </div>
+    </div>
+</div>
+<app-dialog>
+    <p><b>Renault:</b> Bessere Reifen.</p>
+    <p><b>Ferrari:</b> Schneller in Kurven.</p>
+    <p><b>Lotus:</b> Überholbonus.</p>
+    <p><b>BMW:</b> Schnellstes Auto.</p>
+    <p><b>Honda:</b> Höchste Beschleunigung.</p>
+    <p><b>Mercedes:</b> Stabilstes Auto.</p>
+</app-dialog>

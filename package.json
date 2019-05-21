@@ -5,7 +5,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod --base-href /racing/",
+    "buildLocal": "ng build --prod --base-href /racing/",
+    "buildPublic": "ng build --prod --base-href /racing-dice-app/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

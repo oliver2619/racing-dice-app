@@ -1,21 +1,22 @@
-import {Component, OnInit, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import {Team} from '../model/teams';
 import {CarSetupService} from '../car-setup/car-setup.service';
+import {DialogComponent} from '../dialog/dialog.component';
 
 @Component({
     selector: 'app-team-select',
     templateUrl: './team-select.component.html',
     styleUrls: ['./team-select.component.css']
 })
-export class TeamSelectComponent implements OnInit {
+export class TeamSelectComponent {
+
+    @ViewChild(DialogComponent)
+    private dlgTeams: DialogComponent;
 
     @Output()
     onChange = new EventEmitter<Team>();
 
     constructor(private carSetupService: CarSetupService) {}
-
-    ngOnInit() {
-    }
 
     get team(): number {
         return this.carSetupService.team;
@@ -24,5 +25,9 @@ export class TeamSelectComponent implements OnInit {
     set team(team: number) {
         this.carSetupService.team = team;
         this.onChange.emit(team);
+    }
+
+    about(): void {
+        this.dlgTeams.show();
     }
 }

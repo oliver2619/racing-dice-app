@@ -164,6 +164,16 @@ export class CarSetup {
         return this._curvesJoker;
     }
 
+    canArmSpeedJoker(curve: number, weather: Weather): boolean {
+        const oldJoker = this._curvesJoker;
+        this._curvesJoker = JokerState.UNSET;
+        const v1 = this.getMaxSpeedInCurve(curve, weather);
+        this._curvesJoker = JokerState.SUCCESS;
+        const v2 = this.getMaxSpeedInCurve(curve, weather);
+        this._curvesJoker = oldJoker;
+        return v2 > v1;
+    }
+    
     armCurvesJoker(): void {
         if (this._curvesJoker === JokerState.UNSET && this.totalHealth > 0) {
             this._curvesJoker = this.getJokerChallenge();
@@ -303,6 +313,9 @@ export class CarSetup {
     }
 
     private getBonusDurability(): number {
-        return this._durability - 1;
+        let ret = this._durability - 1;
+        if (this._team === Team.BLACK)
+            ret += .5;
+        return ret;
     }
 }

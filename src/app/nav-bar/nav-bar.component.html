@@ -1,4 +1,23 @@
-<button routerLink="/dice" routerLinkActive="checked"><img src="assets/icons/dice.png"></button>
-<button routerLink="/carSetup" routerLinkActive="checked"><img src="assets/icons/wrench_orange.png"></button>
-<button routerLink="/race" routerLinkActive="checked"><img src="assets/icons/steering_wheel_racing.png"></button>
-<button (click)="toggleFullscreen()"><img *ngIf="!fullscreen" src="assets/icons/panel_resize.png"><img *ngIf="fullscreen" src="assets/icons/panel_resize_actual.png"></button>
+<div class="nav-bar">
+    <div class="btn-group nav-item">
+        <button routerLink="/dice" routerLinkActive="checked"><img src="assets/icons/dice.png"></button>
+        <button routerLink="/team" routerLinkActive="checked"><img src="assets/icons/group.png"></button>
+        <button routerLink="/weather" routerLinkActive="checked"><img src="assets/icons/weather_cloudy.png"></button>
+        <button routerLink="/carSetup" routerLinkActive="checked"><img src="assets/icons/wrench_orange.png"></button>
+        <button routerLink="/race" routerLinkActive="checked"><img src="assets/icons/steering_wheel_racing.png"></button>
+    </div>
+    <div class="nav-item">
+        <ng-content></ng-content>
+    </div>
+    <div class="btn-group nav-item">
+        <button (click)="toggleSoundLevel()">
+            <img *ngIf="soundLevel == 0" src="assets/icons/sound_mute.png">
+            <img *ngIf="soundLevel == 1" src="assets/icons/sound_none.png">
+            <img *ngIf="soundLevel &gt; 1" src="assets/icons/sound.png">
+        </button>
+        <button (click)="toggleFullscreen()">
+            <img *ngIf="!fullscreen" src="assets/icons/panel_resize.png">
+            <img *ngIf="fullscreen" src="assets/icons/panel_resize_actual.png">
+        </button>
+    </div>
+</div>

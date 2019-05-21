@@ -1,56 +1,114 @@
 @fontFamily: Segoe UI, sans-serif;
 @fontSize: 1rem;
-@boxShadow: .2rem;
+@boxShadow: .6rem;
+@boxShadow2: 1.5rem;
 @buttonTextShadow: .6rem;
+@borderRadius: .25rem;
+
+// global
+
+body, h1, h2, label, div.label, button, a {
+    font-family: @fontFamily;
+}
 
 body {
-    font-family: @fontFamily;
-    font-size: @fontSize;
     margin: 0px;
     padding: 0px;
 }
 
 .app {
-    margin: 0px;
-    padding: 0rem;
     background-image: url('assets/alu.jpg');
-    position: fixed;
-    overflow: scroll;
+    position: absolute;
     top: 0px;
     left: 0px;
     right: 0px;
     bottom: 0px;
     z-index: 1;
+    margin: 0px;
+    padding: 0px;
 }
+
+// page
 
 .page {
-    margin: 0px;
-    padding: .5rem;
-    position: absolute;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
     top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    z-index: 2;
 }
 
+.page-header {
+    flex-grow: 0;
+}
+
+.page-footer {
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+.page-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    overflow: auto;
+}
+
+.page-content h1 {
+    margin: 0px;
+}
+
+.footer-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: stretch;
+    flex-grow: 1;
+}
+
+// nav-bar
+
+.nav-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: space-between;
+    align-items: center;
+}
+
+.nav-item {
+    margin: .4rem;
+}
+
+// dialog
+
 .dialog {
-    background-image: url('assets/alu.jpg');
+    background-color: #d0d0d0;
     display: block;
-    position: absolute;
+    position: fixed;
     top: 0px;
     left: 0px;
     right: 0px;
     bottom: 0px;
     margin: 0rem;
-    padding: .5rem;
+    padding: .4rem;
     z-index: 3;
+    overflow: auto;
 
-    .buttonBar {
-        display: inline-block;
-        position: absolute;
-        margin: auto;
-        bottom: .5rem;
+    h1 {
+        margin: .4rem;
+    }
+
+    h2 {
+        font-weight: bold;
+        margin: .2rem;
+        margin-top: .3rem;
+        margin-bottom: .1rem;
     }
 }
 
@@ -58,11 +116,39 @@ body {
     display: none !important;
 }
 
+// buttons
+
 button, a.button {
     color: black;
-    background-color: #b0b0b0;
-    min-height: 3rem;
-    min-width: 3rem;
+    background: rgb(193,198,200);
+    background: radial-gradient(circle, rgba(193,198,200,1) 0%, rgba(134,143,153,1) 100%);
+}
+
+button.checked, a.button.checked {
+    background: rgb(255,255,255);
+    background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(208,208,208,1) 100%);
+    box-shadow: 0px 0px @boxShadow white;
+    border-color: white;
+}
+
+a.disabled, button.disabled, input.disabled {
+    opacity: .5;
+}
+
+.btn-group {
+    display: inline-flex;
+}
+
+.btn-group button, .btn-group a.button {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-left-style: none;
+}
+
+.btn-group button:first-child, .btn-group a.button:first-child {
+    border-left-style: solid;
 }
 
 img {
@@ -72,31 +158,19 @@ img {
     vertical-align: middle;
 }
 
-button.checked, a.button.checked {
-    background-color: white;
-    box-shadow: 0px 0px @boxShadow white;
-    border-color: white;
-}
-
-a.disabled, button.disabled, input.disabled {
-    opacity: .5;
-}
-
 input {
     background-color: white;
 }
 
-input[type=number] {
-    text-align: right;
+input.challenge {
+    font-size: @fontSize * 2;
+    text-align: center;
+    width: 5em;
 }
 
 input, button, a.button {
     border: 1px solid black;
-    border-radius: .25rem;
     font-family: @fontFamily;
-    font-size: @fontSize;
-    margin: .4rem;
-    padding: .5rem;
     display: inline-block;
     box-shadow: .1rem .1rem @boxShadow black;
     outline: 0px none black;
@@ -104,93 +178,108 @@ input, button, a.button {
 
 .yellow {
     color: black;
-    background-color: #FFD400;
+    background: rgb(255,212,0);
+    background: radial-gradient(circle, rgba(255,212,0,1) 0%, rgba(215,179,0,1) 100%);
 }
 
 .yellow.checked {
-    background-color: #FFE57F;
+    background: rgb(255,244,203);
+    background: radial-gradient(circle, rgba(255,244,203,1) 0%, rgba(255,219,44,1) 100%);  
     border-color: #FFF1BF;
-    box-shadow: 0px 0px @boxShadow #FFF1BF;
+    box-shadow: 0px 0px @boxShadow2 #FFF1BF;
     text-shadow: 0px 0px @buttonTextShadow white;
 }
 
 .red {
     color: black;
-    background-color: #FF0400;
+    background: rgb(255,4,0);
+    background: radial-gradient(circle, rgba(255,4,0,1) 0%, rgba(214,3,0,1) 100%);
 }
 
 .red.checked {
-    background-color: #FF8484;
+    background: rgb(255,92,90);
+    background: radial-gradient(circle, rgba(255,111,109,1) 0%, rgba(255,37,34,1) 100%);
     border-color: #FFB2B2;
-    box-shadow: 0px 0px @boxShadow #FFB2B2;
+    box-shadow: 0px 0px @boxShadow2 #FFB2B2;
     text-shadow: 0px 0px @buttonTextShadow white;
 }
 
 .green {
     color: black;
-    background-color: #15C200;
+    background: rgb(21,194,0);
+    background: radial-gradient(circle, rgba(21,194,0,1) 0%, rgba(26,130,13,1) 100%);
 }
 
 .green.checked {
-    background-color: #73D865;
+    background: rgb(158,255,147);
+    background: radial-gradient(circle, rgba(158,255,147,1) 0%, rgba(21,194,0,1) 100%);
     border-color: #A3E599;
-    box-shadow: 0px 0px @boxShadow #A3E599;
+    box-shadow: 0px 0px @boxShadow2 #A3E599;
     text-shadow: 0px 0px @buttonTextShadow white;
 }
 
 .blue {
     color: white;
-    background-color: #2C2FE0;
+    background: rgb(44,47,224);
+    background: radial-gradient(circle, rgba(44,47,224,1) 0%, rgba(47,48,110,1) 100%);
 }
 
 .blue.checked {
-    background-color: #8788E5;
+    color: black;
+    background: rgb(159,161,255);
+    background: radial-gradient(circle, rgba(159,161,255,1) 0%, rgba(64,67,236,1) 100%);
     border-color: #BFC0EF;
-    box-shadow: 0px 0px @boxShadow #BFC0EF;
+    box-shadow: 0px 0px @boxShadow2 #BFC0EF;
     text-shadow: 0px 0px @buttonTextShadow white;
 }
 
 .violet {
     color: white;
-    background-color: #801AE0;
+    background: rgb(128,26,224);
+    background: radial-gradient(circle, rgba(128,26,224,1) 0%, rgba(69,32,103,1) 100%);
 }
 
 .violet.checked {
-    background-color: #B284E0;
+    color: black;
+    background: rgb(207,157,255);
+    background: radial-gradient(circle, rgba(207,157,255,1) 0%, rgba(159,56,255,1) 100%);
     border-color: #CEBAE2;
-    box-shadow: 0px 0px @boxShadow #CEBAE2;
+    box-shadow: 0px 0px @boxShadow2 #CEBAE2;
     text-shadow: 0px 0px @buttonTextShadow white;
 }
 
 .black {
     color: white;
-    background-color: #000000
+    background: rgb(50,50,50);
+    background: radial-gradient(circle, rgba(50,50,50,1) 0%, rgba(0,0,0,1) 100%);
 }
 
 .black.checked {
-    background-color: #7F7F7F;
+    color: black;
+    background: rgb(159,159,159);
+    background: radial-gradient(circle, rgba(159,159,159,1) 0%, rgba(135,135,135,1) 44%, rgba(57,57,57,1) 100%);
     border-color: #CCCCCC;
-    box-shadow: 0px 0px @boxShadow #CCCCCC;
+    box-shadow: 0px 0px @boxShadow2 #CCCCCC;
     text-shadow: 0px 0px @buttonTextShadow white;
 }
 
 label, div.label {
-    font-family: @fontFamily;
-    font-size: @fontSize;
     display: inline;
     text-shadow: 1px 1px 1px white;
-    margin-right: .5rem;
 
     img {
-        margin-right: .5rem;
+        margin-right: .4rem;
     }
+}
+
+h1 {
+    text-shadow: 1px 1px 1px white;
 }
 
 p {
     margin: 0px;
-    margin-top: 0.4rem;
-    margin-bottom: 0.4rem;
     padding: 0px;
+    text-align: justify;
 }
 
 table {
@@ -202,6 +291,111 @@ tr {
     padding: 0px;
 }
 
-td {
-    padding: 0px;
+@media all and (max-width: 539px) {
+
+    body, input, label, button, a.button, div.label, h2 {
+        font-size: @fontSize - .1rem;
+    }
+
+    h1 {
+        font-size: @fontSize + .1rem;
+    }
+
+    button, a.button {
+        min-width: 2.5rem;
+        min-height: 2.5rem;
+    }
+
+    input, button, a.button {
+        border-radius: 0px;
+        padding: .3rem;
+    }
+
+    .btn-group button:first-child, .btn-group a.button:first-child {
+        border-top-left-radius: @borderRadius / 2;
+        border-bottom-left-radius: @borderRadius / 2;
+    }
+
+    .btn-group button:last-child, .btn-group a.button:last-child {
+        border-top-right-radius: @borderRadius / 2;
+        border-bottom-right-radius: @borderRadius / 2;
+    }
+
+    td {
+        padding: .2rem;
+    }
+
+    img  {
+        width: 28px;
+    }
+}
+
+@media all and (min-width: 540px) and (max-width: 719px) {
+
+    body, input, label, button, a.button, div.label, h2 {
+        font-size: @fontSize;
+    }
+
+    h1 {
+        font-size: @fontSize + .3rem;
+    }
+
+    button, a.button {
+        min-width: 3rem;
+        min-height: 3rem;
+    }
+
+    input, button, a.button {
+        border-radius: @borderRadius;
+        padding: .5rem;
+    }
+
+    .btn-group button:first-child, .btn-group a.button:first-child {
+        border-top-left-radius: @borderRadius;
+        border-bottom-left-radius: @borderRadius;
+    }
+
+    .btn-group button:last-child, .btn-group a.button:last-child {
+        border-top-right-radius: @borderRadius;
+        border-bottom-right-radius: @borderRadius;
+    }
+
+    td {
+        padding: .4rem;
+    }
+
+}
+
+@media all and (min-width: 720px) {
+    body, input, label, button, a.button, div.label, h2 {
+        font-size: @fontSize + .3rem;
+    }
+
+    h1 {
+        font-size: @fontSize + .5rem;
+    }
+
+    button, a.button {
+        min-width: 4rem;
+        min-height: 4rem;
+    }
+
+    input, button, a.button {
+        border-radius: @borderRadius * 1.5;
+        padding: 1rem;
+    }
+
+    .btn-group button:first-child, .btn-group a.button:first-child {
+        border-top-left-radius: @borderRadius * 1.5;
+        border-bottom-left-radius: @borderRadius * 1.5;
+    }
+
+    .btn-group button:last-child, .btn-group a.button:last-child {
+        border-top-right-radius: @borderRadius * 1.5;
+        border-bottom-right-radius: @borderRadius * 1.5;
+    }
+
+    td {
+        padding: .6rem;
+    }
 }
