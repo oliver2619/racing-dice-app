@@ -18,6 +18,8 @@ import { WeatherComponent } from './weather/weather.component';
 import {AppService} from './app.service';
 import {AudioService} from './audio.service';
 import { ButtonDirective } from './button.directive';
+import { HealthComponent } from './health/health.component';
+import { CanvasComponent } from './canvas/canvas.component';
 
 
 @NgModule({
@@ -31,7 +33,9 @@ import { ButtonDirective } from './button.directive';
         DialogComponent,
         NavBarComponent,
         WeatherComponent,
-        ButtonDirective
+        ButtonDirective,
+        HealthComponent,
+        CanvasComponent
     ],
     imports: [
         BrowserModule,

@@ -2,9 +2,18 @@
 
 ## todo
 
+* update Angular
+
 ## maybe
 
 * use localstore to autosave settings and states
-* background changes when selecting team
-* start / stop race collect statistics distance, avg. speed, efficiency
+    * selected team
+    * weather
+    * car setup
+    * race situation
+    * audio settings
+* start / stop race collect statistics
+    * distance
+    * avg. speed
+    * efficiency
 * fuel?

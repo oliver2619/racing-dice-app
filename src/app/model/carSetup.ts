@@ -108,7 +108,7 @@ export class CarSetup {
     }
 
     get driving(): boolean {
-        return this._speed > 0;
+        return this._speed > 0 || this._currentAccelDice !== undefined;
     }
     
     getNextSpeedOptions(weather: Weather): number[] {

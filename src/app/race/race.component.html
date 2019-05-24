@@ -6,7 +6,9 @@
         </app-nav-bar>
     </div>
     <div class="page-content">
-        <button *ngIf="!hasMaxAcceleration()" (click)="calcMaxAcceleration()"><img src="assets/icons/dice.png"></button>
+        <div *ngIf="!hasMaxAcceleration()">
+            <button (click)="calcMaxAcceleration()"><img src="assets/icons/dice.png"></button>
+        </div>
         <table *ngIf="hasMaxAcceleration()">
             <tr>
                 <td>
@@ -56,21 +58,11 @@
         </div>
         <div class="footer-item">
             <label><img src="assets/icons/heart.png">Motor</label>
-            <img *ngIf="motorHealth &gt; 4" src="assets/icons/temperature_cold.png">
-            <img *ngIf="motorHealth === 4" src="assets/icons/temperature_cool.png">
-            <img *ngIf="motorHealth === 3" src="assets/icons/temperature_normal.png">
-            <img *ngIf="motorHealth === 2" src="assets/icons/temperature_warm.png">
-            <img *ngIf="motorHealth === 1" src="assets/icons/temperature_hot.png">
-            <img *ngIf="motorHealth &lt; 1" src="assets/icons/fire.png">
+            <app-health [health]="motorHealth"></app-health>
         </div>
         <div class="footer-item">
             <label><img src="assets/icons/tire.png">Reifen</label>
-            <img *ngIf="tiresHealth &gt; 4" src="assets/icons/temperature_cold.png">
-            <img *ngIf="tiresHealth === 4" src="assets/icons/temperature_cool.png">
-            <img *ngIf="tiresHealth === 3" src="assets/icons/temperature_normal.png">
-            <img *ngIf="tiresHealth === 2" src="assets/icons/temperature_warm.png">
-            <img *ngIf="tiresHealth === 1" src="assets/icons/temperature_hot.png">
-            <img *ngIf="tiresHealth &lt; 1" src="assets/icons/fire.png">
+            <app-health [health]="tiresHealth"></app-health>
         </div>
     </div>
 </div>
