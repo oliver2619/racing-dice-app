@@ -4,7 +4,7 @@
     </div>
     <div class="page-content">
         <h1>Würfel Challenge</h1>
-        <button (click)="getScore()" [ngClass]="{disabled: isGettingScore}"><img src="assets/icons/dice.png"></button>
+        <button (click)="getScore()" [disabled]="isGettingScore"><img src="assets/icons/dice.png"></button>
         <input type="number" readonly="readonly" value="{{score}}" class="challenge">
     </div>
 </div>

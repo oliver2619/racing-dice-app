@@ -11,6 +11,6 @@
             <button [ngClass]="{checked: weather === 3}" (click)="weather=3"><img src="assets/icons/weather_rain_little.png"></button>
             <button [ngClass]="{checked: weather === 4}" (click)="weather=4"><img src="assets/icons/weather_rain.png"></button>
         </div>
-        <button [ngClass]="{disabled: isShufflingWeather()}" (click)="shuffleWeather()"><img src="assets/icons/dice.png"></button>
+        <button [disabled]="isShufflingWeather()" (click)="shuffleWeather()"><img src="assets/icons/dice.png"></button>
     </div>
 </div>

@@ -85,7 +85,7 @@ export class CarSetup {
     }
 
     get maxSpeed(): number {
-        if (this.totalHealth <= 0)
+        if (!this.alive)
             return 0;
         let bonus = 15;
         bonus -= this.getBonusFlaps();
@@ -107,8 +107,38 @@ export class CarSetup {
         return this._speedJoker;
     }
 
+    get driving(): boolean {
+        return this._speed > 0;
+    }
+    
+    getNextSpeedOptions(weather: Weather): number[] {
+        const ret: number[] = [];
+        const minSpeed = this.nextMinSpeed;
+        const maxSpeed = this.getNextMaxSpeed(weather);
+        for (let i = minSpeed; i <= maxSpeed; ++i)
+            ret.push(i);
+        return ret;
+    }
+
+    canArmSpeedJoker(weather: Weather): boolean {
+        if (this._speedJoker !== JokerState.UNSET)
+            return true;
+        const oldSpeedJoker = this._speedJoker;
+        const oldCurvesJoker = this._curvesJoker;
+        if (this._curvesJoker === JokerState.UNSET)
+            this._curvesJoker = JokerState.SUCCESS;
+        this._speedJoker = JokerState.UNSET;
+        const v1 = this.getNextSpeedOptions(weather).length;
+        this._speedJoker = JokerState.SUCCESS;
+        const v2 = this.getNextSpeedOptions(weather).length;
+        this._speedJoker = oldSpeedJoker;
+        this._curvesJoker = oldCurvesJoker;
+        return v2 > v1;
+
+    }
+
     armSpeedJoker(): void {
-        if (this._speedJoker === JokerState.UNSET && this.totalHealth > 0) {
+        if (this._speedJoker === JokerState.UNSET && this.alive) {
             this._speedJoker = this.getJokerChallenge();
             if (this._speedJoker === JokerState.FAILURE) {
                 --this._motorHealth;
@@ -164,18 +194,24 @@ export class CarSetup {
         return this._curvesJoker;
     }
 
-    canArmSpeedJoker(curve: number, weather: Weather): boolean {
-        const oldJoker = this._curvesJoker;
+    canArmCurvesJoker(weather: Weather): boolean {
+        if (this._curvesJoker !== JokerState.UNSET)
+            return true;
+        const oldCurvesJoker = this._curvesJoker;
+        const oldSpeedJoker = this._speedJoker;
+        if (this._speedJoker === JokerState.UNSET)
+            this._speedJoker = JokerState.SUCCESS;
         this._curvesJoker = JokerState.UNSET;
-        const v1 = this.getMaxSpeedInCurve(curve, weather);
+        const v1 = this.getNextSpeedOptions(weather).length;
         this._curvesJoker = JokerState.SUCCESS;
-        const v2 = this.getMaxSpeedInCurve(curve, weather);
-        this._curvesJoker = oldJoker;
+        const v2 = this.getNextSpeedOptions(weather).length;
+        this._curvesJoker = oldCurvesJoker;
+        this._speedJoker = oldSpeedJoker;
         return v2 > v1;
     }
-    
+
     armCurvesJoker(): void {
-        if (this._curvesJoker === JokerState.UNSET && this.totalHealth > 0) {
+        if (this._curvesJoker === JokerState.UNSET && this.alive) {
             this._curvesJoker = this.getJokerChallenge();
             if (this._curvesJoker === JokerState.FAILURE) {
                 --this._tiresHealth;
@@ -213,9 +249,14 @@ export class CarSetup {
         return Math.min(this._tiresHealth, this._motorHealth);
     }
 
+    get alive(): boolean {
+        return this.totalHealth > 0;
+    }
+    
     repair(): void {
         this._motorHealth = CarSetup.maxHealth;
         this._tiresHealth = CarSetup.maxHealth;
+        this.reset();
     }
 
     canGo(speed: number, weather: Weather): boolean {
@@ -236,7 +277,7 @@ export class CarSetup {
         this._curvesJoker = JokerState.UNSET;
         this._currentAccelDice = undefined;
     }
-    
+
     private getAccelerationForDice(dice: number, weather: Weather): number {
         let bonus = 0;
         bonus += this.getBonusTires(weather);

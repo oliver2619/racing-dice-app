@@ -37,13 +37,7 @@ export class RaceComponent {
     }
 
     get nextSpeedOptions(): Array<number> {
-        const ret: Array<number> = [];
-        const car = this.currentCar;
-        const minSpeed = car.nextMinSpeed;
-        const maxSpeed = car.getNextMaxSpeed(this.raceService.weather);
-        for (let i = minSpeed; i <= maxSpeed; ++i)
-            ret.push(i);
-        return ret;
+        return this.currentCar.getNextSpeedOptions(this.raceService.weather);
     }
 
     get speedJokerNoFx(): boolean {
@@ -58,13 +52,17 @@ export class RaceComponent {
         return this.currentCar.maxSpeed;
     }
 
+    canArmSpeedJoker(): boolean {
+        return this.currentCar.canArmSpeedJoker(this.raceService.weather);
+    }
+
     armSpeedJoker(): void {
         if (!this.isSpeedJokerArmed()) {
             this.currentCar.armSpeedJoker();
             if (this.speedJokerNoFx)
                 this.audioService.motorFailure(false);
             else if (this.speedJokerFailure) {
-                if (this.currentCar.totalHealth <= 0)
+                if (!this.currentCar.alive)
                     this.audioService.crash();
                 else
                     this.audioService.motorFailure(true);
@@ -119,20 +117,20 @@ export class RaceComponent {
     }
 
     canArmCurvesJoker(): boolean {
-        return this.currentCar.canArmSpeedJoker(this.currentCar.currentCurve, this.raceService.weather);
+        return this.currentCar.canArmCurvesJoker(this.raceService.weather);
     }
-    
+
     armCurvesJoker(): void {
         if (!this.isCurvesJokerArmed()) {
             this.currentCar.armCurvesJoker();
             if (this.curvesJokerNoFx)
                 this.audioService.tireFailure(false);
             else if (this.curvesJokerFailure) {
-                if (this.currentCar.totalHealth <= 0)
+                if (!this.currentCar.alive)
                     this.audioService.crash();
                 else
                     this.audioService.tireFailure(true);
-            }else
+            } else
                 this.audioService.click();
         }
     }
@@ -145,6 +143,10 @@ export class RaceComponent {
         this.selectCurveDialog.show();
     }
 
+    isDriving(): boolean {
+        return this.currentCar.driving;
+    }
+    
     calcMaxAcceleration(): void {
         this.currentCar.calcMaxAcceleration();
     }

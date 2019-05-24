@@ -1,10 +1,8 @@
 <div class="dialog" [hidden]="!visible">
     <div class="page">
-    <div class="page-content">
-        <ng-content></ng-content>
-    </div>
-    <div class="page-footer">
-        <button (click)="close()"><img src="assets/icons/cross.png"></button>
-    </div>
+        <div class="page-content">
+            <ng-content></ng-content>
+            <button (click)="close()"><img src="assets/icons/cross.png"></button>
         </div>
+    </div>
 </div>

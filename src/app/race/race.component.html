@@ -2,7 +2,7 @@
     <div class="page-header">
         <app-nav-bar>
             <button class="silent" [ngClass]="{checked: isHorn()}" (click)="horn()"><img src="assets/icons/horn.png"></button>
-            <button (click)="reset()"><img src="assets/icons/traffic_lights_red.png"></button>
+            <button [disabled]="!isDriving()" (click)="reset()"><img src="assets/icons/traffic_lights_red.png"></button>
         </app-nav-bar>
     </div>
     <div class="page-content">
@@ -39,13 +39,13 @@
                     </div>
                 </td>
                 <td>
-                    <button class="silent" [ngClass]="{checked: isSpeedJokerArmed()}" (click)="armSpeedJoker()"><img src="assets/icons/dynamite.png"></button>
+                    <button *ngIf="canArmSpeedJoker()" class="silent" [ngClass]="{checked: isSpeedJokerArmed()}" (click)="armSpeedJoker()"><img src="assets/icons/dynamite.png"></button>
                     <span *ngIf="speedJokerNoFx"><img src="assets/icons/snail.png"></span>
                     <span *ngIf="speedJokerFailure"><img src="assets/icons/caution_high_voltage.png"></span>
                 </td>
             </tr>
         </table>
-        <button *ngIf="hasMaxAcceleration()" [ngClass]="{disabled: !canGo()}" (click)="go()"><img src="assets/icons/arrow_up.png">Fahren<img src="assets/icons/arrow_up.png"></button>
+        <button *ngIf="hasMaxAcceleration()" [disabled]="!canGo()" (click)="go()"><img src="assets/icons/arrow_up.png">Fahren<img src="assets/icons/arrow_up.png"></button>
     </div>
     <div class="page-footer">
         <div class="footer-item">
