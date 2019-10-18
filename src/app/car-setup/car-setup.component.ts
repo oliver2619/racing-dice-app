@@ -11,7 +11,7 @@ import {DialogComponent} from '../dialog/dialog.component';
 })
 export class CarSetupComponent {
 
-    @ViewChild(DialogComponent)
+    @ViewChild(DialogComponent, {static: true})
     private dlgTeams: DialogComponent;
 
     constructor(private carSetupService: CarSetupService, private raceService: RaceService) {}

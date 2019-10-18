@@ -8,7 +8,7 @@ import {AppService} from './app.service';
 })
 export class AppComponent implements OnInit {
 
-    @ViewChild('app') element: ElementRef;
+    @ViewChild('app', {static: true}) element: ElementRef;
     
     constructor(private appService: AppService) {}
     

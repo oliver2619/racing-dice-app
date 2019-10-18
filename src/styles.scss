@@ -1,14 +1,14 @@
-@fontFamily: Segoe UI, sans-serif;
-@fontSize: 1rem;
-@boxShadow: .6rem;
-@boxShadow2: 1.5rem;
-@buttonTextShadow: .6rem;
-@borderRadius: .25rem;
+$fontFamily: Segoe UI, sans-serif;
+$fontSize: 1rem;
+$boxShadow: .6rem;
+$boxShadow2: 1.5rem;
+$buttonTextShadow: .6rem;
+$borderRadius: .25rem;
 
 // global
 
 body, h1, h2, label, div.label, button, a {
-    font-family: @fontFamily;
+    font-family: $fontFamily;
 }
 
 body {
@@ -137,7 +137,7 @@ button, a.button {
 button.checked, a.button.checked {
     background: rgb(255,255,255);
     background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(208,208,208,1) 100%);
-    box-shadow: 0px 0px @boxShadow white;
+    box-shadow: 0px 0px $boxShadow white;
     border-color: white;
 }
 
@@ -173,16 +173,16 @@ input {
 }
 
 input.challenge {
-    font-size: @fontSize * 2;
+    font-size: $fontSize * 2;
     text-align: center;
     width: 5em;
 }
 
 input, button, a.button {
     border: 1px solid black;
-    font-family: @fontFamily;
+    font-family: $fontFamily;
     display: inline-block;
-    box-shadow: .1rem .1rem @boxShadow black;
+    box-shadow: .1rem .1rem $boxShadow black;
     outline: 0px none black;
 }
 
@@ -196,8 +196,8 @@ input, button, a.button {
     background: rgb(255,244,203);
     background: radial-gradient(circle, rgba(255,244,203,1) 0%, rgba(255,219,44,1) 100%);  
     border-color: #FFF1BF;
-    box-shadow: 0px 0px @boxShadow2 #FFF1BF;
-    text-shadow: 0px 0px @buttonTextShadow white;
+    box-shadow: 0px 0px $boxShadow2 #FFF1BF;
+    text-shadow: 0px 0px $buttonTextShadow white;
 }
 
 .red {
@@ -210,8 +210,8 @@ input, button, a.button {
     background: rgb(255,92,90);
     background: radial-gradient(circle, rgba(255,111,109,1) 0%, rgba(255,37,34,1) 100%);
     border-color: #FFB2B2;
-    box-shadow: 0px 0px @boxShadow2 #FFB2B2;
-    text-shadow: 0px 0px @buttonTextShadow white;
+    box-shadow: 0px 0px $boxShadow2 #FFB2B2;
+    text-shadow: 0px 0px $buttonTextShadow white;
 }
 
 .green {
@@ -224,8 +224,8 @@ input, button, a.button {
     background: rgb(158,255,147);
     background: radial-gradient(circle, rgba(158,255,147,1) 0%, rgba(21,194,0,1) 100%);
     border-color: #A3E599;
-    box-shadow: 0px 0px @boxShadow2 #A3E599;
-    text-shadow: 0px 0px @buttonTextShadow white;
+    box-shadow: 0px 0px $boxShadow2 #A3E599;
+    text-shadow: 0px 0px $buttonTextShadow white;
 }
 
 .blue {
@@ -239,8 +239,8 @@ input, button, a.button {
     background: rgb(159,161,255);
     background: radial-gradient(circle, rgba(159,161,255,1) 0%, rgba(64,67,236,1) 100%);
     border-color: #BFC0EF;
-    box-shadow: 0px 0px @boxShadow2 #BFC0EF;
-    text-shadow: 0px 0px @buttonTextShadow white;
+    box-shadow: 0px 0px $boxShadow2 #BFC0EF;
+    text-shadow: 0px 0px $buttonTextShadow white;
 }
 
 .violet {
@@ -254,8 +254,8 @@ input, button, a.button {
     background: rgb(207,157,255);
     background: radial-gradient(circle, rgba(207,157,255,1) 0%, rgba(159,56,255,1) 100%);
     border-color: #CEBAE2;
-    box-shadow: 0px 0px @boxShadow2 #CEBAE2;
-    text-shadow: 0px 0px @buttonTextShadow white;
+    box-shadow: 0px 0px $boxShadow2 #CEBAE2;
+    text-shadow: 0px 0px $buttonTextShadow white;
 }
 
 .black {
@@ -269,8 +269,8 @@ input, button, a.button {
     background: rgb(159,159,159);
     background: radial-gradient(circle, rgba(159,159,159,1) 0%, rgba(135,135,135,1) 44%, rgba(57,57,57,1) 100%);
     border-color: #CCCCCC;
-    box-shadow: 0px 0px @boxShadow2 #CCCCCC;
-    text-shadow: 0px 0px @buttonTextShadow white;
+    box-shadow: 0px 0px $boxShadow2 #CCCCCC;
+    text-shadow: 0px 0px $buttonTextShadow white;
 }
 
 label, div.label {
@@ -304,11 +304,11 @@ tr {
 @media all and (max-width: 539px) {
 
     body, input, label, button, a.button, div.label, h2 {
-        font-size: @fontSize - .1rem;
+        font-size: $fontSize - .1rem;
     }
 
     h1 {
-        font-size: @fontSize + .1rem;
+        font-size: $fontSize + .1rem;
     }
 
     button, a.button {
@@ -322,13 +322,13 @@ tr {
     }
 
     .btn-group button:first-child, .btn-group a.button:first-child {
-        border-top-left-radius: @borderRadius / 2;
-        border-bottom-left-radius: @borderRadius / 2;
+        border-top-left-radius: $borderRadius / 2;
+        border-bottom-left-radius: $borderRadius / 2;
     }
 
     .btn-group button:last-child, .btn-group a.button:last-child {
-        border-top-right-radius: @borderRadius / 2;
-        border-bottom-right-radius: @borderRadius / 2;
+        border-top-right-radius: $borderRadius / 2;
+        border-bottom-right-radius: $borderRadius / 2;
     }
 
     td {
@@ -343,11 +343,11 @@ tr {
 @media all and (min-width: 540px) and (max-width: 719px) {
 
     body, input, label, button, a.button, div.label, h2 {
-        font-size: @fontSize;
+        font-size: $fontSize;
     }
 
     h1 {
-        font-size: @fontSize + .3rem;
+        font-size: $fontSize + .3rem;
     }
 
     button, a.button {
@@ -356,18 +356,18 @@ tr {
     }
 
     input, button, a.button {
-        border-radius: @borderRadius;
+        border-radius: $borderRadius;
         padding: .5rem;
     }
 
     .btn-group button:first-child, .btn-group a.button:first-child {
-        border-top-left-radius: @borderRadius;
-        border-bottom-left-radius: @borderRadius;
+        border-top-left-radius: $borderRadius;
+        border-bottom-left-radius: $borderRadius;
     }
 
     .btn-group button:last-child, .btn-group a.button:last-child {
-        border-top-right-radius: @borderRadius;
-        border-bottom-right-radius: @borderRadius;
+        border-top-right-radius: $borderRadius;
+        border-bottom-right-radius: $borderRadius;
     }
 
     td {
@@ -378,11 +378,11 @@ tr {
 
 @media all and (min-width: 720px) {
     body, input, label, button, a.button, div.label, h2 {
-        font-size: @fontSize + .3rem;
+        font-size: $fontSize + .3rem;
     }
 
     h1 {
-        font-size: @fontSize + .5rem;
+        font-size: $fontSize + .5rem;
     }
 
     button, a.button {
@@ -391,18 +391,18 @@ tr {
     }
 
     input, button, a.button {
-        border-radius: @borderRadius * 1.5;
+        border-radius: $borderRadius * 1.5;
         padding: 1rem;
     }
 
     .btn-group button:first-child, .btn-group a.button:first-child {
-        border-top-left-radius: @borderRadius * 1.5;
-        border-bottom-left-radius: @borderRadius * 1.5;
+        border-top-left-radius: $borderRadius * 1.5;
+        border-bottom-left-radius: $borderRadius * 1.5;
     }
 
     .btn-group button:last-child, .btn-group a.button:last-child {
-        border-top-right-radius: @borderRadius * 1.5;
-        border-bottom-right-radius: @borderRadius * 1.5;
+        border-top-right-radius: $borderRadius * 1.5;
+        border-bottom-right-radius: $borderRadius * 1.5;
     }
 
     td {

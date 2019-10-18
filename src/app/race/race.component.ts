@@ -12,7 +12,7 @@ import {AudioService} from '../audio.service';
 })
 export class RaceComponent {
 
-    @ViewChild(DialogComponent)
+    @ViewChild(DialogComponent, {static: true})
     private selectCurveDialog: DialogComponent;
 
     private _nextSpeed: number = 0;

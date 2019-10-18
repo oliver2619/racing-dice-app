@@ -10,7 +10,7 @@ import {DialogComponent} from '../dialog/dialog.component';
 })
 export class TeamSelectComponent {
 
-    @ViewChild(DialogComponent)
+    @ViewChild(DialogComponent, {static: true})
     private dlgTeams: DialogComponent;
 
     @Output()

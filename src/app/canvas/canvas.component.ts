@@ -9,7 +9,7 @@ import {Team} from '../model/teams';
 })
 export class CanvasComponent implements OnInit, OnDestroy {
 
-    @ViewChild('canvas') element: ElementRef;
+    @ViewChild('canvas', {static: true}) element: ElementRef;
 
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;

@@ -5,12 +5,12 @@ export class AppService {
     private _element: HTMLElement;
 
     constructor() {
-        document.addEventListener('webkitfullscreenchange', (ev: Event) => {
+        document.addEventListener('fullscreenchange', (ev: Event) => {
         });
     }
 
     get fullscreen(): boolean {
-        return document.webkitFullscreenElement !== null;
+        return document.fullscreenElement !== null;
     }
 
     registerFullScreenElement(element: HTMLElement): void {
@@ -19,8 +19,8 @@ export class AppService {
 
     toggleFullscreen(): void {
         if (!this.fullscreen)
-            this._element.webkitRequestFullscreen();
+            this._element.requestFullscreen();
         else
-            document.webkitExitFullscreen();
+            document.exitFullscreen();
     }
 }

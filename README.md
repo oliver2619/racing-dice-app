@@ -2,8 +2,6 @@
 
 ## todo
 
-* update Angular
-
 ## maybe
 
 * use localstore to autosave settings and states
