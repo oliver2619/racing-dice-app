@@ -339,23 +339,23 @@ tr {
     padding: 0px;
 }
 
-@media all and (max-width: 539px) {
-
+@media all and (max-height: 319px), all and (max-width: 639px) {
+    
     body, input, label, button, a.button, div.label, h2 {
-        font-size: $fontSize - .1rem;
+        font-size: $fontSize * .8;
     }
 
     h1 {
-        font-size: $fontSize + .1rem;
+        font-size: $fontSize * .8 * 1.2;
     }
 
     button, a.button {
-        min-width: 2.5rem;
-        min-height: 2.5rem;
+        min-width: 2rem;
+        min-height: 2rem;
     }
-
+    
     input, button, a.button {
-        border-radius: 0px;
+        border-radius: $borderRadius / 2;
         padding: .3rem;
     }
 
@@ -372,30 +372,26 @@ tr {
     td {
         padding: .2rem;
     }
-
-    img  {
-        width: 28px;
-    }
 }
 
-@media all and (min-width: 540px) and (max-width: 719px) {
-
+@media all and (min-height: 320px) and (max-height: 639px) and (min-width: 640px), all and (min-width: 640px) and (max-width: 1023px) and (min-height: 320px) {
+    
     body, input, label, button, a.button, div.label, h2 {
         font-size: $fontSize;
     }
 
     h1 {
-        font-size: $fontSize + .3rem;
+        font-size: $fontSize * 1.2;
     }
 
     button, a.button {
         min-width: 3rem;
         min-height: 3rem;
     }
-
+    
     input, button, a.button {
         border-radius: $borderRadius;
-        padding: .5rem;
+        padding: .4rem;
     }
 
     .btn-group button:first-child, .btn-group a.button:first-child {
@@ -407,27 +403,26 @@ tr {
         border-top-right-radius: $borderRadius;
         border-bottom-right-radius: $borderRadius;
     }
-
+    
     td {
         padding: .4rem;
     }
-
 }
 
-@media all and (min-width: 720px) {
+@media all and (min-height: 640px) and (min-width: 1024px) {
     body, input, label, button, a.button, div.label, h2 {
-        font-size: $fontSize + .3rem;
+        font-size: $fontSize * 1.8;
     }
 
     h1 {
-        font-size: $fontSize + .5rem;
+        font-size: $fontSize * 1.8 * 1.2;
     }
 
     button, a.button {
         min-width: 4rem;
         min-height: 4rem;
     }
-
+    
     input, button, a.button {
         border-radius: $borderRadius * 1.5;
         padding: 1rem;
@@ -442,8 +437,8 @@ tr {
         border-top-right-radius: $borderRadius * 1.5;
         border-bottom-right-radius: $borderRadius * 1.5;
     }
-
+    
     td {
-        padding: .6rem;
+        padding: 1rem;
     }
 }
