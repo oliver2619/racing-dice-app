@@ -1,8 +1,10 @@
 <div class="page">
     <div class="page-header">
         <app-nav-bar>
-            <button class="silent" [ngClass]="{checked: isHorn()}" (click)="horn()"><img src="assets/icons/horn.png"></button>
-            <button [disabled]="!isDriving()" (click)="reset()"><img src="assets/icons/traffic_lights_red.png"></button>
+            <div class="btn-group">
+                <button class="silent" [ngClass]="{checked: isHorn()}" (click)="horn()"><img src="assets/icons/horn.png"></button>
+                <button [disabled]="!isDriving()" (click)="reset()"><img src="assets/icons/traffic_lights_red.png"></button>
+            </div>
         </app-nav-bar>
     </div>
     <div class="page-content">
@@ -26,9 +28,9 @@
                     <b>{{maxSpeedInCurve}}</b>
                 </td>
                 <td>
-                    <button *ngIf="canArmCurvesJoker()" class="silent" [ngClass]="{checked: isCurvesJokerArmed()}" (click)="armCurvesJoker()"><img src="assets/icons/dynamite.png"></button>
-                    <span *ngIf="curvesJokerNoFx"><img src="assets/icons/snail.png"></span>
-                    <span *ngIf="curvesJokerFailure"><img src="assets/icons/caution_high_voltage.png"></span>
+                    <button *ngIf="canArmCurvesJoker() && !isCurvesJokerArmed()" class="silent" (click)="armCurvesJoker()"><img src="assets/icons/dynamite.png"></button>
+                    <span *ngIf="curvesJokerNoFx"><img src="assets/icons/snail.png" class="blink-warn"></span>
+                    <span *ngIf="curvesJokerFailure"><img src="assets/icons/caution_high_voltage.png" class="blink-critical"></span>
                 </td>
             </tr>
             <tr>
@@ -41,18 +43,21 @@
                     </div>
                 </td>
                 <td>
-                    <button *ngIf="canArmSpeedJoker()" class="silent" [ngClass]="{checked: isSpeedJokerArmed()}" (click)="armSpeedJoker()"><img src="assets/icons/dynamite.png"></button>
-                    <span *ngIf="speedJokerNoFx"><img src="assets/icons/snail.png"></span>
-                    <span *ngIf="speedJokerFailure"><img src="assets/icons/caution_high_voltage.png"></span>
+                    <button *ngIf="canArmSpeedJoker() && !isSpeedJokerArmed()" class="silent" (click)="armSpeedJoker()"><img src="assets/icons/dynamite.png"></button>
+                    <span *ngIf="speedJokerNoFx"><img src="assets/icons/snail.png" class="blink-warn"></span>
+                    <span *ngIf="speedJokerFailure"><img src="assets/icons/caution_high_voltage.png" class="blink-critical"></span>
                 </td>
             </tr>
         </table>
-        <button *ngIf="hasMaxAcceleration()" [disabled]="!canGo()" (click)="go()"><img src="assets/icons/arrow_up.png">Fahren<img src="assets/icons/arrow_up.png"></button>
+        <button *ngIf="hasMaxAcceleration() && hasSpeedOptions" [disabled]="!canGo()" (click)="go()"><img src="assets/icons/arrow_up.png">Fahren<img src="assets/icons/arrow_up.png"></button>
+        <button *ngIf="!hasSpeedOptions" (click)="giveUp()"><img src="assets/icons/fire.png">Aufgeben</button>
     </div>
     <div class="page-footer">
+        <!--
         <div class="footer-item">
-            <!-- <label><img src="assets/icons/gas.png">Tank</label><span>{{fuel}}</span> -->
+            <label><img src="assets/icons/gas.png">Tank <b>{{fuel}}</b></label>
         </div>
+        -->
         <div class="footer-item">
             <label><img src="assets/icons/dashboard.png">Geschwindigkeit <b>{{speed}}</b></label>
         </div>

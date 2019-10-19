@@ -1,6 +1,6 @@
 <img *ngIf="health &gt; 4" src="assets/icons/temperature_cold.png">
 <img *ngIf="health === 4" src="assets/icons/temperature_cool.png">
 <img *ngIf="health === 3" src="assets/icons/temperature_normal.png">
-<img *ngIf="health === 2" src="assets/icons/temperature_warm.png">
-<img *ngIf="health === 1" src="assets/icons/temperature_hot.png">
-<img *ngIf="health &lt; 1" src="assets/icons/fire.png">
+<img *ngIf="health === 2" src="assets/icons/temperature_warm.png" class="blink-warn">
+<img *ngIf="health === 1" src="assets/icons/temperature_hot.png" class="blink-critical">
+<img *ngIf="health &lt; 1" src="assets/icons/fire.png" class="blink-critical">

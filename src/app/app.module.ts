@@ -20,6 +20,8 @@ import {AudioService} from './audio.service';
 import { ButtonDirective } from './button.directive';
 import { HealthComponent } from './health/health.component';
 import { CanvasComponent } from './canvas/canvas.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 
 @NgModule({
@@ -40,7 +42,8 @@ import { CanvasComponent } from './canvas/canvas.component';
     imports: [
         BrowserModule,
         RouterModule,
-        RootModule
+        RootModule,
+        ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
     ],
     providers: [CarSetupService, RaceService, AppService, AudioService],
     bootstrap: [AppComponent]

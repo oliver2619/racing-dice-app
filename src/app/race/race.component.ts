@@ -40,6 +40,10 @@ export class RaceComponent {
         return this.currentCar.getNextSpeedOptions(this.raceService.weather);
     }
 
+    get hasSpeedOptions(): boolean {
+        return this.nextSpeedOptions.length > 0;
+    }
+    
     get speedJokerNoFx(): boolean {
         return this.currentCar.speedJoker === JokerState.NO_EFFECT;
     }
@@ -175,6 +179,11 @@ export class RaceComponent {
         this.currentCar.reset();
     }
 
+    giveUp(): void {
+        this.currentCar.giveUp();
+        this.audioService.crash();
+    }
+    
     private get currentCar(): CarSetup {
         return this.carSetupService.getSetup();
     }

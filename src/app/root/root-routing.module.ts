@@ -6,14 +6,16 @@ import {RaceComponent} from '../race/race.component';
 import {DiceComponent} from '../dice/dice.component';
 import {TeamSelectComponent} from '../team-select/team-select.component';
 import {WeatherComponent} from '../weather/weather.component';
+import {CanActivateCarSetupGuard} from 'src/app/car-setup/can-activate-car-setup.guard';
 
 const routes: Routes = [
     {path: '', component: StartComponent},
     {path: 'dice', component: DiceComponent},
     {path: 'team', component: TeamSelectComponent},
     {path: 'weather', component: WeatherComponent},
-    {path: 'carSetup', component: CarSetupComponent},
-    {path: 'race', component: RaceComponent}
+    {path: 'carSetup', component: CarSetupComponent, canActivate: [CanActivateCarSetupGuard]},
+    {path: 'race', component: RaceComponent},
+    {path: '**', redirectTo: ''}
 ];
 
 @NgModule({

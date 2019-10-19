@@ -1,8 +1,10 @@
 <div class="page">
     <div class="page-header">
         <app-nav-bar>
-            <button *ngIf="needsRepair()" (click)="repair()"><img src="assets/icons/wrench_orange.png"> Reparieren</button>
-            <button (click)="about()"><img src="assets/icons/help.png"></button>
+            <div class="btn-group">
+                <button [disabled]="!needsRepair()" (click)="repair()"><img src="assets/icons/bandaid.png"></button>
+                <button (click)="about()"><img src="assets/icons/help.png"></button>
+            </div>
         </app-nav-bar>
     </div>
     <div class="page-content">
@@ -32,7 +34,7 @@
                 </td>
                 <td class="btn-group">
                     <button [ngClass]="{checked: car.gear === 0}" (click)="car.gear = 0">Beschleunigung</button>
-                    <button [ngClass]="{checked: car.gear === 1}" (click)="car.gear = 1">Neutral</button>
+                    <button [ngClass]="{checked: car.gear === 1}" (click)="car.gear = 1">Ausgewogen</button>
                     <button [ngClass]="{checked: car.gear === 2}" (click)="car.gear = 2">Geschwindigkeit</button>
                 </td>
             </tr>
@@ -53,7 +55,7 @@
                 <td>
                     <div class="btn-group">
                         <button [ngClass]="{checked: car.durability === 0}" (click)="car.durability = 0">Niedrig</button>
-                        <button [ngClass]="{checked: car.durability === 1}" (click)="car.durability = 1">Neutral</button>
+                        <button [ngClass]="{checked: car.durability === 1}" (click)="car.durability = 1">Mittel</button>
                         <button [ngClass]="{checked: car.durability === 2}" (click)="car.durability = 2">Hoch</button>
                     </div>
                 </td>

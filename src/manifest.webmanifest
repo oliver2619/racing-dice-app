@@ -1,0 +1,18 @@
+{
+  "name": "Racing",
+  "short_name": "Racing",
+  "theme_color": "#404040",
+  "background_color": "#000000",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "scope": "/oliver2619.github.io/racing-dice-app",
+  "start_url": "/oliver2619.github.io/racing-dice-app",
+  "lang": "de-CH",
+  "icons": [
+    {
+      "src": "assets/icons/flag-finish.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    }
+  ]
+}

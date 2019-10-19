@@ -271,6 +271,14 @@ export class CarSetup {
         this._currentAccelDice = undefined;
     }
 
+    giveUp(): void {
+        this._speedJoker = JokerState.UNSET;
+        this._curvesJoker = JokerState.UNSET;
+        this._currentAccelDice = undefined;
+        this._tiresHealth = 0;
+        this._speed = 0;
+    }
+    
     reset(): void {
         this._speed = 0;
         this._speedJoker = JokerState.UNSET;

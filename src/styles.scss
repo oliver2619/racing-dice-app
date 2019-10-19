@@ -1,9 +1,47 @@
+// variables
+
 $fontFamily: Segoe UI, sans-serif;
 $fontSize: 1rem;
 $boxShadow: .6rem;
 $boxShadow2: 1.5rem;
 $buttonTextShadow: .6rem;
 $borderRadius: .25rem;
+
+// animations
+
+@keyframes warning {
+    from {
+        transform: scale(1.2) translate(0px, -4px);
+    }
+
+    to {
+    }
+}
+
+.blink-warn {
+    animation-name: warning;
+    animation-duration: .8s;
+    animation-timing-function: ease-out;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+}
+
+@keyframes critical {
+    from {
+        transform: scale(1.4) translate(0px, -4px);
+    }
+
+    to {
+    }
+}
+
+.blink-critical {
+    animation-name: critical;
+    animation-duration: .4s;
+    animation-timing-function: ease-out;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+}
 
 // global
 
@@ -98,7 +136,7 @@ canvas {
 // dialog
 
 .dialog {
-    background-color: #d0d0d0;
+    background-color: #ffffff;
     display: block;
     position: fixed;
     top: 0px;
