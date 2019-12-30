@@ -21,16 +21,34 @@ export class CanvasComponent implements OnInit, OnDestroy {
             case Team.YELLOW:
                 return 'rgb(255,212,0)';
             case Team.RED:
-                return 'rgb(255,4,0)';
+                return 'rgb(255,61,61)';
             case Team.GREEN:
-                return 'rgb(21,194,0)';
+                return 'rgb(76,196,60)';
             case Team.BLUE:
-                return 'rgb(44,47,224)';
+                return 'rgb(0,3,183)';
             case Team.VIOLET:
-                return 'rgb(128,26,224)';
+                return 'rgb(175,96,255)';
             case Team.BLACK:
             default:
                 return 'rgb(128,128,128)';
+        }
+    }
+
+    get backgroundOperation(): string {
+        switch (this.carSetupService.team) {
+            case Team.YELLOW:
+                return 'overlay';
+            case Team.RED:
+                return 'multiply';
+            case Team.GREEN:
+                return 'multiply';
+            case Team.BLUE:
+                return 'overlay';
+            case Team.VIOLET:
+                return 'multiply';
+            case Team.BLACK:
+            default:
+                return 'overlay';
         }
     }
 
@@ -67,7 +85,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
         this.context.fillStyle = this.pattern;
         this.context.globalCompositeOperation = 'source-over';
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        this.context.globalCompositeOperation = 'overlay';
+        this.context.globalCompositeOperation = this.backgroundOperation;
         this.context.fillStyle = this.backgroundColor;
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }

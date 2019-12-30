@@ -1,8 +1,16 @@
 import {Injectable} from '@angular/core';
+import {SettingsService} from 'src/app/settings.service';
 
+
+interface AudioSettingsJson {
+    version: number;
+    volumeLevel: number;
+}
 
 @Injectable()
 export class AudioService {
+
+    private static readonly SETTINGS_KEY = 'audio';
 
     private _click = AudioService.newAudio('click');
     private _crash = AudioService.newAudio('crash');
@@ -30,9 +38,15 @@ export class AudioService {
         return this._volumeLevel;
     }
 
-    constructor() {
+    constructor(private settingsService: SettingsService) {
         this._horn.forEach(h => h.addEventListener('ended', (ev: MediaStreamErrorEvent) => this._hornPlayed = false));
         this._click.addEventListener('ended', (ev: MediaStreamErrorEvent) => this._clickPlayed = false);
+        const audioSettings = <AudioSettingsJson> this.settingsService.load(AudioService.SETTINGS_KEY);
+        if (audioSettings !== undefined) {
+            this._volumeLevel = audioSettings.volumeLevel;
+        } else {
+            this.saveSettings();
+        }
     }
 
     click(): void {
@@ -77,9 +91,18 @@ export class AudioService {
             ++this._volumeLevel;
         else
             this._volumeLevel = 0;
+        this.saveSettings();
     }
 
     private static newAudio(name: string): HTMLAudioElement {
         return new Audio(`assets/sounds/${name}.mp3`);
+    }
+
+    private saveSettings(): void {
+        const settings: AudioSettingsJson = {
+            version: 1,
+            volumeLevel: this._volumeLevel
+        };
+        this.settingsService.save(AudioService.SETTINGS_KEY, settings);
     }
 }

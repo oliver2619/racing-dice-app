@@ -21,8 +21,8 @@ export class CarSetup {
     private _gear: number = 1;
     private _speed: number = 0;
     private _tires: TireType = TireType.SUN;
-    private _motorHealth: number = 5;
-    private _tiresHealth: number = 5;
+    private _motorHealth: number = CarSetup.maxHealth;
+    private _tiresHealth: number = CarSetup.maxHealth;
     private _currentCurve: number;
     private _curvesJoker: JokerState = JokerState.UNSET;
     private _speedJoker: JokerState = JokerState.UNSET;
@@ -343,9 +343,9 @@ export class CarSetup {
             case Weather.CLOUDY:
                 return this._tires === TireType.SUN ? (bonus + 1) : (bonus - 1);
             case Weather.CLOUDS:
-                return this._tires === TireType.SUN ? (bonus) : (bonus - 1);
+                return this._tires === TireType.SUN ? (bonus + .5) : (bonus - .5);
             case Weather.RAIN_LITTLE:
-                return this._tires === TireType.SUN ? (bonus - 1) : (bonus);
+                return this._tires === TireType.SUN ? (bonus - .5) : (bonus + .5);
             case Weather.RAIN:
                 return this._tires === TireType.SUN ? (bonus - 1) : (bonus);
             default:
@@ -354,7 +354,7 @@ export class CarSetup {
     }
 
     private getBonusFlaps(): number {
-        return this._flaps - 1;
+        return this._flaps * this._flaps - 1;
     }
 
     private getBonusGear(): number {
