@@ -9,7 +9,6 @@
     * weather
     * car setup
     * race situation
-    * audio settings
 * start / stop race collect statistics
     * distance
     * avg. speed
