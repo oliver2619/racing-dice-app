@@ -22,6 +22,7 @@ import { HealthComponent } from './health/health.component';
 import { CanvasComponent } from './canvas/canvas.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { NumberDisplayValueComponent } from './number-display-value/number-display-value.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { environment } from '../environments/environment';
         WeatherComponent,
         ButtonDirective,
         HealthComponent,
-        CanvasComponent
+        CanvasComponent,
+        NumberDisplayValueComponent
     ],
     imports: [
         BrowserModule,

@@ -7,7 +7,7 @@ import {Component} from '@angular/core';
 })
 export class DiceComponent {
 
-    private _score: number;
+    private _score = 0;
     private _timeout: number;
     private _interval: number;
 
@@ -19,8 +19,8 @@ export class DiceComponent {
         return this._timeout !== undefined;
     }
 
-    get hasScore(): boolean {
-        return this._score !== undefined;
+    get maxValue(): number {
+        return 1234;
     }
     
     getScore(): void {
@@ -28,16 +28,16 @@ export class DiceComponent {
             return;
         this._interval = window.setInterval(() => {
             this._score = this.shuffle();
-        }, 50);
+        }, 200);
         this._timeout = window.setTimeout(() => {
             this._score = this.shuffle();
             this._timeout = undefined;
             window.clearInterval(this._interval);
             this._interval = undefined;
-        }, 1200);
+        }, 800 + 800 * Math.random());
     }
     
     private shuffle(): number {
-        return Math.floor(Math.exp(Math.random() * Math.log(1235)) - 1);
+        return Math.floor(Math.exp(Math.random() * Math.log(this.maxValue + 1)) - 1);
     }
 }

@@ -1,5 +1,7 @@
 import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {AppService} from './app.service';
+import {CarSetupService} from 'src/app/car-setup/car-setup.service';
+import {Team} from 'src/app/model/teams';
 
 @Component({
     selector: 'app-root',
@@ -9,9 +11,13 @@ import {AppService} from './app.service';
 export class AppComponent implements OnInit {
 
     @ViewChild('app', {static: true}) element: ElementRef;
+
+    get team(): string {
+        return Team[this.carSetupService.team].toLowerCase();
+    }
     
-    constructor(private appService: AppService) {}
-    
+    constructor(private appService: AppService, private carSetupService: CarSetupService) {}
+
     ngOnInit(): void {
         document.addEventListener("contextmenu", (ev: PointerEvent) => {
             ev.preventDefault();

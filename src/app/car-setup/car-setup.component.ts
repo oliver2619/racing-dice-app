@@ -28,8 +28,12 @@ export class CarSetupComponent {
         return this.carSetupService.getSetup();
     }
 
+    get challengeSuccessTimes(): number {
+        return this.car.challengeTotalSuccessTimes;
+    }
+    
     canDecFuel(): boolean {
-        return this.car.fuel > 0;
+        return this.car.fuel > 1;
     }
 
     canIncFuel(): boolean {

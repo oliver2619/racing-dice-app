@@ -5,6 +5,6 @@
     <div class="page-content">
         <h1>Würfel Challenge</h1>
         <button (click)="getScore()" [disabled]="isGettingScore"><img src="assets/icons/dice.png"></button>
-        <input [disabled]="isGettingScore || !hasScore" type="number" readonly="readonly" value="{{score}}" class="challenge">
+        <app-number [value]="score" [decimals]="0" [max]="maxValue" class="challenge" [ngClass]="{progress: isGettingScore}"></app-number>
     </div>
 </div>

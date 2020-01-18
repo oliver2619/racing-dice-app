@@ -25,10 +25,11 @@ export class CanvasComponent implements OnInit, OnDestroy {
             case Team.GREEN:
                 return 'rgb(76,196,60)';
             case Team.BLUE:
-                return 'rgb(0,3,183)';
+                return 'rgb(53,56,227)';
             case Team.VIOLET:
-                return 'rgb(175,96,255)';
+                return 'rgb(109,49,170)';
             case Team.BLACK:
+                return 'rgb(80,80,80)';
             default:
                 return 'rgb(128,128,128)';
         }
@@ -37,16 +38,17 @@ export class CanvasComponent implements OnInit, OnDestroy {
     get backgroundOperation(): string {
         switch (this.carSetupService.team) {
             case Team.YELLOW:
-                return 'overlay';
+                return 'color';
             case Team.RED:
                 return 'multiply';
             case Team.GREEN:
                 return 'multiply';
             case Team.BLUE:
-                return 'overlay';
+                return 'multiply';
             case Team.VIOLET:
                 return 'multiply';
             case Team.BLACK:
+                return 'multiply';
             default:
                 return 'overlay';
         }
@@ -82,12 +84,23 @@ export class CanvasComponent implements OnInit, OnDestroy {
     }
 
     private repaint(): void {
+        this.context.save();
         this.context.fillStyle = this.pattern;
         this.context.globalCompositeOperation = 'source-over';
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
         this.context.globalCompositeOperation = this.backgroundOperation;
         this.context.fillStyle = this.backgroundColor;
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.context.globalCompositeOperation = 'lighter';
+        this.context.fillStyle = 'black';
+        this.context.shadowColor = 'white';
+        this.context.shadowBlur = 5;
+        this.context.strokeRect(-1, -1, this.canvas.width + 2, this.canvas.height + 2);
+        this.context.shadowBlur = 10;
+        this.context.strokeRect(-1, -1, this.canvas.width + 2, this.canvas.height + 2);
+        this.context.shadowBlur = 20;
+        this.context.strokeRect(-1, -1, this.canvas.width + 2, this.canvas.height + 2);
+        this.context.restore();
     }
 
 }

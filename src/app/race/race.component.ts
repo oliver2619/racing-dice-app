@@ -1,7 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {RaceService} from './race.service';
 import {CarSetupService} from '../car-setup/car-setup.service';
-import {JokerState, CarSetup} from '../model/carSetup';
+import {JokerState, CarSetup, BrakeJokerState} from '../model/carSetup';
 import {DialogComponent} from '../dialog/dialog.component';
 import {AudioService} from '../audio.service';
 
@@ -18,6 +18,14 @@ export class RaceComponent {
     private _nextSpeed: number = 0;
 
     constructor(private raceService: RaceService, private carSetupService: CarSetupService, private audioService: AudioService) {
+    }
+
+    get canArmBrakeJoker(): boolean {
+        return this.currentCar.canArmBrakeJoker();
+    }
+
+    get canArmSpeedJoker(): boolean {
+        return this.currentCar.canArmSpeedJoker(this.raceService.weather);
     }
 
     get maxSpeedInCurve(): number {
@@ -41,41 +49,30 @@ export class RaceComponent {
     }
 
     get hasSpeedOptions(): boolean {
-        return this.nextSpeedOptions.length > 0;
+        return this.currentCar.alive && this.nextSpeedOptions.length > 0;
     }
-    
+
+    get brakeJokerFailure(): boolean {
+        return this.currentCar.brakeJoker === BrakeJokerState.DAMAGE_SUCCESS;
+    }
+
     get speedJokerNoFx(): boolean {
         return this.currentCar.speedJoker === JokerState.NO_EFFECT;
     }
 
     get speedJokerFailure(): boolean {
-        return this.currentCar.speedJoker === JokerState.FAILURE;
+        return this.currentCar.speedJoker === JokerState.DAMAGE || this.currentCar.speedJoker === JokerState.DAMAGE_SUCCESS;
     }
 
     get maxSpeed(): number {
         return this.currentCar.maxSpeed;
     }
 
-    canArmSpeedJoker(): boolean {
-        return this.currentCar.canArmSpeedJoker(this.raceService.weather);
+    get isBrakeJokerArmed(): boolean {
+        return this.currentCar.brakeJoker !== BrakeJokerState.UNSET;
     }
 
-    armSpeedJoker(): void {
-        if (!this.isSpeedJokerArmed()) {
-            this.currentCar.armSpeedJoker();
-            if (this.speedJokerNoFx)
-                this.audioService.motorFailure(false);
-            else if (this.speedJokerFailure) {
-                if (!this.currentCar.alive)
-                    this.audioService.crash();
-                else
-                    this.audioService.motorFailure(true);
-            } else
-                this.audioService.click();
-        }
-    }
-
-    isSpeedJokerArmed(): boolean {
+    get isSpeedJokerArmed(): boolean {
         return this.currentCar.speedJoker !== JokerState.UNSET;
     }
 
@@ -113,11 +110,45 @@ export class RaceComponent {
     }
 
     get curvesJokerFailure(): boolean {
-        return this.currentCar.curvesJoker === JokerState.FAILURE;
+        return this.currentCar.curvesJoker === JokerState.DAMAGE || this.currentCar.curvesJoker === JokerState.DAMAGE_SUCCESS;
     }
 
     get currentSpeed(): number {
         return this.currentCar.speed;
+    }
+
+    get diceThrown(): boolean {
+        return this.currentCar.diceThrown;
+    }
+    
+    armBrakeJoker(): void {
+        if (!this.isBrakeJokerArmed) {
+            this.currentCar.armBrakeJoker();
+            if (this.brakeJokerFailure) {
+                if (!this.currentCar.alive) {
+                    this.audioService.crash();
+                    this._nextSpeed = 0;
+                } else
+                    this.audioService.tireFailure(true);
+            } else
+                this.audioService.click();
+        }
+    }
+
+    armSpeedJoker(): void {
+        if (!this.isSpeedJokerArmed) {
+            this.currentCar.armSpeedJoker();
+            if (this.speedJokerNoFx)
+                this.audioService.motorFailure(false);
+            else if (this.speedJokerFailure) {
+                if (!this.currentCar.alive) {
+                    this.audioService.crash();
+                    this._nextSpeed = 0;
+                } else
+                    this.audioService.motorFailure(true);
+            } else
+                this.audioService.click();
+        }
     }
 
     canArmCurvesJoker(): boolean {
@@ -130,9 +161,10 @@ export class RaceComponent {
             if (this.curvesJokerNoFx)
                 this.audioService.tireFailure(false);
             else if (this.curvesJokerFailure) {
-                if (!this.currentCar.alive)
+                if (!this.currentCar.alive) {
                     this.audioService.crash();
-                else
+                    this._nextSpeed = 0;
+                } else
                     this.audioService.tireFailure(true);
             } else
                 this.audioService.click();
@@ -150,13 +182,9 @@ export class RaceComponent {
     isDriving(): boolean {
         return this.currentCar.driving;
     }
-    
-    calcMaxAcceleration(): void {
-        this.currentCar.calcMaxAcceleration();
-    }
 
-    hasMaxAcceleration(): boolean {
-        return this.currentCar.hasMaxAcceleration();
+    throwDice(): void {
+        this.currentCar.throwDice();
     }
 
     canGo(): boolean {
@@ -175,15 +203,19 @@ export class RaceComponent {
         return this.audioService.hornPlayed;
     }
 
-    reset(): void {
-        this.currentCar.reset();
+    stop(): void {
+        this.currentCar.stop();
     }
 
     giveUp(): void {
-        this.currentCar.giveUp();
-        this.audioService.crash();
+        if (this.currentCar.alive) {
+            this.currentCar.giveUp();
+            this.audioService.crash();
+        }else {
+            this.currentCar.stop();
+        }
     }
-    
+
     private get currentCar(): CarSetup {
         return this.carSetupService.getSetup();
     }

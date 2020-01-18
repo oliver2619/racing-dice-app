@@ -2,10 +2,12 @@
 
 $fontFamily: Segoe UI, sans-serif;
 $fontSize: 1rem;
-$boxShadow: .6rem;
+$boxShadow: 2px;
 $boxShadow2: 1.5rem;
 $buttonTextShadow: .6rem;
 $borderRadius: .25rem;
+$warn-color: #ffa040;
+$critical-color: #ff4040;
 
 // animations
 
@@ -37,6 +39,27 @@ $borderRadius: .25rem;
 
 .blink-critical {
     animation-name: critical;
+    animation-duration: .4s;
+    animation-timing-function: ease-out;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+}
+
+@keyframes critical-color {
+    from {
+        color: $warn-color;
+        text-shadow: 0 0 3px $warn-color;
+        transform: translate(0px, -.2ex);
+    }
+
+    to {
+        color: $critical-color;
+        text-shadow: 0 0 3px $critical-color;
+    }
+}
+
+.blink-critical-color {
+    animation-name: critical-color;
     animation-duration: .4s;
     animation-timing-function: ease-out;
     animation-iteration-count: infinite;
@@ -94,8 +117,8 @@ canvas {
     flex-grow: 0;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: stretch;
+    justify-content: space-evenly;
+    align-items: baseline;
 }
 
 .page-content {
@@ -105,18 +128,23 @@ canvas {
     justify-content: space-evenly;
     align-items: center;
     overflow: auto;
-}
 
-.page-content h1 {
-    margin: 0px;
+    h1 {
+        margin: 0px;
+    }
 }
 
 .footer-item {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
-    align-items: stretch;
-    flex-grow: 1;
+    justify-content: center;
+    align-items: baseline;
+    flex-grow: 0;
+    margin: .4rem;
+
+    .value-progress {
+        margin-left: .5rem;
+    }
 }
 
 // nav-bar
@@ -136,7 +164,6 @@ canvas {
 // dialog
 
 .dialog {
-    background-color: #ffffff;
     display: block;
     position: fixed;
     top: 0px;
@@ -179,25 +206,27 @@ button.checked, a.button.checked {
     border-color: white;
 }
 
-a.disabled, button.disabled, input.disabled, button[disabled], input[disabled], a[disabled] {
+.disabled, button[disabled], input[disabled], a[disabled] {
     opacity: .5;
 }
 
 .btn-group {
     display: inline-flex;
+
+    button, a.button, input {
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+        border-left-style: none;
+    }
+
+    button:first-child, a.button:first-child {
+        border-left-style: solid;
+    }
 }
 
-.btn-group button, .btn-group a.button {
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
-    border-left-style: none;
-}
-
-.btn-group button:first-child, .btn-group a.button:first-child {
-    border-left-style: solid;
-}
+// image
 
 img {
     margin: 0px;
@@ -206,114 +235,122 @@ img {
     vertical-align: middle;
 }
 
+// input
+
 input {
     background-color: white;
-}
-
-input.challenge {
-    font-size: $fontSize * 2;
-    text-align: center;
-    width: 5em;
 }
 
 input, button, a.button {
     border: 1px solid black;
     font-family: $fontFamily;
     display: inline-block;
-    box-shadow: .1rem .1rem $boxShadow black;
+    box-shadow: 0 0 1rem rgba(black,.5), 0 0 4px black;
     outline: 0px none black;
 }
 
-.yellow {
+input[type=number] {
+    text-align: center;
+
+    &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+}
+
+// colors
+
+.team-select.yellow, .yellow .dialog {
     color: black;
     background: rgb(255,212,0);
     background: radial-gradient(circle, rgba(255,212,0,1) 0%, rgba(215,179,0,1) 100%);
+
+    &.checked {
+        background: rgb(255,244,203);
+        background: radial-gradient(circle, rgba(255,244,203,1) 0%, rgba(255,219,44,1) 100%);  
+        border-color: #FFF1BF;
+        box-shadow: 0px 0px $boxShadow2 #FFF1BF;
+        text-shadow: 0px 0px $buttonTextShadow white;
+    }
 }
 
-.yellow.checked {
-    background: rgb(255,244,203);
-    background: radial-gradient(circle, rgba(255,244,203,1) 0%, rgba(255,219,44,1) 100%);  
-    border-color: #FFF1BF;
-    box-shadow: 0px 0px $boxShadow2 #FFF1BF;
-    text-shadow: 0px 0px $buttonTextShadow white;
-}
-
-.red {
+.team-select.red, .red .dialog {
     color: black;
     background: rgb(255,4,0);
     background: radial-gradient(circle, rgba(255,4,0,1) 0%, rgba(214,3,0,1) 100%);
+
+    &.checked {
+        background: rgb(255,92,90);
+        background: radial-gradient(circle, rgba(255,111,109,1) 0%, rgba(255,37,34,1) 100%);
+        border-color: #FFB2B2;
+        box-shadow: 0px 0px $boxShadow2 #FFB2B2;
+        text-shadow: 0px 0px $buttonTextShadow white;
+    }
 }
 
-.red.checked {
-    background: rgb(255,92,90);
-    background: radial-gradient(circle, rgba(255,111,109,1) 0%, rgba(255,37,34,1) 100%);
-    border-color: #FFB2B2;
-    box-shadow: 0px 0px $boxShadow2 #FFB2B2;
-    text-shadow: 0px 0px $buttonTextShadow white;
-}
-
-.green {
+.team-select.green, .green .dialog {
     color: black;
     background: rgb(21,194,0);
     background: radial-gradient(circle, rgba(21,194,0,1) 0%, rgba(26,130,13,1) 100%);
+
+    &.checked {
+        background: rgb(158,255,147);
+        background: radial-gradient(circle, rgba(158,255,147,1) 0%, rgba(21,194,0,1) 100%);
+        border-color: #A3E599;
+        box-shadow: 0px 0px $boxShadow2 #A3E599;
+        text-shadow: 0px 0px $buttonTextShadow white;
+    }
 }
 
-.green.checked {
-    background: rgb(158,255,147);
-    background: radial-gradient(circle, rgba(158,255,147,1) 0%, rgba(21,194,0,1) 100%);
-    border-color: #A3E599;
-    box-shadow: 0px 0px $boxShadow2 #A3E599;
-    text-shadow: 0px 0px $buttonTextShadow white;
-}
-
-.blue {
+.team-select.blue, .blue .dialog {
     color: white;
     background: rgb(44,47,224);
     background: radial-gradient(circle, rgba(44,47,224,1) 0%, rgba(47,48,110,1) 100%);
+
+    &.checked {
+        color: black;
+        background: rgb(159,161,255);
+        background: radial-gradient(circle, rgba(159,161,255,1) 0%, rgba(64,67,236,1) 100%);
+        border-color: #BFC0EF;
+        box-shadow: 0px 0px $boxShadow2 #BFC0EF;
+        text-shadow: 0px 0px $buttonTextShadow white;
+    }
 }
 
-.blue.checked {
-    color: black;
-    background: rgb(159,161,255);
-    background: radial-gradient(circle, rgba(159,161,255,1) 0%, rgba(64,67,236,1) 100%);
-    border-color: #BFC0EF;
-    box-shadow: 0px 0px $boxShadow2 #BFC0EF;
-    text-shadow: 0px 0px $buttonTextShadow white;
-}
-
-.violet {
+.team-select.violet, .violet .dialog {
     color: white;
     background: rgb(128,26,224);
     background: radial-gradient(circle, rgba(128,26,224,1) 0%, rgba(69,32,103,1) 100%);
+
+    &.checked {
+        color: black;
+        background: rgb(207,157,255);
+        background: radial-gradient(circle, rgba(207,157,255,1) 0%, rgba(159,56,255,1) 100%);
+        border-color: #CEBAE2;
+        box-shadow: 0px 0px $boxShadow2 #CEBAE2;
+        text-shadow: 0px 0px $buttonTextShadow white;
+    }
 }
 
-.violet.checked {
-    color: black;
-    background: rgb(207,157,255);
-    background: radial-gradient(circle, rgba(207,157,255,1) 0%, rgba(159,56,255,1) 100%);
-    border-color: #CEBAE2;
-    box-shadow: 0px 0px $boxShadow2 #CEBAE2;
-    text-shadow: 0px 0px $buttonTextShadow white;
-}
-
-.black {
+.team-select.black, .black .dialog {
     color: white;
     background: rgb(50,50,50);
     background: radial-gradient(circle, rgba(50,50,50,1) 0%, rgba(0,0,0,1) 100%);
+
+    &.checked {
+        color: black;
+        background: rgb(159,159,159);
+        background: radial-gradient(circle, rgba(159,159,159,1) 0%, rgba(135,135,135,1) 44%, rgba(57,57,57,1) 100%);
+        border-color: #CCCCCC;
+        box-shadow: 0px 0px $boxShadow2 #CCCCCC;
+        text-shadow: 0px 0px $buttonTextShadow white;
+    }
 }
 
-.black.checked {
-    color: black;
-    background: rgb(159,159,159);
-    background: radial-gradient(circle, rgba(159,159,159,1) 0%, rgba(135,135,135,1) 44%, rgba(57,57,57,1) 100%);
-    border-color: #CCCCCC;
-    box-shadow: 0px 0px $boxShadow2 #CCCCCC;
-    text-shadow: 0px 0px $buttonTextShadow white;
-}
+// other
 
 label, div.label {
     display: inline;
-    text-shadow: 1px 1px 1px white;
     font-weight: bolder;
 
     img {
@@ -321,8 +358,61 @@ label, div.label {
     }
 }
 
-h1 {
-    text-shadow: 1px 1px 1px white;
+.value-progress {
+    background: radial-gradient(circle, rgb(0,0,0) 0%, rgb(60,60,60) 100%);
+    color: #c0ff80;
+    font-family: Quartz, LCD, monospace;
+    font-weight: bold;
+    border: 1px solid black;
+    display: inline-block;
+    box-shadow: 0 0 2px black;
+    text-shadow: 0 0 3px #c0ff80;
+    display: inline-block;
+    text-align: right;
+
+    .challenge & {
+        font-size: $fontSize * 5;
+        display: inline-block;
+        width: 5ch;
+    }
+
+    .progress & {
+        color: #ffc040;
+        text-shadow: 0 0 3px #ffc040;
+    }
+
+    &.warn {
+        color: $warn-color;
+        text-shadow: 0 0 3px $warn-color;
+    }
+
+    &.critical {
+        @extend .blink-critical-color;
+    }
+}
+
+.yellow, .red, .green {
+    h1 {
+        color: black;
+        text-shadow: -1px -1px 3px white, 1px 1px 2px white;
+    }
+    
+    label, div.label {
+        color: black;
+        text-shadow: -1px -1px 3px white, 1px 1px 2px white;
+    }
+}
+
+.blue, .violet, .black {
+    h1 {
+        color: white;
+        text-shadow: -1px -1px 3px black, 1px 1px 2px black;
+    }
+
+    label, div.label {
+        color: white;
+        text-shadow: -1px -1px 3px black, 1px 1px 2px black;
+    }
 }
 
 p {
@@ -341,7 +431,7 @@ tr {
 }
 
 @media all and (max-height: 319px), all and (max-width: 639px) {
-    
+
     body, input, label, button, a.button, div.label, h2 {
         font-size: $fontSize * .8;
     }
@@ -354,10 +444,10 @@ tr {
         min-width: 2rem;
         min-height: 2rem;
     }
-    
-    input, button, a.button {
+
+    input, button, a.button, .value-progress {
         border-radius: $borderRadius / 2;
-        padding: .3rem;
+        padding: .2rem .3rem;
     }
 
     .btn-group button:first-child, .btn-group a.button:first-child {
@@ -373,10 +463,15 @@ tr {
     td {
         padding: .2rem;
     }
+
+    .footer-item img {
+        width: 16px;
+        height: 16px;
+    }
 }
 
 @media all and (min-height: 320px) and (max-height: 639px) and (min-width: 640px), all and (min-width: 640px) and (max-width: 1023px) and (min-height: 320px) {
-    
+
     body, input, label, button, a.button, div.label, h2 {
         font-size: $fontSize;
     }
@@ -389,10 +484,10 @@ tr {
         min-width: 3rem;
         min-height: 3rem;
     }
-    
-    input, button, a.button {
+
+    input, button, a.button, .value-progress {
         border-radius: $borderRadius;
-        padding: .4rem;
+        padding: .2rem .4rem;
     }
 
     .btn-group button:first-child, .btn-group a.button:first-child {
@@ -404,9 +499,14 @@ tr {
         border-top-right-radius: $borderRadius;
         border-bottom-right-radius: $borderRadius;
     }
-    
+
     td {
         padding: .4rem;
+    }
+
+    .footer-item img {
+        width: 24px;
+        height: 24px;
     }
 }
 
@@ -423,10 +523,10 @@ tr {
         min-width: 4rem;
         min-height: 4rem;
     }
-    
-    input, button, a.button {
+
+    input, button, a.button, .value-progress {
         border-radius: $borderRadius * 1.5;
-        padding: 1rem;
+        padding: .5rem 1rem;
     }
 
     .btn-group button:first-child, .btn-group a.button:first-child {
@@ -438,7 +538,7 @@ tr {
         border-top-right-radius: $borderRadius * 1.5;
         border-bottom-right-radius: $borderRadius * 1.5;
     }
-    
+
     td {
         padding: 1rem;
     }

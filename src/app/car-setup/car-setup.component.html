@@ -23,9 +23,9 @@
                     <label><img src="assets/icons/windy.png">Spoiler</label>
                 </td>
                 <td class="btn-group">
-                    <button [ngClass]="{checked: car.flaps === 0}" (click)="car.flaps = 0">10 °</button>
-                    <button [ngClass]="{checked: car.flaps === 1}" (click)="car.flaps = 1">20 °</button>
-                    <button [ngClass]="{checked: car.flaps === 2}" (click)="car.flaps = 2">30 °</button>
+                    <button [ngClass]="{checked: car.flaps === 0}" (click)="car.flaps = 0">20 °</button>
+                    <button [ngClass]="{checked: car.flaps === 1}" (click)="car.flaps = 1">30 °</button>
+                    <button [ngClass]="{checked: car.flaps === 2}" (click)="car.flaps = 2">35 °</button>
                 </td>
             </tr>
             <tr>
@@ -33,18 +33,20 @@
                     <label><img src="assets/icons/gear_in.png">Getriebe</label>
                 </td>
                 <td class="btn-group">
-                    <button [ngClass]="{checked: car.gear === 0}" (click)="car.gear = 0">Beschleunigung</button>
-                    <button [ngClass]="{checked: car.gear === 1}" (click)="car.gear = 1">Ausgewogen</button>
-                    <button [ngClass]="{checked: car.gear === 2}" (click)="car.gear = 2">Geschwindigkeit</button>
+                    <button [ngClass]="{checked: car.gear === 0}" (click)="car.gear = 0">Beschl.</button>
+                    <button [ngClass]="{checked: car.gear === 1}" (click)="car.gear = 1">2</button>
+                    <button [ngClass]="{checked: car.gear === 2}" (click)="car.gear = 2">3</button>
+                    <button [ngClass]="{checked: car.gear === 3}" (click)="car.gear = 3">4</button>
+                    <button [ngClass]="{checked: car.gear === 4}" (click)="car.gear = 4">Geschw.</button>
                 </td>
             </tr>
             <tr hidden="hidden">
                 <td>
                     <label><img src="assets/icons/gas.png">Treibstoff</label>
                 </td>
-                <td>
+                <td class="btn-group">
                     <button [ngClass]="{disabled: !canDecFuel()}" (click)="decFuel()"><img src="assets/icons/delete.png"></button>
-                    <input type="number" readonly="readonly" value="{{car.fuel}}" size="2">
+                    <input type="number" readonly="readonly" value="{{car.fuel}}" min="1" max="99">
                     <button [ngClass]="{disabled: !canIncFuel()}" (click)="incFuel()"><img src="assets/icons/add.png"></button>
                 </td>
             </tr>
@@ -64,13 +66,20 @@
     </div>
     <div class="page-footer">
         <div class="footer-item">
-            <label><img src="assets/icons/dashboard.png">Geschwindigkeit <b>{{car.maxSpeed}}</b></label>
+            <label><img src="assets/icons/arrow_up.png">Gerade</label>
+            <app-number [value]="car.maxSpeed" [max]="6"></app-number>
         </div>
         <div class="footer-item">
-            <label><img src="assets/icons/dashboard.png">Kurven <b>{{avgSpeedInCurve | number:'1.1-1'}}</b></label>
+            <label><img src="assets/icons/arrow_turn_right.png">Kurven</label>
+            <app-number [value]="avgSpeedInCurve" [max]="6"></app-number>
         </div>
         <div class="footer-item">
-            <label><img src="assets/icons/dashboard.png">Beschleunigung <b>{{avgAcceleration | number:'1.1-1'}}</b></label>
+            <label><img src="assets/icons/dashboard.png">Beschl.</label>
+            <app-number [value]="avgAcceleration" [max]="3"></app-number>
+        </div>
+        <div class="footer-item">
+            <label><img src="assets/icons/dynamite.png">Erfolge</label>
+            <app-number [value]="challengeSuccessTimes" [decimals]="0" [width]="3"></app-number>
         </div>
     </div>
 </div>
@@ -79,10 +88,10 @@
         <h2>Reifen</h2>
         <p>Das Auto beschleunigt und fährt schneller, wenn die Reifen auf das Wetter abgestimmt sind.</p>
         <h2>Spoiler</h2>
-        <p>Je höher der Wert, desto schneller ist das Auto in der Kurve aber desto niedriger ist die Höchstgeschwindigkeit.</p>
+        <p>Je höher der Wert, desto schneller ist das Auto in der Kurve aber desto niedriger ist die allgemeine Höchstgeschwindigkeit und die Beschleunigung.</p>
         <h2>Getriebe</h2>
-        <p>Je höher die Beschleunigung, desto niedriger die Höchstgeschwindigkeit und umgekehrt.</p>
+        <p>Je höher die Beschleunigung, desto niedriger ist die Höchstgeschwindigkeit und umgekehrt.</p>
         <h2>Qualität</h2>
-        <p>Je höher die Qualität ist, desto niedriger ist die Beschleunigung und Geschwindigkeit, aber umso höheres <img src="assets/icons/dynamite.png"> Risiko kann eingegangen werden.</p>
+        <p>Je höher die Qualität, desto niedriger ist die Beschleunigung und Geschwindigkeit, aber umso höheres <img src="assets/icons/dynamite.png"> Risiko kann eingegangen werden.</p>
     </div>
 </app-dialog>

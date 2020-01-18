@@ -2,8 +2,11 @@
 
 ## todo
 
+* setup values with progress bar
+
 ## maybe
 
+* plausibility check: enter parkour -> calculate number
 * use localstore to autosave settings and states
     * selected team
     * weather
@@ -14,3 +17,9 @@
     * avg. speed
     * efficiency
 * fuel?
+* Windschatten
+
+## Physically
+
+* Print tiles
+* More straights

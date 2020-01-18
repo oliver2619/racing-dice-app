@@ -5,22 +5,22 @@
     <div class="page-content">
         <h1>Wähle dein Team</h1>
         <div class="btn-group">
-            <button [ngClass]="{checked: team === 0}" (click)="team=0" class="yellow">Renault</button>
-            <button [ngClass]="{checked: team === 1}" (click)="team=1" class="red">Ferrari</button>
-            <button [ngClass]="{checked: team === 2}" (click)="team=2" class="green">Lotus</button>
-            <button [ngClass]="{checked: team === 3}" (click)="team=3" class="blue">BMW</button>
-            <button [ngClass]="{checked: team === 4}" (click)="team=4" class="violet">Honda</button>
-            <button [ngClass]="{checked: team === 5}" (click)="team=5" class="black">Mercedes</button>
+            <button [ngClass]="{checked: team === 0}" (click)="team=0" class="team-select yellow">Renault</button>
+            <button [ngClass]="{checked: team === 1}" (click)="team=1" class="team-select red">Ferrari</button>
+            <button [ngClass]="{checked: team === 2}" (click)="team=2" class="team-select green">Lotus</button>
+            <button [ngClass]="{checked: team === 3}" (click)="team=3" class="team-select blue">BMW</button>
+            <button [ngClass]="{checked: team === 4}" (click)="team=4" class="team-select violet">Honda</button>
+            <button [ngClass]="{checked: team === 5}" (click)="team=5" class="team-select black">Mercedes</button>
         </div>
     </div>
 </div>
 <app-dialog>
     <div>
-        <h2>Renault</h2><p>Bessere Reifen.</p>
-        <h2>Ferrari</h2><p>Schneller in Kurven.</p>
-        <h2>Lotus</h2><p>Überholbonus.</p>
-        <h2>BMW</h2><p>Schnellstes Auto.</p>
-        <h2>Honda</h2><p>Höchste Beschleunigung.</p>
-        <h2>Mercedes</h2><p>Stabilstes Auto, richtige Hupe.</p>
+        <h2>Renault</h2><p>Das Team hat die besseren Reifen.</p>
+        <h2>Ferrari</h2><p>Das Auto ist sehr schnell in Kurven.</p>
+        <h2>Lotus</h2><p>Das Team mit dem Überholbonus oder Schummelbonus.</p>
+        <h2>BMW</h2><p>Das Auto mit der grössten Höchstgeschwindigkeit.</p>
+        <h2>Honda</h2><p>Das Auto mit der grössten Beschleunigung.</p>
+        <h2>Mercedes</h2><p>Das stabilste Auto, das auch eine richtige Hupe hat.</p>
     </div>
 </app-dialog>
