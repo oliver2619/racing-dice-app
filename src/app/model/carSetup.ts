@@ -403,7 +403,7 @@ export class CarSetup {
                 throw 'Unknown weather';
         }
         if (this._team === Team.YELLOW)
-            bonus *= 1.12;
+            bonus *= 1.04;
         return bonus;
     }
 
