@@ -1,19 +1,55 @@
 // variables
 
 $fontFamily: Segoe UI, sans-serif;
-$fontSize: 1rem;
+$fontSize: 2.7vw;
 $boxShadow: 2px;
 $boxShadow2: 1.5rem;
 $buttonTextShadow: .6rem;
-$borderRadius: .25rem;
+$borderRadius: 1vh;
 $warn-color: #ffa040;
 $critical-color: #ff4040;
 
 // animations
 
+@keyframes rotate {
+    from {
+        transform: rotate(-80deg);
+    }
+
+    to {
+        transform: rotate(60deg);
+    }
+}
+
+.animate-rotate {
+    animation-name: rotate;
+    animation-duration: 1.2s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes jump {
+    from {
+        transform: translate(0px, 5%);
+    }
+
+    to {
+        transform: translate(0px, -5%);
+    }
+}
+
+.animate-jump {
+    animation-name: jump;
+    animation-duration: 0.6s;
+    animation-timing-function: cubic-bezier;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
 @keyframes warning {
     from {
-        transform: scale(1.2) translate(0px, -4px);
+        transform: scale(1.2) translate(0px, -5%);
     }
 
     to {
@@ -30,7 +66,7 @@ $critical-color: #ff4040;
 
 @keyframes critical {
     from {
-        transform: scale(1.4) translate(0px, -4px);
+        transform: scale(1.4) translate(0px, -10%);
     }
 
     to {
@@ -70,6 +106,14 @@ $critical-color: #ff4040;
 
 body, h1, h2, label, div.label, button, a {
     font-family: $fontFamily;
+}
+
+h1 {
+    font-size: $fontSize * 1.2;
+}
+
+body, label, button, a.button, .label, h2, .value-progress {
+    font-size: $fontSize;
 }
 
 body {
@@ -197,6 +241,15 @@ button, a.button {
     color: black;
     background: rgb(193,198,200);
     background: radial-gradient(circle, rgba(193,198,200,1) 0%, rgba(134,143,153,1) 100%);
+    min-width: 2.5em;
+    min-height: 5ex;
+    border: 1px solid black;
+    border-radius: $borderRadius;
+    font-family: $fontFamily;
+    display: inline-block;
+    box-shadow: 0 0 1rem rgba(black,.5), 0 0 4px black;
+    outline: 0px none black;
+    padding: .2ex .5em;
 }
 
 button.checked, a.button.checked {
@@ -206,24 +259,60 @@ button.checked, a.button.checked {
     border-color: white;
 }
 
-.disabled, button[disabled], input[disabled], a[disabled] {
+.disabled, button[disabled], a[disabled] {
     opacity: .5;
 }
 
 .btn-group {
     display: inline-flex;
 
-    button, a.button, input {
+    button, .button {
         border-top-left-radius: 0px;
         border-bottom-left-radius: 0px;
         border-top-right-radius: 0px;
         border-bottom-right-radius: 0px;
         border-left-style: none;
-    }
 
-    button:first-child, a.button:first-child {
-        border-left-style: solid;
+        &:first-child {
+            border-left-style: solid;
+            border-top-left-radius: $borderRadius;
+            border-bottom-left-radius: $borderRadius;
+        }
+
+        &:last-child {
+            border-top-right-radius: $borderRadius;
+            border-bottom-right-radius: $borderRadius;
+        }
     }
+}
+
+.btn-list {
+    display: inline-flex;
+    align-items: center;
+
+    &>button, &>.button, &>div {
+        margin-left: .5em;
+        margin-right: .5em;
+
+        &:first-child {
+            margin-left: 0;
+        }
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
+
+// form
+
+.form {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-column-gap: 1em;
+    grid-row-gap: 1.2ex;
+    justify-items: start;
+    align-items: center;
 }
 
 // image
@@ -233,29 +322,6 @@ img {
     padding: 0px;
     display: inline-block;
     vertical-align: middle;
-}
-
-// input
-
-input {
-    background-color: white;
-}
-
-input, button, a.button {
-    border: 1px solid black;
-    font-family: $fontFamily;
-    display: inline-block;
-    box-shadow: 0 0 1rem rgba(black,.5), 0 0 4px black;
-    outline: 0px none black;
-}
-
-input[type=number] {
-    text-align: center;
-
-    &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
 }
 
 // colors
@@ -361,19 +427,23 @@ label, div.label {
 .value-progress {
     background: radial-gradient(circle, rgb(0,0,0) 0%, rgb(60,60,60) 100%);
     color: #c0ff80;
-    font-family: Quartz, LCD, monospace;
+    //font-family: Quartz, LCD, monospace;
     font-weight: bold;
     border: 1px solid black;
+    border-radius: $borderRadius;
     display: inline-block;
     box-shadow: 0 0 2px black;
     text-shadow: 0 0 3px #c0ff80;
     display: inline-block;
     text-align: right;
+    padding: .2ex .5em;
+
+    .footer-item & {
+        padding: .2ex .4em;
+    }
 
     .challenge & {
-        font-size: $fontSize * 5;
-        display: inline-block;
-        width: 5ch;
+        font-size: $fontSize * 4;
     }
 
     .progress & {
@@ -396,7 +466,7 @@ label, div.label {
         color: black;
         text-shadow: -1px -1px 3px white, 1px 1px 2px white;
     }
-    
+
     label, div.label {
         color: black;
         text-shadow: -1px -1px 3px white, 1px 1px 2px white;
@@ -421,48 +491,7 @@ p {
     text-align: justify;
 }
 
-table {
-    border-collapse: collapse;
-    margin: 0px;
-}
-
-tr {
-    padding: 0px;
-}
-
 @media all and (max-height: 319px), all and (max-width: 639px) {
-
-    body, input, label, button, a.button, div.label, h2 {
-        font-size: $fontSize * .8;
-    }
-
-    h1 {
-        font-size: $fontSize * .8 * 1.2;
-    }
-
-    button, a.button {
-        min-width: 2rem;
-        min-height: 2rem;
-    }
-
-    input, button, a.button, .value-progress {
-        border-radius: $borderRadius / 2;
-        padding: .2rem .3rem;
-    }
-
-    .btn-group button:first-child, .btn-group a.button:first-child {
-        border-top-left-radius: $borderRadius / 2;
-        border-bottom-left-radius: $borderRadius / 2;
-    }
-
-    .btn-group button:last-child, .btn-group a.button:last-child {
-        border-top-right-radius: $borderRadius / 2;
-        border-bottom-right-radius: $borderRadius / 2;
-    }
-
-    td {
-        padding: .2rem;
-    }
 
     .footer-item img {
         width: 16px;
@@ -472,38 +501,6 @@ tr {
 
 @media all and (min-height: 320px) and (max-height: 639px) and (min-width: 640px), all and (min-width: 640px) and (max-width: 1023px) and (min-height: 320px) {
 
-    body, input, label, button, a.button, div.label, h2 {
-        font-size: $fontSize;
-    }
-
-    h1 {
-        font-size: $fontSize * 1.2;
-    }
-
-    button, a.button {
-        min-width: 3rem;
-        min-height: 3rem;
-    }
-
-    input, button, a.button, .value-progress {
-        border-radius: $borderRadius;
-        padding: .2rem .4rem;
-    }
-
-    .btn-group button:first-child, .btn-group a.button:first-child {
-        border-top-left-radius: $borderRadius;
-        border-bottom-left-radius: $borderRadius;
-    }
-
-    .btn-group button:last-child, .btn-group a.button:last-child {
-        border-top-right-radius: $borderRadius;
-        border-bottom-right-radius: $borderRadius;
-    }
-
-    td {
-        padding: .4rem;
-    }
-
     .footer-item img {
         width: 24px;
         height: 24px;
@@ -511,35 +508,4 @@ tr {
 }
 
 @media all and (min-height: 640px) and (min-width: 1024px) {
-    body, input, label, button, a.button, div.label, h2 {
-        font-size: $fontSize * 1.8;
-    }
-
-    h1 {
-        font-size: $fontSize * 1.8 * 1.2;
-    }
-
-    button, a.button {
-        min-width: 4rem;
-        min-height: 4rem;
-    }
-
-    input, button, a.button, .value-progress {
-        border-radius: $borderRadius * 1.5;
-        padding: .5rem 1rem;
-    }
-
-    .btn-group button:first-child, .btn-group a.button:first-child {
-        border-top-left-radius: $borderRadius * 1.5;
-        border-bottom-left-radius: $borderRadius * 1.5;
-    }
-
-    .btn-group button:last-child, .btn-group a.button:last-child {
-        border-top-right-radius: $borderRadius * 1.5;
-        border-bottom-right-radius: $borderRadius * 1.5;
-    }
-
-    td {
-        padding: 1rem;
-    }
 }

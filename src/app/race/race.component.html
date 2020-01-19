@@ -8,50 +8,33 @@
         </app-nav-bar>
     </div>
     <div class="page-content">
-        <div *ngIf="!diceThrown">
-            <button (click)="throwDice()"><img src="assets/icons/dice.png"></button>
+        <div *ngIf="!diceThrown && alive">
+            <button (click)="throwDice()"><img src="assets/icons/dice.png" class="animate-rotate"></button>
         </div>
-        <table *ngIf="diceThrown">
-            <tr>
-                <td>
-                    <label><img src="assets/icons/arrow_turn_right.png">Kurve</label>
-                </td>
-                <td colspan="2">
-                    <button (click)="selectCurve()"><span *ngIf="currentCurve !== undefined">{{currentCurve}}</span><img *ngIf="currentCurve === undefined" src="assets/icons/arrow_up.png"></button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label><img src="assets/icons/dashboard.png">Max. Geschw.</label>
-                </td>
-                <td>
-                    <app-number [value]="maxSpeedInCurve"></app-number>
-                </td>
-                <td>
-                    <button *ngIf="canArmCurvesJoker() && !isCurvesJokerArmed()" class="silent" (click)="armCurvesJoker()"><img src="assets/icons/dynamite.png"></button>
-                    <span *ngIf="curvesJokerNoFx"><img src="assets/icons/snail.png" class="blink-warn"></span>
-                    <span *ngIf="curvesJokerFailure"><img src="assets/icons/caution_high_voltage.png" class="blink-critical"></span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label><img src="assets/icons/dashboard.png">Geschw. wählen</label>
-                </td>
-                <td>
-                    <div class="btn-group">
-                        <button *ngIf="canArmBrakeJoker && !isBrakeJokerArmed" class="silent" (click)="armBrakeJoker()"><img src="assets/icons/dynamite.png"></button>
-                        <button *ngFor="let s of nextSpeedOptions" [ngClass]="{checked: nextSpeed === s}" (click)="nextSpeed = s">{{s}}</button>
-                        <button *ngIf="canArmSpeedJoker && !isSpeedJokerArmed" class="silent" (click)="armSpeedJoker()"><img src="assets/icons/dynamite.png"></button>
-                    </div>
-                </td>
-                <td>
-                    <span *ngIf="speedJokerNoFx"><img src="assets/icons/snail.png" class="blink-warn"></span>
-                    <span *ngIf="brakeJokerFailure || speedJokerFailure"><img src="assets/icons/caution_high_voltage.png" class="blink-critical"></span>
-                </td>
-            </tr>
-        </table>
-        <button *ngIf="diceThrown && hasSpeedOptions" [disabled]="!canGo()" (click)="go()"><img src="assets/icons/arrow_up.png">Fahren<img src="assets/icons/arrow_up.png"></button>
-        <button *ngIf="diceThrown && !hasSpeedOptions" (click)="giveUp()"><img src="assets/icons/fire.png">Aufgeben</button>
+        <div *ngIf="diceThrown" class="form">
+            <label><img src="assets/icons/arrow_turn_right.png">Kurve</label>
+            <button (click)="selectCurve()"><span *ngIf="currentCurve !== undefined">{{currentCurve}}</span><img *ngIf="currentCurve === undefined" src="assets/icons/arrow_up.png"></button>
+            <label><img src="assets/icons/dashboard.png">Max. Geschw.</label>
+            <div class="btn-list">
+                <app-number [value]="maxSpeedInCurve" [decimals]="0"></app-number>
+                <button *ngIf="canArmCurvesJoker() && !isCurvesJokerArmed()" class="silent" (click)="armCurvesJoker()"><img src="assets/icons/dynamite.png"></button>
+                <div *ngIf="curvesJokerNoFx"><img src="assets/icons/snail.png" class="blink-warn"></div>
+                <div *ngIf="curvesJokerFailure"><img src="assets/icons/caution_high_voltage.png" class="blink-critical"></div>
+            </div>
+            <label><img src="assets/icons/dashboard.png">Geschw. wählen</label>
+            <div class="btn-list">
+                <button *ngIf="canArmBrakeJoker && !isBrakeJokerArmed" class="silent" (click)="armBrakeJoker()"><img src="assets/icons/dynamite.png"></button>
+                <div *ngIf="brakeJokerFailure"><img src="assets/icons/caution_high_voltage.png" class="blink-critical"></div>
+                <div class="btn-group">
+                    <button *ngFor="let s of nextSpeedOptions" [ngClass]="{checked: nextSpeed === s}" (click)="nextSpeed = s">{{s}}</button>
+                </div>
+                <button *ngIf="canArmSpeedJoker && !isSpeedJokerArmed" class="silent" (click)="armSpeedJoker()"><img src="assets/icons/dynamite.png"></button>
+                <div *ngIf="speedJokerNoFx"><img src="assets/icons/snail.png" class="blink-warn"></div>
+                <div *ngIf="speedJokerFailure"><img src="assets/icons/caution_high_voltage.png" class="blink-critical"></div>
+            </div>
+        </div>
+        <button *ngIf="diceThrown && hasSpeedOptions" [disabled]="!canGo()" (click)="go()"><img src="assets/icons/arrow_up.png" class="animate-jump">Fahren<img src="assets/icons/arrow_up.png" class="animate-jump"></button>
+        <button *ngIf="diceThrown && !hasSpeedOptions" (click)="giveUp()"><img src="assets/icons/fire.png" class="blink-critical">Aufgeben</button>
     </div>
     <div class="page-footer">
         <!--

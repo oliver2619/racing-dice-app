@@ -121,6 +121,10 @@ export class RaceComponent {
         return this.currentCar.diceThrown;
     }
     
+    get alive(): boolean {
+        return this.currentCar.alive;
+    }
+    
     armBrakeJoker(): void {
         if (!this.isBrakeJokerArmed) {
             this.currentCar.armBrakeJoker();

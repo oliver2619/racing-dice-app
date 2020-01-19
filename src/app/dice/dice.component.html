@@ -4,7 +4,9 @@
     </div>
     <div class="page-content">
         <h1>Würfel Challenge</h1>
-        <button (click)="getScore()" [disabled]="isGettingScore"><img src="assets/icons/dice.png"></button>
-        <app-number [value]="score" [decimals]="0" [max]="maxValue" class="challenge" [ngClass]="{progress: isGettingScore}"></app-number>
+        <div class="btn-list">
+            <button (click)="getScore()" [disabled]="isGettingScore"><img src="assets/icons/dice.png" [ngClass]="{'animate-rotate': !isGettingScore}"></button>
+            <app-number [value]="score" [decimals]="0" [max]="maxValue" [width]="5" class="challenge" [ngClass]="{progress: isGettingScore}"></app-number>
+        </div>
     </div>
 </div>

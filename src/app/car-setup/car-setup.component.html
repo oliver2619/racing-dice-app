@@ -2,67 +2,49 @@
     <div class="page-header">
         <app-nav-bar>
             <div class="btn-group">
-                <button [disabled]="!needsRepair()" (click)="repair()"><img src="assets/icons/bandaid.png"></button>
+                <button [disabled]="!needsRepair()" (click)="repair()"><img src="assets/icons/bandaid.png" [ngClass]="{'blink-warn': needsRepair()}"></button>
                 <button (click)="about()"><img src="assets/icons/help.png"></button>
             </div>
         </app-nav-bar>
     </div>
     <div class="page-content">
-        <table>
-            <tr>
-                <td>
-                    <label><img src="assets/icons/tire.png">Reifen</label>
-                </td>
-                <td class="btn-group">
-                    <button [ngClass]="{checked: car.tires === 1}" (click)="car.tires = 1"><img src="assets/icons/weather_sun.png"></button>
-                    <button [ngClass]="{checked: car.tires === 0}" (click)="car.tires = 0"><img src="assets/icons/weather_rain.png"></button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label><img src="assets/icons/windy.png">Spoiler</label>
-                </td>
-                <td class="btn-group">
-                    <button [ngClass]="{checked: car.flaps === 0}" (click)="car.flaps = 0">20 °</button>
-                    <button [ngClass]="{checked: car.flaps === 1}" (click)="car.flaps = 1">30 °</button>
-                    <button [ngClass]="{checked: car.flaps === 2}" (click)="car.flaps = 2">35 °</button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label><img src="assets/icons/gear_in.png">Getriebe</label>
-                </td>
-                <td class="btn-group">
-                    <button [ngClass]="{checked: car.gear === 0}" (click)="car.gear = 0">Beschl.</button>
-                    <button [ngClass]="{checked: car.gear === 1}" (click)="car.gear = 1">2</button>
-                    <button [ngClass]="{checked: car.gear === 2}" (click)="car.gear = 2">3</button>
-                    <button [ngClass]="{checked: car.gear === 3}" (click)="car.gear = 3">4</button>
-                    <button [ngClass]="{checked: car.gear === 4}" (click)="car.gear = 4">Geschw.</button>
-                </td>
-            </tr>
-            <tr hidden="hidden">
-                <td>
-                    <label><img src="assets/icons/gas.png">Treibstoff</label>
-                </td>
-                <td class="btn-group">
-                    <button [ngClass]="{disabled: !canDecFuel()}" (click)="decFuel()"><img src="assets/icons/delete.png"></button>
-                    <input type="number" readonly="readonly" value="{{car.fuel}}" min="1" max="99">
-                    <button [ngClass]="{disabled: !canIncFuel()}" (click)="incFuel()"><img src="assets/icons/add.png"></button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label><img src="assets/icons/fire.png">Qualität</label>
-                </td>
-                <td>
-                    <div class="btn-group">
-                        <button [ngClass]="{checked: car.durability === 0}" (click)="car.durability = 0">Niedrig</button>
-                        <button [ngClass]="{checked: car.durability === 1}" (click)="car.durability = 1">Mittel</button>
-                        <button [ngClass]="{checked: car.durability === 2}" (click)="car.durability = 2">Hoch</button>
-                    </div>
-                </td>
-            </tr>
-        </table>
+        <div class="form">
+            <label><img src="assets/icons/tire.png">Reifen</label>
+            <div class="btn-group">
+                <button [ngClass]="{checked: car.tires === 1}" (click)="car.tires = 1"><img src="assets/icons/weather_sun.png"></button>
+                <button [ngClass]="{checked: car.tires === 0}" (click)="car.tires = 0"><img src="assets/icons/weather_rain.png"></button>
+            </div>
+            <label><img src="assets/icons/windy.png">Spoiler</label>
+            <div class="btn-group">
+                <button [ngClass]="{checked: car.flaps === 0}" (click)="car.flaps = 0">20 °</button>
+                <button [ngClass]="{checked: car.flaps === 1}" (click)="car.flaps = 1">30 °</button>
+                <button [ngClass]="{checked: car.flaps === 2}" (click)="car.flaps = 2">40 °</button>
+                <button [ngClass]="{checked: car.flaps === 3}" (click)="car.flaps = 3">43 °</button>
+                <button [ngClass]="{checked: car.flaps === 4}" (click)="car.flaps = 4">45 °</button>
+            </div>
+            <label><img src="assets/icons/gear_in.png">Getriebe</label>
+            <div class="btn-group">
+                <button [ngClass]="{checked: car.gear === 0}" (click)="car.gear = 0">Beschl.</button>
+                <button [ngClass]="{checked: car.gear === 1}" (click)="car.gear = 1">2</button>
+                <button [ngClass]="{checked: car.gear === 2}" (click)="car.gear = 2">3</button>
+                <button [ngClass]="{checked: car.gear === 3}" (click)="car.gear = 3">4</button>
+                <button [ngClass]="{checked: car.gear === 4}" (click)="car.gear = 4">Geschw.</button>
+            </div>
+            <!--
+            <label><img src="assets/icons/gas.png">Treibstoff</label>
+            <div class="btn-list">
+                <button [ngClass]="{disabled: !canDecFuel()}" (click)="decFuel()"><img src="assets/icons/delete.png"></button>
+                <app-number [value]="car.fuel" [max]="20" [decimals]="0" [width]="2"></app-number>
+                <button [ngClass]="{disabled: !canIncFuel()}" (click)="incFuel()"><img src="assets/icons/add.png"></button>
+            </div>
+            -->
+            <label><img src="assets/icons/fire.png">Qualität</label>
+            <div class="btn-group">
+                <button [ngClass]="{checked: car.durability === 0}" (click)="car.durability = 0">Niedrig</button>
+                <button [ngClass]="{checked: car.durability === 1}" (click)="car.durability = 1">Mittel</button>
+                <button [ngClass]="{checked: car.durability === 2}" (click)="car.durability = 2">Hoch</button>
+            </div>
+        </div>
     </div>
     <div class="page-footer">
         <div class="footer-item">

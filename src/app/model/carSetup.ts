@@ -20,7 +20,7 @@ export enum DurabilityType {
 export class CarSetup {
 
     private _durability: DurabilityType = DurabilityType.NORMAL;
-    private _flaps: number = 1;
+    private _flaps: number = 2;
     private _fuel: number = Math.floor(CarSetup.maxFuel * .8);
     private _gear: number = 2;
     private _speed: number = 0;
@@ -86,8 +86,8 @@ export class CarSetup {
 
     get maxSpeed(): number {
         let ret = 0;
-        for (let dice1 = 0; dice1 < 100; ++dice1) {
-            ret += this.getMaxSpeedForDice(dice1 / 100);
+        for (let dice = 0; dice < 100; ++dice) {
+            ret += this.getMaxSpeedForDice(dice / 100);
         }
         return ret / 100;
     }
@@ -145,24 +145,24 @@ export class CarSetup {
     }
 
     get challengeTotalSuccessTimes(): number {
-        return CarSetup.maxHealth * this.probabilityChallengeSuccess / this.probabilityChallengeDamage;
+        return Math.round(CarSetup.maxHealth * this.probabilityChallengeSuccess / this.probabilityChallengeDamage);
     }
 
     private get probabilityChallengeSuccess(): number {
-        let ret = 0.6 + 0.2 * (this._durability - 1);
+        let ret = 0.65 + 0.2 * (this._durability - 1);
         if (this._team === Team.BLACK)
-            ret += .1;
+            ret += .05;
         else
-            ret -= .1;
+            ret -= .05;
         return ret;
     }
 
     private get probabilityChallengeDamage(): number {
-        let ret = .12 - 0.06 * (this._durability - 1);
+        let ret = .12 - 0.04 * (this._durability - 1);
         if (this._team === Team.BLACK)
-            ret -= .02;
+            ret -= .01;
         else
-            ret += .02;
+            ret += .01;
         return ret;
     }
 
@@ -215,8 +215,8 @@ export class CarSetup {
 
     getAvgAcceleration(weather: Weather): number {
         let ret = 0;
-        for (let dice1 = 0; dice1 < 100; ++dice1) {
-            ret += this.getAccelerationForDice(dice1 / 100, weather);
+        for (let dice = 0; dice < 100; ++dice) {
+            ret += this.getAccelerationForDice(dice / 100, weather);
         }
         return ret / 100;
     }
@@ -279,7 +279,7 @@ export class CarSetup {
         if (curve === undefined)
             return this.getMaxSpeedForDice(this._dice);
         const ms = this.getMaxSpeedForDice(.5);
-        let ret = .2 + this.getBonusTires(weather) * (2 + this.getBonusFlaps()) * curve * 1.8 / 20 - .3 * this.getBonusDurability();
+        let ret = .3 + this.getBonusTires(weather) * (2 + this.getBonusFlaps() / 2) * (curve / 20) * 1.8 - .2 * this.getBonusDurability();
         if (this._team === Team.RED)
             ret += .1;
         else
@@ -327,7 +327,8 @@ export class CarSetup {
     }
 
     private getAccelerationForDice(dice: number, weather: Weather): number {
-        let ret = this.getBonusTires(weather) * (3 - this.getBonusGear()) * 0.4 - .3 * this.getBonusDurability() - .1 * this.getBonusFlaps() + .3 * this.getBonusDice(dice);
+        // 4.9 + .6 * gear is related to max speed
+        let ret = Math.min(this.getBonusTires(weather), 4.3 / (4.9 + .6 * this.getBonusGear())) * 1.7 - .2 * this.getBonusDurability() - .1 * this.getBonusFlaps() + .3 * this.getBonusDice(dice);
         if (this._team === Team.VIOLET)
             ret += .1;
         else
@@ -341,7 +342,8 @@ export class CarSetup {
     private getMaxSpeedForDice(dice: number): number {
         if (!this.alive)
             return 0;
-        let ret = 5 + .5 * this.getBonusGear() - .2 * this.getBonusFlaps() - .3 * this.getBonusDurability() + .3 * this.getBonusDice(dice);
+        // 4.9 + .6 * gear is related to acceleration
+        let ret = 4.9 + .6 * this.getBonusGear() - .3 * this.getBonusFlaps() - .2 * this.getBonusDurability() + .3 * this.getBonusDice(dice);
         if (this._team === Team.BLUE)
             ret += .1;
         else
@@ -412,7 +414,7 @@ export class CarSetup {
 
     // -1 .. 1
     private getBonusFlaps(): number {
-        return this._flaps - 1;
+        return (this._flaps - 2) / 2;
     }
 
     // -1 .. 1
@@ -424,9 +426,9 @@ export class CarSetup {
     private getBonusDurability(): number {
         let ret = this._durability - 1;
         if (this._team === Team.BLACK)
-            ret += 1 / 3;
+            ret += 1 / 2;
         else
-            ret -= 1 / 3;
+            ret -= 1 / 2;
         return ret;
     }
 }
