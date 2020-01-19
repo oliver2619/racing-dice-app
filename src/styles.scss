@@ -427,7 +427,7 @@ label, div.label {
 .value-progress {
     background: radial-gradient(circle, rgb(0,0,0) 0%, rgb(60,60,60) 100%);
     color: #c0ff80;
-    //font-family: Quartz, LCD, monospace;
+    font-family: monospace; // Quartz, LCD
     font-weight: bold;
     border: 1px solid black;
     border-radius: $borderRadius;
