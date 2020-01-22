@@ -1,4 +1,10 @@
 import {Component} from '@angular/core';
+import {LocalStoreService} from 'src/app/local-store.service';
+
+interface DiceJson {
+    version: number;
+    score: number;
+}
 
 @Component({
     selector: 'app-dice',
@@ -7,10 +13,19 @@ import {Component} from '@angular/core';
 })
 export class DiceComponent {
 
+    private static readonly STORE_KEY = 'dice';
+    
     private _score = 0;
     private _timeout: number;
     private _interval: number;
 
+    constructor(private localStoreService: LocalStoreService) {
+        const json = <DiceJson> localStoreService.load(DiceComponent.STORE_KEY);
+        if(json !== undefined) {
+            this._score = json.score;
+        }
+    }
+    
     get score(): number {
         return this._score;
     }
@@ -34,6 +49,11 @@ export class DiceComponent {
             this._timeout = undefined;
             window.clearInterval(this._interval);
             this._interval = undefined;
+            const json: DiceJson = {
+                version: 1,
+                score: this._score
+            };
+            this.localStoreService.save(DiceComponent.STORE_KEY, json);
         }, 800 + 800 * Math.random());
     }
     

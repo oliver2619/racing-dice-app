@@ -1,7 +1,7 @@
 <div class="page">
     <div class="page-header">
         <app-nav-bar>
-            <div class="btn-group">
+            <div class="btn-list">
                 <button [disabled]="!needsRepair()" (click)="repair()"><img src="assets/icons/bandaid.png" [ngClass]="{'blink-warn': needsRepair()}"></button>
                 <button (click)="about()"><img src="assets/icons/help.png"></button>
             </div>
@@ -68,7 +68,7 @@
 <app-dialog>
     <div>
         <h2>Reifen</h2>
-        <p>Das Auto beschleunigt und fährt schneller, wenn die Reifen auf das Wetter abgestimmt sind.</p>
+        <p>Das Auto beschleunigt stärker und fährt schneller um Kurven, wenn die Reifen auf das Wetter abgestimmt sind.</p>
         <h2>Spoiler</h2>
         <p>Je höher der Wert, desto schneller ist das Auto in der Kurve aber desto niedriger ist die allgemeine Höchstgeschwindigkeit und die Beschleunigung.</p>
         <h2>Getriebe</h2>

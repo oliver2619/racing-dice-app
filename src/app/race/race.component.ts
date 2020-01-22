@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, OnInit} from '@angular/core';
 import {RaceService} from './race.service';
 import {CarSetupService} from '../car-setup/car-setup.service';
 import {JokerState, CarSetup, BrakeJokerState} from '../model/carSetup';
@@ -10,7 +10,7 @@ import {AudioService} from '../audio.service';
     templateUrl: './race.component.html',
     styleUrls: ['./race.component.css']
 })
-export class RaceComponent {
+export class RaceComponent implements OnInit {
 
     @ViewChild(DialogComponent, {static: true})
     private selectCurveDialog: DialogComponent;
@@ -120,11 +120,15 @@ export class RaceComponent {
     get diceThrown(): boolean {
         return this.currentCar.diceThrown;
     }
-    
+
     get alive(): boolean {
         return this.currentCar.alive;
     }
-    
+
+    ngOnInit(): void {
+        this._nextSpeed = this.currentCar.speed;
+    }
+
     armBrakeJoker(): void {
         if (!this.isBrakeJokerArmed) {
             this.currentCar.armBrakeJoker();
@@ -189,6 +193,7 @@ export class RaceComponent {
 
     throwDice(): void {
         this.currentCar.throwDice();
+        this._nextSpeed = this.currentCar.speed;
     }
 
     canGo(): boolean {
@@ -215,7 +220,7 @@ export class RaceComponent {
         if (this.currentCar.alive) {
             this.currentCar.giveUp();
             this.audioService.crash();
-        }else {
+        } else {
             this.currentCar.stop();
         }
     }

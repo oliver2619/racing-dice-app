@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {SettingsService} from 'src/app/settings.service';
+import {LocalStoreService} from 'src/app/local-store.service';
 
 
 interface AudioSettingsJson {
@@ -38,10 +38,10 @@ export class AudioService {
         return this._volumeLevel;
     }
 
-    constructor(private settingsService: SettingsService) {
+    constructor(private localStoreService: LocalStoreService) {
         this._horn.forEach(h => h.addEventListener('ended', (ev: MediaStreamErrorEvent) => this._hornPlayed = false));
         this._click.addEventListener('ended', (ev: MediaStreamErrorEvent) => this._clickPlayed = false);
-        const audioSettings = <AudioSettingsJson> this.settingsService.load(AudioService.SETTINGS_KEY);
+        const audioSettings = <AudioSettingsJson> this.localStoreService.load(AudioService.SETTINGS_KEY);
         if (audioSettings !== undefined) {
             this._volumeLevel = audioSettings.volumeLevel;
         } else {
@@ -103,6 +103,6 @@ export class AudioService {
             version: 1,
             volumeLevel: this._volumeLevel
         };
-        this.settingsService.save(AudioService.SETTINGS_KEY, settings);
+        this.localStoreService.save(AudioService.SETTINGS_KEY, settings);
     }
 }

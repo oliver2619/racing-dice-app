@@ -17,6 +17,24 @@ export enum DurabilityType {
     WEAK, NORMAL, STRONG
 }
 
+export type CarSetupObserver = (setup: CarSetup) => any;
+
+export interface CarSetupJson {
+    durability: string;
+    flaps: number;
+    fuel: number;
+    gear: number;
+    speed: number;
+    tires: string;
+    motorHealth: number;
+    tiresHealth: number;
+    currentCurve?: number;
+    curvesJoker: string;
+    speedJoker: string;
+    brakeJoker: string;
+    dice?: number;
+}
+
 export class CarSetup {
 
     private _durability: DurabilityType = DurabilityType.NORMAL;
@@ -27,13 +45,13 @@ export class CarSetup {
     private _tires: TireType = TireType.SUN;
     private _motorHealth: number = CarSetup.maxHealth;
     private _tiresHealth: number = CarSetup.maxHealth;
-    private _currentCurve: number;
+    private _currentCurve: number | undefined;
     private _curvesJoker: JokerState = JokerState.UNSET;
     private _speedJoker: JokerState = JokerState.UNSET;
     private _brakeJoker: BrakeJokerState = BrakeJokerState.UNSET;
-    private _dice: number;
+    private _dice: number | undefined;
 
-    constructor(private _team: Team) {
+    constructor(private _team: Team, private _observer: CarSetupObserver) {
     }
 
     public static get maxFuel(): number {
@@ -58,6 +76,7 @@ export class CarSetup {
 
     set durability(durability: DurabilityType) {
         this._durability = durability;
+        this._observer(this);
     }
 
     get flaps(): number {
@@ -66,6 +85,7 @@ export class CarSetup {
 
     set flaps(flaps: number) {
         this._flaps = flaps;
+        this._observer(this);
     }
 
     get fuel(): number {
@@ -74,6 +94,7 @@ export class CarSetup {
 
     set fuel(fuel: number) {
         this._fuel = fuel;
+        this._observer(this);
     }
 
     get gear(): number {
@@ -82,6 +103,7 @@ export class CarSetup {
 
     set gear(gear: number) {
         this._gear = gear;
+        this._observer(this);
     }
 
     get maxSpeed(): number {
@@ -110,6 +132,7 @@ export class CarSetup {
 
     set tires(tires: TireType) {
         this._tires = tires;
+        this._observer(this);
     }
 
     get motorHealth(): number {
@@ -126,6 +149,7 @@ export class CarSetup {
 
     set currentCurve(curve: number) {
         this._currentCurve = curve;
+        this._observer(this);
     }
 
     get curvesJoker(): JokerState {
@@ -177,6 +201,7 @@ export class CarSetup {
                 --this._tiresHealth;
                 this.healthCheck();
             }
+            this._observer(this);
         }
     }
 
@@ -205,12 +230,15 @@ export class CarSetup {
                 --this._motorHealth;
                 this.healthCheck();
             }
+            this._observer(this);
         }
     }
 
     throwDice(): void {
-        if (!this.diceThrown)
+        if (!this.diceThrown){
             this._dice = Math.random();
+            this._observer(this);
+        }
     }
 
     getAvgAcceleration(weather: Weather): number {
@@ -263,6 +291,7 @@ export class CarSetup {
                 --this._tiresHealth;
                 this.healthCheck();
             }
+            this._observer(this);
         }
     }
 
@@ -307,6 +336,7 @@ export class CarSetup {
         this._curvesJoker = JokerState.UNSET;
         this._brakeJoker = BrakeJokerState.UNSET;
         this._dice = undefined;
+        this._observer(this);
     }
 
     giveUp(): void {
@@ -316,6 +346,7 @@ export class CarSetup {
         this._dice = undefined;
         this._tiresHealth = 0;
         this._speed = 0;
+        this._observer(this);
     }
 
     stop(): void {
@@ -324,6 +355,42 @@ export class CarSetup {
         this._curvesJoker = JokerState.UNSET;
         this._brakeJoker = BrakeJokerState.UNSET;
         this._dice = undefined;
+        this._observer(this);
+    }
+
+    load(json: CarSetupJson): void {
+        this._durability = DurabilityType[json.durability];
+        this._flaps = json.flaps;
+        this._fuel = json.fuel;
+        this._gear = json.gear;
+        this._speed = json.speed;
+        this._tires = TireType[json.tires];
+        this._motorHealth = json.motorHealth;
+        this._tiresHealth = json.tiresHealth;
+        this._currentCurve = json.currentCurve;
+        this._curvesJoker = JokerState[json.curvesJoker];
+        this._speedJoker = JokerState[json.speedJoker];
+        this._brakeJoker = BrakeJokerState[json.brakeJoker];
+        this._dice = json.dice;
+    }
+
+    save(): CarSetupJson {
+        const ret: CarSetupJson = {
+            durability: DurabilityType[this._durability],
+            flaps: this._flaps,
+            fuel: this._fuel,
+            gear: this._gear,
+            speed: this._speed,
+            tires: TireType[this._tires],
+            motorHealth: this._motorHealth,
+            tiresHealth: this._tiresHealth,
+            currentCurve: this._currentCurve,
+            curvesJoker: JokerState[this._curvesJoker],
+            speedJoker: JokerState[this._speedJoker],
+            brakeJoker: BrakeJokerState[this._brakeJoker],
+            dice: this._dice
+        };
+        return ret;
     }
 
     private getAccelerationForDice(dice: number, weather: Weather): number {
