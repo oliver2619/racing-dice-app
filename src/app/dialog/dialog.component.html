@@ -2,7 +2,10 @@
     <div class="page">
         <div class="page-content">
             <ng-content></ng-content>
-            <button (click)="close()"><img src="assets/icons/cross.png"></button>
+            <div class="btn-list">
+                <button *ngIf="isQuestion" (click)="ok()"><img src="assets/icons/tick.png"></button>
+                <button (click)="cancel()"><img src="assets/icons/cross.png"></button>
+            </div>
         </div>
     </div>
 </div>

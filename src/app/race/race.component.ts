@@ -12,8 +12,11 @@ import {AudioService} from '../audio.service';
 })
 export class RaceComponent implements OnInit {
 
-    @ViewChild(DialogComponent, {static: true})
+    @ViewChild('curve', {static: true})
     private selectCurveDialog: DialogComponent;
+
+    @ViewChild('question', {static: true})
+    private questionDialog: DialogComponent;
 
     private _nextSpeed: number = 0;
 
@@ -102,7 +105,7 @@ export class RaceComponent implements OnInit {
 
     set currentCurve(curve: number) {
         this.currentCar.currentCurve = curve;
-        this.selectCurveDialog.close();
+        this.selectCurveDialog.cancel();
     }
 
     get curvesJokerNoFx(): boolean {
@@ -213,7 +216,13 @@ export class RaceComponent implements OnInit {
     }
 
     stop(): void {
-        this.currentCar.stop();
+        this.questionDialog.question().subscribe({
+            next: result => {
+                if (result) {
+                    this.currentCar.stop();
+                }
+            }
+        });
     }
 
     giveUp(): void {

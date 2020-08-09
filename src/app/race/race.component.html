@@ -57,10 +57,14 @@
         </div>
     </div>
 </div>
-<app-dialog title="Curve">
+<app-dialog #curve title="Kurve">
     <h1>Kurve wählen</h1>
     <div class="btn-group">
         <button *ngFor="let c of curves" [ngClass]="{checked: currentCurve === c}" (click)="currentCurve = c">{{c}}</button>
     </div>
     <button [ngClass]="{checked: currentCurve === undefined}" (click)="currentCurve = undefined"><img src="assets/icons/arrow_up.png"></button>
+</app-dialog>
+<app-dialog #question title="Frage">
+    <h1>Notbremse</h1>
+    <p>Möchtest du wirklich eine Notbremse machen und zum Stillstand kommen? Diese Aktion ist während eines Rennens nicht erlaubt.</p>
 </app-dialog>

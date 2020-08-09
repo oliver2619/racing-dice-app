@@ -1,13 +1,23 @@
 // variables
 
 $fontFamily: Segoe UI, sans-serif;
-$fontSize: 2.7vw;
 $boxShadow: 2px;
 $boxShadow2: 1.5rem;
 $buttonTextShadow: .6rem;
 $borderRadius: 1vh;
 $warn-color: #ffa040;
 $critical-color: #ff4040;
+
+@mixin fontSize($factor) {
+    @media all and (max-width: 1023px) {
+        font-size: 2.7vw * $factor;
+    }
+
+    @media all and (min-width: 1024px) {
+        font-size: 1024px * 2.7 / 100 * $factor;
+    }
+}
+
 
 // animations
 
@@ -109,11 +119,11 @@ body, h1, h2, label, div.label, button, a {
 }
 
 h1 {
-    font-size: $fontSize * 1.2;
+    @include fontSize(1.2);
 }
 
 body, label, button, a.button, .label, h2, .value-progress {
-    font-size: $fontSize;
+    @include fontSize(1);
 }
 
 body {
@@ -443,7 +453,7 @@ label, div.label {
     }
 
     .challenge & {
-        font-size: $fontSize * 4;
+        @include fontSize(4);
     }
 
     .progress & {
@@ -496,6 +506,10 @@ p {
     .footer-item img {
         width: 16px;
         height: 16px;
+        
+        &.health {
+            width: 32px;
+        }
     }
 }
 
@@ -504,6 +518,10 @@ p {
     .footer-item img {
         width: 24px;
         height: 24px;
+
+        &.health {
+            width: 32px;
+        }
     }
 }
 
