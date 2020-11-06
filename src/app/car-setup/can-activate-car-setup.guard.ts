@@ -11,7 +11,7 @@ export class CanActivateCarSetupGuard implements CanActivate {
     }
 
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
-        if (this.carSetupService.getSetup().driving) {
+        if (this.carSetupService.car.driving) {
             this.router.navigateByUrl('/race');
             return false;
         }

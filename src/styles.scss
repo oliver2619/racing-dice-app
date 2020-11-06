@@ -18,7 +18,6 @@ $critical-color: #ff4040;
     }
 }
 
-
 // animations
 
 @keyframes rotate {
@@ -183,6 +182,14 @@ canvas {
     align-items: center;
     overflow: auto;
 
+	&.scroll {
+		margin-bottom: .5ex;
+		border: 1px solid black;
+		padding: .5ex .5em;
+		overflow-y: scroll;
+		justify-content: flex-start;
+	}
+	
     h1 {
         margin: 0px;
     }
@@ -247,7 +254,7 @@ canvas {
 
 // buttons
 
-button, a.button {
+button, .button {
     color: black;
     background: rgb(193,198,200);
     background: radial-gradient(circle, rgba(193,198,200,1) 0%, rgba(134,143,153,1) 100%);
@@ -256,13 +263,18 @@ button, a.button {
     border: 1px solid black;
     border-radius: $borderRadius;
     font-family: $fontFamily;
+	text-decoration: none;
     display: inline-block;
     box-shadow: 0 0 1rem rgba(black,.5), 0 0 4px black;
     outline: 0px none black;
-    padding: .2ex .5em;
+    padding: .5ex .5em;
+
+	&.large {
+	    padding: 1em 1em;
+	}
 }
 
-button.checked, a.button.checked {
+button.checked, .button.checked {
     background: rgb(255,255,255);
     background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(208,208,208,1) 100%);
     box-shadow: 0px 0px $boxShadow white;
@@ -275,6 +287,8 @@ button.checked, a.button.checked {
 
 .btn-group {
     display: inline-flex;
+	flex-direction: row;
+	align-items: stretch;
 
     button, .button {
         border-top-left-radius: 0px;
@@ -294,6 +308,25 @@ button.checked, a.button.checked {
             border-bottom-right-radius: $borderRadius;
         }
     }
+
+	app-number {
+		display: flex;
+		align-items: stretch;
+		flex-grow: 1;
+		flex-shrink: 1;
+
+		.value-progress {
+	        border-top-left-radius: 0px;
+	        border-bottom-left-radius: 0px;
+	        border-top-right-radius: 0px;
+	        border-bottom-right-radius: 0px;
+	        border-left-style: none;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: flex-end;
+		}
+	}
 }
 
 .btn-list {
@@ -312,6 +345,21 @@ button.checked, a.button.checked {
             margin-right: 0;
         }
     }
+
+	&.large {
+		&>button, &>.button, &>div {
+    	    margin-left: 1em;
+        	margin-right: 1em;
+		}
+
+        &:first-child {
+            margin-left: 0;
+        }
+
+        &:last-child {
+            margin-right: 0;
+        }
+	}
 }
 
 // form
@@ -332,6 +380,18 @@ img {
     padding: 0px;
     display: inline-block;
     vertical-align: middle;
+}
+
+.composite-icon {
+	img.bottom-left {
+		position: absolute;
+		transform: translate(-40px, 8px) scale(.5, .5);
+	}
+
+	img.top-right {
+		position: absolute;
+		transform: translate(-24px, -8px) scale(.5, .5);
+	}
 }
 
 // colors
@@ -423,6 +483,29 @@ img {
     }
 }
 
+// parcour
+
+.parcour {
+
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+	
+	div, button, .button {
+		margin: 0 .2em;
+	}
+}
+
+.parcour-tile {
+	display: inline-grid;
+    grid-template-columns: repeat(2, auto);
+    column-gap: .2em;
+    row-gap: .2ex;
+    justify-items: end;
+    align-items: center;
+	align-content: center;
+}
+
 // other
 
 label, div.label {
@@ -444,7 +527,6 @@ label, div.label {
     display: inline-block;
     box-shadow: 0 0 2px black;
     text-shadow: 0 0 3px #c0ff80;
-    display: inline-block;
     text-align: right;
     padding: .2ex .5em;
 
@@ -481,6 +563,10 @@ label, div.label {
         color: black;
         text-shadow: -1px -1px 3px white, 1px 1px 2px white;
     }
+
+	.page-content.scroll {
+		border-color: black;
+	}
 }
 
 .blue, .violet, .black {
@@ -488,11 +574,15 @@ label, div.label {
         color: white;
         text-shadow: -1px -1px 3px black, 1px 1px 2px black;
     }
-
+	
     label, div.label {
         color: white;
         text-shadow: -1px -1px 3px black, 1px 1px 2px black;
     }
+
+	.page-content.scroll {
+		border-color: white;
+	}
 }
 
 p {

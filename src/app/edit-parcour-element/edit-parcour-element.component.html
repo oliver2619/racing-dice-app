@@ -1,0 +1,29 @@
+<app-dialog #dialog>
+	<h1>Element bearbeiten</h1>
+	<div class="form">
+		<label>Element</label>
+		<div class="btn-list">
+			<button (click)="setStraight(3)" class="parcour-tile">
+				<img src="assets/icons/arrow_up.png">3
+			</button>
+			<button (click)="setStraight(4)" class="parcour-tile">
+				<img src="assets/icons/arrow_up.png">4
+			</button>
+			<div class="btn-group">
+				<button (click)="setCurve(1)" class="parcour-tile" [ngClass]="{checked: curveLength === 1}">
+					<img src="assets/icons/arrow_turn_right.png">1
+				</button>
+				<button (click)="setCurve(3)" class="parcour-tile" [ngClass]="{checked: curveLength === 3}">
+					<img src="assets/icons/arrow_turn_right.png">3
+				</button>
+				<button (click)="setCurve(4)" class="parcour-tile" [ngClass]="{checked: curveLength === 4}">
+					<img src="assets/icons/arrow_turn_right.png">4
+				</button>
+			</div>
+		</div>
+		<label *ngIf="curveLength !== undefined">Kurve</label>
+	    <div *ngIf="curveLength !== undefined" class="btn-group">
+    	    <button *ngFor="let c of curves" (click)="selectCurve(c)">{{c}}</button>
+    	</div>
+	</div>
+</app-dialog>

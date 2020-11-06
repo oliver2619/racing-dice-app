@@ -1,64 +1,108 @@
-import {Component, ViewChild} from '@angular/core';
-import {CarSetup} from '../model/carSetup';
-import {CarSetupService} from './car-setup.service';
-import {RaceService} from '../race/race.service';
-import {DialogComponent} from '../dialog/dialog.component';
+import { Component, ViewChild, OnInit } from '@angular/core';
+import { CarSetup } from '../model/carSetup';
+import { CarSetupService } from './car-setup.service';
+import { RaceService } from '../race/race.service';
+import { DialogComponent } from '../dialog/dialog.component';
+import { ParcourService } from '../parcour/parcour.service';
+import { CarSetupInfo } from '../model/car-setup-info';
 
 @Component({
-    selector: 'app-car-setup',
-    templateUrl: './car-setup.component.html',
-    styleUrls: ['./car-setup.component.css']
+	selector: 'app-car-setup',
+	templateUrl: './car-setup.component.html',
+	styleUrls: ['./car-setup.component.css']
 })
-export class CarSetupComponent {
+export class CarSetupComponent implements OnInit {
 
-    @ViewChild(DialogComponent, {static: true})
-    private dlgTeams: DialogComponent;
+	private _benchmark = 0;
 
-    constructor(private carSetupService: CarSetupService, private raceService: RaceService) {}
+	@ViewChild(DialogComponent, { static: true })
+	private dlgTeams: DialogComponent;
 
-    get avgSpeedInCurve(): number {
-        return this.car.getAvgSpeedInCurve(this.raceService.weather);
-    }
+	get avgAcceleration(): number {
+		return this.carSetupService.car.getAvgAcceleration(this.raceService.weather);
+	}
 
-    get avgAcceleration(): number {
-        return this.car.getAvgAcceleration(this.raceService.weather);
-    }
+	get avgSpeedInCurve(): number {
+		return this.carSetupService.car.getAvgSpeedInCurve(this.raceService.weather);
+	}
 
-    get car(): CarSetup {
-        return this.carSetupService.getSetup();
-    }
+	get benchmarkValue(): number {
+		return this._benchmark;
+	}
 
-    get challengeSuccessTimes(): number {
-        return this.car.challengeTotalSuccessTimes;
-    }
-    
-    canDecFuel(): boolean {
-        return this.car.fuel > 1;
-    }
+	get carSetup(): CarSetupInfo {
+		return this.carSetupService.car.setup;
+	}
 
-    canIncFuel(): boolean {
-        return this.car.fuel < CarSetup.maxFuel;
-    }
+	get challengeSuccessTimes(): number {
+		return this.carSetupService.car.setup.challengeTotalSuccessTimes;
+	}
 
-    decFuel(): void {
-        if (this.canDecFuel())
-            this.car.fuel--;
-    }
+	get maxSpeed(): number {
+		return this.carSetupService.car.maxSpeed;
+	}
 
-    incFuel(): void {
-        if (this.canIncFuel())
-            this.car.fuel++;
-    }
+	get needsRepair(): boolean {
+		return this.carSetupService.car.totalHealth < CarSetup.maxHealth;
+	}
 
-    needsRepair(): boolean {
-        return this.car.totalHealth < CarSetup.maxHealth;
-    }
+	constructor(private carSetupService: CarSetupService, private raceService: RaceService, private parcourService: ParcourService) { }
+	
+	ngOnInit(): void {
+		this.updateBenchmark();
+	}
 
-    repair(): void {
-        this.car.repair();
-    }
+	about(): void {
+		this.dlgTeams.show();
+	}
 
-    about(): void {
-        this.dlgTeams.show();
-    }
+	canDecFuel(): boolean {
+		return this.carSetupService.car.fuel > 1;
+	}
+
+	canIncFuel(): boolean {
+		return this.carSetupService.car.fuel < CarSetup.maxFuel;
+	}
+
+	decFuel(): void {
+		if (this.canDecFuel()) {
+			this.carSetupService.changeFuel(-1);
+			this.updateBenchmark();
+		}
+	}
+
+	incFuel(): void {
+		if (this.canIncFuel()) {
+			this.carSetupService.changeFuel(1);
+			this.updateBenchmark();
+		}
+	}
+
+	repair(): void {
+		this.carSetupService.repair();
+	}
+
+	setDurability(dur: number): void {
+		this.carSetupService.setDurability(dur);
+		this.updateBenchmark();
+	}
+
+	setFlaps(flaps: number): void {
+		this.carSetupService.setFlaps(flaps);
+		this.updateBenchmark();
+	}
+
+	setGear(gear: number): void {
+		this.carSetupService.setGear(gear);
+		this.updateBenchmark();
+	}
+
+	setTires(tires: number): void {
+		this.carSetupService.setTires(tires);
+		this.updateBenchmark();
+	}
+
+	private updateBenchmark(): void {
+		this._benchmark = this.carSetupService.benchmark(this.parcourService.parcour);
+	}
 }

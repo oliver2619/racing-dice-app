@@ -1,90 +1,146 @@
-import {Injectable} from '@angular/core';
-import {CarSetup, CarSetupObserver, CarSetupJson} from '../model/carSetup';
-import {Team} from '../model/teams';
-import {LocalStoreService} from 'src/app/local-store.service';
-
-export type TeamSelectionChangeObserver = (team: Team) => any;
+import { Injectable } from '@angular/core';
+import { CarSetup } from '../model/carSetup';
+import { Team } from '../model/teams';
+import { LocalStoreService } from 'src/app/local-store.service';
+import { Car } from '../model/car';
+import { TeamService } from '../team-select/team.service';
+import { RaceService } from '../race/race.service';
+import { CarInfo } from '../model/car-info';
+import { CarJson } from '../model/car-json';
+import { Parcour } from '../model/parcour';
+import { Benchmark } from '../model/benchmark';
 
 interface CarListAndTeamSetupJson {
-    version: number;
-    team: string;
-    yellow: CarSetupJson;
-    red: CarSetupJson;
-    green: CarSetupJson;
-    blue: CarSetupJson;
-    violet: CarSetupJson;
-    black: CarSetupJson;
+	version: number;
+	yellow: CarJson;
+	red: CarJson;
+	green: CarJson;
+	blue: CarJson;
+	violet: CarJson;
+	black: CarJson;
 }
 
 @Injectable()
 export class CarSetupService {
 
-    private static readonly STORE_KEY: string = 'carSetup';
+	private static readonly STORE_KEY: string = 'carSetup';
 
-    private _carSetupObserver: CarSetupObserver = setup => this.save();
+	private _car: Car[] = [
+		new Car(new CarSetup(Team.YELLOW)),
+		new Car(new CarSetup(Team.RED)),
+		new Car(new CarSetup(Team.GREEN)),
+		new Car(new CarSetup(Team.BLUE)),
+		new Car(new CarSetup(Team.VIOLET)),
+		new Car(new CarSetup(Team.BLACK))
+	];
 
-    private carSetup: CarSetup[] = [
-        new CarSetup(Team.YELLOW, this._carSetupObserver),
-        new CarSetup(Team.RED, this._carSetupObserver),
-        new CarSetup(Team.GREEN, this._carSetupObserver),
-        new CarSetup(Team.BLUE, this._carSetupObserver),
-        new CarSetup(Team.VIOLET, this._carSetupObserver),
-        new CarSetup(Team.BLACK, this._carSetupObserver)
-    ];
+	get car(): CarInfo {
+		return this._car[this.teamService.team];
+	}
 
-    private _team: Team;
-    private _observers: TeamSelectionChangeObserver[] = [];
+	constructor(private localStoreService: LocalStoreService, private readonly teamService: TeamService, private readonly raceService: RaceService) {
+		const json = <CarListAndTeamSetupJson>this.localStoreService.load(CarSetupService.STORE_KEY);
+		if (json !== undefined) {
+			this._car[Team.YELLOW].load(json.yellow);
+			this._car[Team.RED].load(json.red);
+			this._car[Team.GREEN].load(json.green);
+			this._car[Team.BLUE].load(json.blue);
+			this._car[Team.VIOLET].load(json.violet);
+			this._car[Team.BLACK].load(json.black);
+		}
+	}
 
-    constructor(private localStoreService: LocalStoreService) {
-        const json = <CarListAndTeamSetupJson> this.localStoreService.load(CarSetupService.STORE_KEY);
-        if (json === undefined) {
-            this._team = Team.YELLOW;
-        } else {
-            this._team = Team[json.team.toUpperCase()];
-            this.carSetup[Team.YELLOW].load(json.yellow);
-            this.carSetup[Team.RED].load(json.red);
-            this.carSetup[Team.GREEN].load(json.green);
-            this.carSetup[Team.BLUE].load(json.blue);
-            this.carSetup[Team.VIOLET].load(json.violet);
-            this.carSetup[Team.BLACK].load(json.black);
-        }
-    }
+	armBrakeJoker(): void {
+		this._car[this.teamService.team].armBrakeJoker();
+		this.save();
+	}
 
-    getSetup(): CarSetup {
-        return this.carSetup[this._team];
-    }
+	armCurvesJoker(): void {
+		this._car[this.teamService.team].armCurveJoker();
+		this.save();
+	}
 
-    get team(): Team {
-        return this._team;
-    }
+	armSpeedJoker(): void {
+		this._car[this.teamService.team].armSpeedJoker();
+		this.save();
+	}
 
-    set team(team: Team) {
-        if (this._team !== team) {
-            this._team = team;
-            this.save();
-            this._observers.forEach(o => o(this._team));
-        }
-    }
+	benchmark(parcour: Parcour): number {
+		const car = this._car[this.teamService.team].clone();
+		const b = new Benchmark(car, parcour, this.raceService.weather);
+		return b.run();
+	}
 
-    addTeamSelectionEvent(callback: TeamSelectionChangeObserver): void {
-        this._observers.push(callback);
-    }
+	changeFuel(amount: number): void {
+		this._car[this.teamService.team].fuel += amount;
+		this.save();
+	}
 
-    removeTeamSelectionEvent(callback: TeamSelectionChangeObserver): void {
-        this._observers = this._observers.filter(o => o !== callback);
-    }
+	giveUp(): void {
+		this._car[this.teamService.team].giveUp();
+		this.save();
+	}
 
-    private save(): void {
-        const json: CarListAndTeamSetupJson = {
-            version: 1,
-            team: Team[this._team].toLowerCase(),
-            yellow: this.carSetup[Team.YELLOW].save(),
-            red: this.carSetup[Team.RED].save(),
-            green: this.carSetup[Team.GREEN].save(),
-            blue: this.carSetup[Team.BLUE].save(),
-            violet: this.carSetup[Team.VIOLET].save(),
-            black: this.carSetup[Team.BLACK].save(),
-        };
-        this.localStoreService.save(CarSetupService.STORE_KEY, json);
-    }
+	drive(speed: number): void {
+		this._car[this.teamService.team].drive(speed, this.raceService.weather);
+		this.save();
+	}
+
+	repair(): void {
+		this._car[this.teamService.team].repair();
+		this.save();
+	}
+
+	setCurve(curve: number): void {
+		this._car[this.teamService.team].curve = curve;
+		this.save();
+	}
+
+	setDurability(durability: number): void {
+		this._car[this.teamService.team].setup.durability = durability;
+		this.save();
+	}
+
+	setFlaps(flaps: number): void {
+		this._car[this.teamService.team].setup.flaps = flaps;
+		this.save();
+	}
+
+	setGear(gear: number): void {
+		this._car[this.teamService.team].setup.gear = gear;
+		this.save();
+	}
+
+	setTires(tires: number): void {
+		this._car[this.teamService.team].setup.tires = tires;
+		this.save();
+	}
+
+	stop(): void {
+		this._car[this.teamService.team].stop();
+		this.save();
+	}
+
+	throwDice(): void {
+		this._car[this.teamService.team].throwDice();
+		this.save();
+	}
+
+	undo(): void {
+		this._car[this.teamService.team].undo();
+		this.save();
+	}
+
+	private save(): void {
+		const json: CarListAndTeamSetupJson = {
+			version: 1,
+			yellow: this._car[Team.YELLOW].save(),
+			red: this._car[Team.RED].save(),
+			green: this._car[Team.GREEN].save(),
+			blue: this._car[Team.BLUE].save(),
+			violet: this._car[Team.VIOLET].save(),
+			black: this._car[Team.BLACK].save(),
+		};
+		this.localStoreService.save(CarSetupService.STORE_KEY, json);
+	}
 }

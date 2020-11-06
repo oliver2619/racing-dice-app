@@ -2,7 +2,7 @@
     <div class="page-header">
         <app-nav-bar>
             <div class="btn-list">
-                <button [disabled]="!needsRepair()" (click)="repair()"><img src="assets/icons/bandaid.png" [ngClass]="{'blink-warn': needsRepair()}"></button>
+                <button [disabled]="!needsRepair" (click)="repair()"><img src="assets/icons/bandaid.png" [ngClass]="{'blink-warn': needsRepair}"></button>
                 <button (click)="about()"><img src="assets/icons/help.png"></button>
             </div>
         </app-nav-bar>
@@ -11,24 +11,24 @@
         <div class="form">
             <label><img src="assets/icons/tire.png">Reifen</label>
             <div class="btn-group">
-                <button [ngClass]="{checked: car.tires === 1}" (click)="car.tires = 1"><img src="assets/icons/weather_sun.png"></button>
-                <button [ngClass]="{checked: car.tires === 0}" (click)="car.tires = 0"><img src="assets/icons/weather_rain.png"></button>
+                <button [ngClass]="{checked: carSetup.tires === 1}" (click)="setTires(1)"><img src="assets/icons/weather_sun.png"></button>
+                <button [ngClass]="{checked: carSetup.tires === 0}" (click)="setTires(0)"><img src="assets/icons/weather_rain.png"></button>
             </div>
             <label><img src="assets/icons/windy.png">Spoiler</label>
             <div class="btn-group">
-                <button [ngClass]="{checked: car.flaps === 0}" (click)="car.flaps = 0">20 °</button>
-                <button [ngClass]="{checked: car.flaps === 1}" (click)="car.flaps = 1">30 °</button>
-                <button [ngClass]="{checked: car.flaps === 2}" (click)="car.flaps = 2">40 °</button>
-                <button [ngClass]="{checked: car.flaps === 3}" (click)="car.flaps = 3">43 °</button>
-                <button [ngClass]="{checked: car.flaps === 4}" (click)="car.flaps = 4">45 °</button>
+                <button [ngClass]="{checked: carSetup.flaps === 0}" (click)="setFlaps(0)">20 °</button>
+                <button [ngClass]="{checked: carSetup.flaps === 1}" (click)="setFlaps(1)">30 °</button>
+                <button [ngClass]="{checked: carSetup.flaps === 2}" (click)="setFlaps(2)">40 °</button>
+                <button [ngClass]="{checked: carSetup.flaps === 3}" (click)="setFlaps(3)">43 °</button>
+                <button [ngClass]="{checked: carSetup.flaps === 4}" (click)="setFlaps(4)">45 °</button>
             </div>
             <label><img src="assets/icons/gear_in.png">Getriebe</label>
             <div class="btn-group">
-                <button [ngClass]="{checked: car.gear === 0}" (click)="car.gear = 0">Beschl.</button>
-                <button [ngClass]="{checked: car.gear === 1}" (click)="car.gear = 1">2</button>
-                <button [ngClass]="{checked: car.gear === 2}" (click)="car.gear = 2">3</button>
-                <button [ngClass]="{checked: car.gear === 3}" (click)="car.gear = 3">4</button>
-                <button [ngClass]="{checked: car.gear === 4}" (click)="car.gear = 4">Geschw.</button>
+                <button [ngClass]="{checked: carSetup.gear === 0}" (click)="setGear(0)">Beschl.</button>
+                <button [ngClass]="{checked: carSetup.gear === 1}" (click)="setGear(1)">2</button>
+                <button [ngClass]="{checked: carSetup.gear === 2}" (click)="setGear(2)">3</button>
+                <button [ngClass]="{checked: carSetup.gear === 3}" (click)="setGear(3)">4</button>
+                <button [ngClass]="{checked: carSetup.gear === 4}" (click)="setGear(4)">Geschw.</button>
             </div>
             <!--
             <label><img src="assets/icons/gas.png">Treibstoff</label>
@@ -40,32 +40,36 @@
             -->
             <label><img src="assets/icons/fire.png">Qualität</label>
             <div class="btn-group">
-                <button [ngClass]="{checked: car.durability === 0}" (click)="car.durability = 0">Niedrig</button>
-                <button [ngClass]="{checked: car.durability === 1}" (click)="car.durability = 1">Mittel</button>
-                <button [ngClass]="{checked: car.durability === 2}" (click)="car.durability = 2">Hoch</button>
+                <button [ngClass]="{checked: carSetup.durability === 0}" (click)="setDurability(0)">Niedrig</button>
+                <button [ngClass]="{checked: carSetup.durability === 1}" (click)="setDurability(1)">Mittel</button>
+                <button [ngClass]="{checked: carSetup.durability === 2}" (click)="setDurability(2)">Hoch</button>
             </div>
         </div>
     </div>
     <div class="page-footer">
         <div class="footer-item">
-            <label><img src="assets/icons/arrow_up.png">Gerade</label>
-            <app-number [value]="car.maxSpeed" [max]="6"></app-number>
+            <label><img src="assets/icons/arrow_up.png"><!-- Gerade --></label>
+            <app-number [value]="maxSpeed" [max]="6"></app-number>
         </div>
         <div class="footer-item">
-            <label><img src="assets/icons/arrow_turn_right.png">Kurven</label>
+            <label><img src="assets/icons/arrow_turn_right.png"><!-- Kurven --></label>
             <app-number [value]="avgSpeedInCurve" [max]="6"></app-number>
         </div>
         <div class="footer-item">
-            <label><img src="assets/icons/dashboard.png">Beschl.</label>
+            <label><img src="assets/icons/rocket.png"><!-- Beschl. --></label>
             <app-number [value]="avgAcceleration" [max]="3"></app-number>
         </div>
         <div class="footer-item">
-            <label><img src="assets/icons/dynamite.png">Erfolge</label>
+            <label><img src="assets/icons/dynamite.png"><!-- Erfolge --></label>
             <app-number [value]="challengeSuccessTimes" [decimals]="0" [width]="3"></app-number>
+        </div>
+        <div class="footer-item">
+            <label><img src="assets/icons/star.png"><!-- Avg. speed --></label>
+            <app-number [value]="benchmarkValue" [decimals]="2" [max]="6"></app-number>
         </div>
     </div>
 </div>
-<app-dialog>
+<app-dialog [scrolling]="true">
     <div>
         <h2>Reifen</h2>
         <p>Das Auto beschleunigt stärker und fährt schneller um Kurven, wenn die Reifen auf das Wetter abgestimmt sind.</p>
@@ -75,5 +79,11 @@
         <p>Je höher die Beschleunigung, desto niedriger ist die Höchstgeschwindigkeit und umgekehrt.</p>
         <h2>Qualität</h2>
         <p>Je höher die Qualität, desto niedriger ist die Beschleunigung und Geschwindigkeit, aber umso höheres <img src="assets/icons/dynamite.png"> Risiko kann eingegangen werden.</p>
+        <h2>Legende</h2>
+        <p><img src="assets/icons/arrow_up.png"> Durchschnittliche Höchstgeschwindigkeit auf der Geraden.</p>
+        <p><img src="assets/icons/arrow_turn_right.png"> Durchschnittliche Höchstgeschwindigkeit in der Kurve.</p>
+        <p><img src="assets/icons/rocket.png"> Durchschnittliche Beschleunigung.</p>
+        <p><img src="assets/icons/dynamite.png"> Durchschnittliche Anzahl der Erfolge von <img src="assets/icons/dynamite.png"> Versuchen.</p>
+        <p><img src="assets/icons/star.png"> Rating bezüglich der eingegebenen Rennstrecke.</p>
     </div>
 </app-dialog>

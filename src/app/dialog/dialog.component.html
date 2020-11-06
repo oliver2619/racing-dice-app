@@ -1,7 +1,9 @@
 <div class="dialog" [hidden]="!visible">
     <div class="page">
-        <div class="page-content">
+        <div class="page-content" [ngClass]="{scroll: scrolling}">
             <ng-content></ng-content>
+        </div>
+        <div class="page-footer">
             <div class="btn-list">
                 <button *ngIf="isQuestion" (click)="ok()"><img src="assets/icons/tick.png"></button>
                 <button (click)="cancel()"><img src="assets/icons/cross.png"></button>

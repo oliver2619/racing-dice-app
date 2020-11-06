@@ -23,6 +23,8 @@ import { CanvasComponent } from './canvas/canvas.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { NumberDisplayValueComponent } from './number-display-value/number-display-value.component';
+import { ParcourComponent } from './parcour/parcour.component';
+import { EditParcourElementComponent } from './edit-parcour-element/edit-parcour-element.component';
 
 
 @NgModule({
@@ -39,7 +41,9 @@ import { NumberDisplayValueComponent } from './number-display-value/number-displ
         ButtonDirective,
         HealthComponent,
         CanvasComponent,
-        NumberDisplayValueComponent
+        NumberDisplayValueComponent,
+        ParcourComponent,
+        EditParcourElementComponent
     ],
     imports: [
         BrowserModule,

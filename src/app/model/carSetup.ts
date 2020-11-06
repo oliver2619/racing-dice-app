@@ -1,501 +1,136 @@
-import {Team} from "./teams";
-import {Weather} from "./race";
-
-export enum JokerState {
-    UNSET, DAMAGE, NO_EFFECT, SUCCESS, DAMAGE_SUCCESS
-}
-
-export enum BrakeJokerState {
-    UNSET, DAMAGE_SUCCESS, SUCCESS
-}
+import { Team } from "./teams";
+import { Weather } from "./race";
+import { CarJson } from './car-json';
+import { CarSetupInfo } from './car-setup-info';
+import { BrakeJokerState, JokerState } from './car-info';
 
 export enum TireType {
-    RAIN, SUN
+	RAIN, SUN
 }
 
 export enum DurabilityType {
-    WEAK, NORMAL, STRONG
+	WEAK, NORMAL, STRONG
 }
 
-export type CarSetupObserver = (setup: CarSetup) => any;
+export class CarSetup implements CarSetupInfo {
 
-export interface CarSetupJson {
-    durability: string;
-    flaps: number;
-    fuel: number;
-    gear: number;
-    speed: number;
-    tires: string;
-    motorHealth: number;
-    tiresHealth: number;
-    currentCurve?: number;
-    curvesJoker: string;
-    speedJoker: string;
-    brakeJoker: string;
-    dice?: number;
-}
+	static readonly maxFuel = 20;
+	static readonly maxHealth = 5;
 
-export class CarSetup {
+	durability = DurabilityType.NORMAL;
+	flaps = 2;
+	gear = 2;
+	tires = TireType.SUN;
 
-    private _durability: DurabilityType = DurabilityType.NORMAL;
-    private _flaps: number = 2;
-    private _fuel: number = Math.floor(CarSetup.maxFuel * .8);
-    private _gear: number = 2;
-    private _speed: number = 0;
-    private _tires: TireType = TireType.SUN;
-    private _motorHealth: number = CarSetup.maxHealth;
-    private _tiresHealth: number = CarSetup.maxHealth;
-    private _currentCurve: number | undefined;
-    private _curvesJoker: JokerState = JokerState.UNSET;
-    private _speedJoker: JokerState = JokerState.UNSET;
-    private _brakeJoker: BrakeJokerState = BrakeJokerState.UNSET;
-    private _dice: number | undefined;
+	get challengeTotalSuccessTimes(): number {
+		return Math.round(CarSetup.maxHealth * this.probabilityChallengeSuccess / this.probabilityChallengeDamage);
+	}
 
-    constructor(private _team: Team, private _observer: CarSetupObserver) {
-    }
+	constructor(public readonly team: Team) {
+	}
 
-    public static get maxFuel(): number {
-        return 20;
-    }
+	getBrakeJokerChallenge(): BrakeJokerState {
+		if (Math.random() < this.probabilityChallengeSuccess)
+			return BrakeJokerState.SUCCESS;
+		else
+			return BrakeJokerState.DAMAGE_SUCCESS;
+	}
 
-    public static get maxHealth(): number {
-        return 5;
-    }
+	getJokerChallenge(): JokerState {
+		if (Math.random() < this.probabilityChallengeSuccess) {
+			if (Math.random() < this.probabilityChallengeDamage)
+				return JokerState.DAMAGE_SUCCESS;
+			else
+				return JokerState.SUCCESS;
+		} else {
+			if (Math.random() < this.probabilityChallengeDamage)
+				return JokerState.DAMAGE;
+			else
+				return JokerState.NO_EFFECT;
+		}
+	}
 
-    get brakeJoker(): BrakeJokerState {
-        return this._brakeJoker;
-    }
+	load(json: CarJson): void {
+		this.durability = DurabilityType[json.durability];
+		this.flaps = json.flaps;
+		this.gear = json.gear;
+		this.tires = TireType[json.tires];
+	}
 
-    get driving(): boolean {
-        return this._speed > 0 || this._dice !== undefined;
-    }
+	save(json: CarJson): void {
+		json.durability = DurabilityType[this.durability];
+		json.flaps = this.flaps;
+		json.gear = this.gear;
+		json.tires = TireType[this.tires];
+	}
 
-    get durability(): DurabilityType {
-        return this._durability;
-    }
+	// .5 .. 1
+	getBonusTires(weather: Weather): number {
+		let bonus: number;
+		switch (weather) {
+			case Weather.SUN:
+				bonus = this.tires === TireType.SUN ? 1 : .6;
+				break;
+			case Weather.CLOUDY:
+				bonus = this.tires === TireType.SUN ? 1 : .7;
+				break;
+			case Weather.CLOUDS:
+				bonus = this.tires === TireType.SUN ? .9 : .8;
+				break;
+			case Weather.RAIN_LITTLE:
+				bonus = this.tires === TireType.SUN ? .7 : .9;
+				break;
+			case Weather.RAIN:
+				bonus = this.tires === TireType.SUN ? .5 : .8;
+				break;
+			default:
+				throw 'Unknown weather';
+		}
+		if (this.team === Team.YELLOW)
+			bonus *= 1.04;
+		return bonus;
+	}
 
-    set durability(durability: DurabilityType) {
-        this._durability = durability;
-        this._observer(this);
-    }
+	// -1 .. 1
+	getBonusDice(dice: number): number {
+		return dice * 2 - 1;
+	}
 
-    get flaps(): number {
-        return this._flaps;
-    }
+	// -1 .. 1
+	getBonusFlaps(): number {
+		return (this.flaps - 2) / 2;
+	}
 
-    set flaps(flaps: number) {
-        this._flaps = flaps;
-        this._observer(this);
-    }
+	// -1 .. 1
+	getBonusGear(): number {
+		return (this.gear - 2) / 2;
+	}
 
-    get fuel(): number {
-        return this._fuel;
-    }
+	// -1 .. 1
+	getBonusDurability(): number {
+		let ret = this.durability - 1;
+		if (this.team === Team.BLACK)
+			ret += 1 / 2;
+		else
+			ret -= 1 / 2;
+		return ret;
+	}
 
-    set fuel(fuel: number) {
-        this._fuel = fuel;
-        this._observer(this);
-    }
+	private get probabilityChallengeSuccess(): number {
+		let ret = 0.65 + 0.2 * (this.durability - 1);
+		if (this.team === Team.BLACK)
+			ret += .05;
+		else
+			ret -= .05;
+		return ret;
+	}
 
-    get gear(): number {
-        return this._gear;
-    }
-
-    set gear(gear: number) {
-        this._gear = gear;
-        this._observer(this);
-    }
-
-    get maxSpeed(): number {
-        let ret = 0;
-        for (let dice = 0; dice < 100; ++dice) {
-            ret += this.getMaxSpeedForDice(dice / 100);
-        }
-        return ret / 100;
-    }
-
-    get nextMinSpeed(): number {
-        return Math.max(this._speed - (this._brakeJoker !== BrakeJokerState.UNSET ? 3 : 2), 0);
-    }
-
-    get speed(): number {
-        return this._speed;
-    }
-
-    get speedJoker(): JokerState {
-        return this._speedJoker;
-    }
-
-    get tires(): TireType {
-        return this._tires;
-    }
-
-    set tires(tires: TireType) {
-        this._tires = tires;
-        this._observer(this);
-    }
-
-    get motorHealth(): number {
-        return this._motorHealth;
-    }
-
-    get tiresHealth(): number {
-        return this._tiresHealth;
-    }
-
-    get currentCurve(): number {
-        return this._currentCurve;
-    }
-
-    set currentCurve(curve: number) {
-        this._currentCurve = curve;
-        this._observer(this);
-    }
-
-    get curvesJoker(): JokerState {
-        return this._curvesJoker;
-    }
-
-    get totalHealth(): number {
-        return Math.min(this._tiresHealth, this._motorHealth);
-    }
-
-    get alive(): boolean {
-        return this.totalHealth > 0;
-    }
-
-    get diceThrown(): boolean {
-        return this._dice !== undefined;
-    }
-
-    get challengeTotalSuccessTimes(): number {
-        return Math.round(CarSetup.maxHealth * this.probabilityChallengeSuccess / this.probabilityChallengeDamage);
-    }
-
-    private get probabilityChallengeSuccess(): number {
-        let ret = 0.65 + 0.2 * (this._durability - 1);
-        if (this._team === Team.BLACK)
-            ret += .05;
-        else
-            ret -= .05;
-        return ret;
-    }
-
-    private get probabilityChallengeDamage(): number {
-        let ret = .12 - 0.04 * (this._durability - 1);
-        if (this._team === Team.BLACK)
-            ret -= .01;
-        else
-            ret += .01;
-        return ret;
-    }
-
-    canArmBrakeJoker(): boolean {
-        return this._brakeJoker === BrakeJokerState.UNSET && this._speed > 2;
-    }
-
-    armBrakeJoker(): void {
-        if (this._brakeJoker === BrakeJokerState.UNSET && this.alive) {
-            this._brakeJoker = this.getBrakeJokerChallenge();
-            if (this._brakeJoker === BrakeJokerState.DAMAGE_SUCCESS) {
-                --this._tiresHealth;
-                this.healthCheck();
-            }
-            this._observer(this);
-        }
-    }
-
-    canArmSpeedJoker(weather: Weather): boolean {
-        // TODO only if maxSpeed < 6
-        if (this._speedJoker !== JokerState.UNSET)
-            return true;
-        const oldSpeedJoker = this._speedJoker;
-        const oldCurvesJoker = this._curvesJoker;
-        if (this._curvesJoker === JokerState.UNSET)
-            this._curvesJoker = JokerState.SUCCESS;
-        this._speedJoker = JokerState.UNSET;
-        const v1 = this.getNextSpeedOptions(weather).length;
-        this._speedJoker = JokerState.SUCCESS;
-        const v2 = this.getNextSpeedOptions(weather).length;
-        this._speedJoker = oldSpeedJoker;
-        this._curvesJoker = oldCurvesJoker;
-        return v2 > v1;
-
-    }
-
-    armSpeedJoker(): void {
-        if (this._speedJoker === JokerState.UNSET && this.alive) {
-            this._speedJoker = this.getJokerChallenge();
-            if (this._speedJoker === JokerState.DAMAGE || this._speedJoker === JokerState.DAMAGE_SUCCESS) {
-                --this._motorHealth;
-                this.healthCheck();
-            }
-            this._observer(this);
-        }
-    }
-
-    throwDice(): void {
-        if (!this.diceThrown){
-            this._dice = Math.random();
-            this._observer(this);
-        }
-    }
-
-    getAvgAcceleration(weather: Weather): number {
-        let ret = 0;
-        for (let dice = 0; dice < 100; ++dice) {
-            ret += this.getAccelerationForDice(dice / 100, weather);
-        }
-        return ret / 100;
-    }
-
-    getNextMaxSpeed(weather: Weather): number {
-        let accel: number;
-        if (this._dice !== undefined)
-            accel = this.getAccelerationForDice(this._dice, weather);
-        else
-            accel = 0;
-        return Math.min(this._speed + accel, this.getMaxSpeedInCurve(this.currentCurve, weather));
-    }
-
-    getNextSpeedOptions(weather: Weather): number[] {
-        const ret: number[] = [];
-        const minSpeed = this.nextMinSpeed;
-        const maxSpeed = this.getNextMaxSpeed(weather);
-        for (let i = minSpeed; i <= maxSpeed; ++i)
-            ret.push(i);
-        return ret;
-    }
-
-    canArmCurvesJoker(weather: Weather): boolean {
-        // TODO only if max speed < 6
-        if (this._curvesJoker !== JokerState.UNSET)
-            return true;
-        const oldCurvesJoker = this._curvesJoker;
-        const oldSpeedJoker = this._speedJoker;
-        if (this._speedJoker === JokerState.UNSET)
-            this._speedJoker = JokerState.SUCCESS;
-        this._curvesJoker = JokerState.UNSET;
-        const v1 = this.getNextSpeedOptions(weather).length;
-        this._curvesJoker = JokerState.SUCCESS;
-        const v2 = this.getNextSpeedOptions(weather).length;
-        this._curvesJoker = oldCurvesJoker;
-        this._speedJoker = oldSpeedJoker;
-        return v2 > v1;
-    }
-
-    armCurvesJoker(): void {
-        if (this._curvesJoker === JokerState.UNSET && this.alive) {
-            this._curvesJoker = this.getJokerChallenge();
-            if (this._curvesJoker === JokerState.DAMAGE || this._curvesJoker === JokerState.DAMAGE_SUCCESS) {
-                --this._tiresHealth;
-                this.healthCheck();
-            }
-            this._observer(this);
-        }
-    }
-
-    getAvgSpeedInCurve(weather: Weather): number {
-        let ret = 0;
-        for (let c = 10; c <= 20; ++c) {
-            ret += this.getMaxSpeedInCurve(c, weather);
-        }
-        return ret / 11;
-    }
-
-    // 1 .. 5
-    getMaxSpeedInCurve(curve: number, weather: Weather): number {
-        if (curve === undefined)
-            return this.getMaxSpeedForDice(this._dice);
-        const ms = this.getMaxSpeedForDice(.5);
-        let ret = .3 + this.getBonusTires(weather) * (2 + this.getBonusFlaps() / 2) * (curve / 20) * 1.8 - .2 * this.getBonusDurability();
-        if (this._team === Team.RED)
-            ret += .1;
-        else
-            ret -= .1;
-        ret = Math.round(ret);
-        if (this._curvesJoker === JokerState.SUCCESS || this._curvesJoker === JokerState.DAMAGE_SUCCESS)
-            ++ret;
-        return Math.min(ret, ms);
-    }
-
-    repair(): void {
-        this._motorHealth = CarSetup.maxHealth;
-        this._tiresHealth = CarSetup.maxHealth;
-        this.stop();
-    }
-
-    canGo(speed: number, weather: Weather): boolean {
-        return speed >= this.nextMinSpeed && speed <= this.getNextMaxSpeed(weather);
-    }
-
-    go(speed: number, weather: Weather): void {
-        if (this.canGo(speed, weather))
-            this._speed = speed;
-        this._speedJoker = JokerState.UNSET;
-        this._curvesJoker = JokerState.UNSET;
-        this._brakeJoker = BrakeJokerState.UNSET;
-        this._dice = undefined;
-        this._observer(this);
-    }
-
-    giveUp(): void {
-        this._speedJoker = JokerState.UNSET;
-        this._curvesJoker = JokerState.UNSET;
-        this._brakeJoker = BrakeJokerState.UNSET;
-        this._dice = undefined;
-        this._tiresHealth = 0;
-        this._speed = 0;
-        this._observer(this);
-    }
-
-    stop(): void {
-        this._speed = 0;
-        this._speedJoker = JokerState.UNSET;
-        this._curvesJoker = JokerState.UNSET;
-        this._brakeJoker = BrakeJokerState.UNSET;
-        this._dice = undefined;
-        this._observer(this);
-    }
-
-    load(json: CarSetupJson): void {
-        this._durability = DurabilityType[json.durability];
-        this._flaps = json.flaps;
-        this._fuel = json.fuel;
-        this._gear = json.gear;
-        this._speed = json.speed;
-        this._tires = TireType[json.tires];
-        this._motorHealth = json.motorHealth;
-        this._tiresHealth = json.tiresHealth;
-        this._currentCurve = json.currentCurve;
-        this._curvesJoker = JokerState[json.curvesJoker];
-        this._speedJoker = JokerState[json.speedJoker];
-        this._brakeJoker = BrakeJokerState[json.brakeJoker];
-        this._dice = json.dice;
-    }
-
-    save(): CarSetupJson {
-        const ret: CarSetupJson = {
-            durability: DurabilityType[this._durability],
-            flaps: this._flaps,
-            fuel: this._fuel,
-            gear: this._gear,
-            speed: this._speed,
-            tires: TireType[this._tires],
-            motorHealth: this._motorHealth,
-            tiresHealth: this._tiresHealth,
-            currentCurve: this._currentCurve,
-            curvesJoker: JokerState[this._curvesJoker],
-            speedJoker: JokerState[this._speedJoker],
-            brakeJoker: BrakeJokerState[this._brakeJoker],
-            dice: this._dice
-        };
-        return ret;
-    }
-
-    private getAccelerationForDice(dice: number, weather: Weather): number {
-        // 4.9 + .6 * gear is related to max speed
-        let ret = Math.min(this.getBonusTires(weather), 4.3 / (4.9 + .6 * this.getBonusGear())) * 1.7 - .2 * this.getBonusDurability() - .1 * this.getBonusFlaps() + .3 * this.getBonusDice(dice);
-        if (this._team === Team.VIOLET)
-            ret += .1;
-        else
-            ret -= .1;
-        ret = Math.round(ret);
-        if (this._speedJoker === JokerState.SUCCESS || this._speedJoker === JokerState.DAMAGE_SUCCESS)
-            ++ret;
-        return ret;
-    }
-
-    private getMaxSpeedForDice(dice: number): number {
-        if (!this.alive)
-            return 0;
-        // 4.9 + .6 * gear is related to acceleration
-        let ret = 4.9 + .6 * this.getBonusGear() - .3 * this.getBonusFlaps() - .2 * this.getBonusDurability() + .3 * this.getBonusDice(dice);
-        if (this._team === Team.BLUE)
-            ret += .1;
-        else
-            ret -= .1;
-        ret = Math.round(ret);
-        if ((this._speedJoker === JokerState.SUCCESS || this._speedJoker === JokerState.DAMAGE_SUCCESS) && ret < 6)
-            ++ret;
-        return ret;
-    }
-
-    private getJokerChallenge(): JokerState {
-        if (Math.random() < this.probabilityChallengeSuccess) {
-            if (Math.random() < this.probabilityChallengeDamage)
-                return JokerState.DAMAGE_SUCCESS;
-            else
-                return JokerState.SUCCESS;
-        } else {
-            if (Math.random() < this.probabilityChallengeDamage)
-                return JokerState.DAMAGE;
-            else
-                return JokerState.NO_EFFECT;
-        }
-    }
-
-    private getBrakeJokerChallenge(): BrakeJokerState {
-        if (Math.random() < this.probabilityChallengeSuccess)
-            return BrakeJokerState.SUCCESS;
-        else
-            return BrakeJokerState.DAMAGE_SUCCESS;
-    }
-
-    private healthCheck(): void {
-        if (this.totalHealth <= 0)
-            this._speed = 0;
-    }
-
-    // .5 .. 1
-    private getBonusTires(weather: Weather): number {
-        let bonus: number;
-        switch (weather) {
-            case Weather.SUN:
-                bonus = this._tires === TireType.SUN ? 1 : .6;
-                break;
-            case Weather.CLOUDY:
-                bonus = this._tires === TireType.SUN ? 1 : .7;
-                break;
-            case Weather.CLOUDS:
-                bonus = this._tires === TireType.SUN ? .9 : .8;
-                break;
-            case Weather.RAIN_LITTLE:
-                bonus = this._tires === TireType.SUN ? .7 : .9;
-                break;
-            case Weather.RAIN:
-                bonus = this._tires === TireType.SUN ? .5 : .8;
-                break;
-            default:
-                throw 'Unknown weather';
-        }
-        if (this._team === Team.YELLOW)
-            bonus *= 1.04;
-        return bonus;
-    }
-
-    // -1 .. 1
-    private getBonusDice(dice: number): number {
-        return dice * 2 - 1;
-    }
-
-    // -1 .. 1
-    private getBonusFlaps(): number {
-        return (this._flaps - 2) / 2;
-    }
-
-    // -1 .. 1
-    private getBonusGear(): number {
-        return (this._gear - 2) / 2;
-    }
-
-    // -1 .. 1
-    private getBonusDurability(): number {
-        let ret = this._durability - 1;
-        if (this._team === Team.BLACK)
-            ret += 1 / 2;
-        else
-            ret -= 1 / 2;
-        return ret;
-    }
+	private get probabilityChallengeDamage(): number {
+		let ret = .12 - 0.04 * (this.durability - 1);
+		if (this.team === Team.BLACK)
+			ret -= .01;
+		else
+			ret += .01;
+		return ret;
+	}
 }

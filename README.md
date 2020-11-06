@@ -2,20 +2,20 @@
 
 ## todo
 
-* Security dialog when stop car
-* setup values with progress bar
+* Rebalance teams
 
 ## maybe
 
-* plausibility check: enter parkour -> calculate number
-* start / stop race collect statistics
-    * distance
-    * avg. speed
-    * efficiency
-* fuel?
 * Windschatten
+* fuel?
+* start / stop race collect statistics
+	* distance
+	* avg. speed
+	* efficiency
+* setup values with progress bar
+* Popup on icons without labels
 
 ## Physically
 
-* Print tiles and cars
+* Print chips and cars
 * More straights

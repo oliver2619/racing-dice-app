@@ -1,33 +1,28 @@
-import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
-import {Team} from '../model/teams';
-import {CarSetupService} from '../car-setup/car-setup.service';
-import {DialogComponent} from '../dialog/dialog.component';
+import { Component, ViewChild } from '@angular/core';
+import { DialogComponent } from '../dialog/dialog.component';
+import { TeamService } from './team.service';
 
 @Component({
-    selector: 'app-team-select',
-    templateUrl: './team-select.component.html',
-    styleUrls: ['./team-select.component.css']
+	selector: 'app-team-select',
+	templateUrl: './team-select.component.html',
+	styleUrls: ['./team-select.component.css']
 })
 export class TeamSelectComponent {
 
-    @ViewChild(DialogComponent, {static: true})
-    private dlgTeams: DialogComponent;
+	@ViewChild(DialogComponent, { static: true })
+	private dlgTeams: DialogComponent;
 
-    @Output()
-    onChange = new EventEmitter<Team>();
+	constructor(private readonly teamService: TeamService) {  }
 
-    constructor(private carSetupService: CarSetupService) {}
+	get team(): number {
+		return this.teamService.team;
+	}
 
-    get team(): number {
-        return this.carSetupService.team;
-    }
+	set team(team: number) {
+		this.teamService.team = team;
+	}
 
-    set team(team: number) {
-        this.carSetupService.team = team;
-        this.onChange.emit(team);
-    }
-
-    about(): void {
-        this.dlgTeams.show();
-    }
+	about(): void {
+		this.dlgTeams.show();
+	}
 }

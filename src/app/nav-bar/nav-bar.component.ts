@@ -17,7 +17,7 @@ export class NavBarComponent {
 
     constructor(private appService: AppService, private audioService: AudioService, private carSetupService: CarSetupService) {}
 
-    get driving(): boolean {return this.carSetupService.getSetup().driving;}
+    get driving(): boolean {return this.carSetupService.car.driving;}
 
     get fullscreen(): boolean {return this.appService.fullscreen;}
 
