@@ -198,10 +198,7 @@ export class Car implements CarInfo {
 
 	// 1 .. 5
 	getMaxSpeedInCurve(curve: number | undefined, weather: Weather): number {
-		if(this._dice === undefined) {
-			throw new Error('No dice was thrown');
-		}
-		const ms = this.getMaxSpeedForDice(this._dice);
+		const ms = this.getMaxSpeedForDice(this._dice ?? 0.5);
 		if (curve === undefined)
 			return ms;
 		let ret = .3 + this.setup.getBonusTires(weather) * (2 + this.setup.getBonusFlaps() / 2) * (curve / 20) * 1.8 - .2 * this.setup.getBonusDurability();

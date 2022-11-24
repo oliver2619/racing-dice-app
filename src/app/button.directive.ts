@@ -2,7 +2,7 @@ import { Directive, ElementRef } from '@angular/core';
 import { AudioService } from './audio.service';
 
 @Directive({
-  selector: '[button]'
+  selector: 'button'
 })
 export class ButtonDirective {
 

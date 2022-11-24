@@ -32,6 +32,10 @@ export class AudioService {
   private _clickPlayed = false;
   private _volumeLevel = 1;
 
+  get hornAudible(): boolean {
+    return this._volumeLevel > 0;
+  }
+
   get hornPlayed(): boolean {
     return this._hornPlayed;
   }
@@ -68,7 +72,7 @@ export class AudioService {
   }
 
   horn(team: number): void {
-    if (this._volumeLevel > 0 && !this._hornPlayed) {
+    if (this.hornAudible && !this._hornPlayed) {
       this._horn[team].play();
       this._hornPlayed = true;
     }

@@ -2,7 +2,7 @@
     <div class="page-header">
         <app-nav-bar>
             <div class="btn-list">
-                <button class="silent" [ngClass]="{checked: isHorn()}" (click)="horn()"><img src="assets/icons/horn.png"></button>
+                <button [disabled]="!canHorn" class="silent" [ngClass]="{checked: isHorn()}" (click)="horn()"><img src="assets/icons/horn.png"></button>
                 <button [disabled]="!isDriving()" (click)="stop()"><img src="assets/icons/traffic_lights_red.png"></button>
             </div>
         </app-nav-bar>

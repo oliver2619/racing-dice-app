@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy, AfterViewInit } from '@angular/core';
 import { Team } from '../model/teams';
 import { TeamService, TeamSelectionChangeObserver } from '../team-select/team.service';
 
@@ -7,7 +7,7 @@ import { TeamService, TeamSelectionChangeObserver } from '../team-select/team.se
 	templateUrl: './canvas.component.html',
 	styleUrls: ['./canvas.component.scss']
 })
-export class CanvasComponent implements OnInit, OnDestroy {
+export class CanvasComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	@ViewChild('canvas')
 	element: ElementRef<HTMLCanvasElement> | undefined;
@@ -63,22 +63,25 @@ export class CanvasComponent implements OnInit, OnDestroy {
 		window.addEventListener('resize', this.resizeCallback);
 	}
 
-	ngOnDestroy(): void {
-		this.teamService.removeTeamSelectionEvent(this.callback);
-		window.removeEventListener('resize', this.resizeCallback);
-	}
-
 	ngOnInit(): void {
 		this.teamService.addTeamSelectionEvent(this.callback);
-		this.canvas = this.element?.nativeElement;
-		this.context = this.canvas?.getContext('2d') ?? undefined;
-		this.resize();
 		const image: HTMLImageElement = new Image();
 		image.src = 'assets/alu.jpg';
 		image.onload = (ev: Event) => {
 			this.pattern = this.context?.createPattern(image, 'repeat') ?? undefined;
 			this.repaint();
 		};
+	}
+
+	ngAfterViewInit(): void {
+		this.canvas = this.element?.nativeElement;
+		this.context = this.canvas?.getContext('2d') ?? undefined;
+		this.resize();
+	}
+
+	ngOnDestroy(): void {
+		this.teamService.removeTeamSelectionEvent(this.callback);
+		window.removeEventListener('resize', this.resizeCallback);
 	}
 
 	private resize(): void {

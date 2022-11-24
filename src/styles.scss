@@ -192,7 +192,7 @@ canvas.parcour {
     overflow: auto;
 
 	&.row {
-    	flex-direction: row;
+        flex-direction: row;
 	}
 	
 	&.scroll {
@@ -292,7 +292,7 @@ button, .button {
     padding: .5ex .5em;
 
 	&.large {
-	    padding: 1em 1em;
+        padding: 1em 1em;
 	}
 }
 
@@ -304,7 +304,7 @@ button.checked, .button.checked {
 }
 
 .disabled, button[disabled], a[disabled] {
-    opacity: .5;
+    opacity: .67;
 }
 
 .btn-group {
@@ -338,11 +338,11 @@ button.checked, .button.checked {
 		flex-shrink: 1;
 
 		.value-progress {
-	        border-top-left-radius: 0px;
-	        border-bottom-left-radius: 0px;
-	        border-top-right-radius: 0px;
-	        border-bottom-right-radius: 0px;
-	        border-left-style: none;
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
+            border-top-right-radius: 0px;
+            border-bottom-right-radius: 0px;
+            border-left-style: none;
 			display: flex;
 			flex-direction: row;
 			align-items: center;
@@ -370,8 +370,8 @@ button.checked, .button.checked {
 
 	&.large {
 		&>button, &>.button, &>div {
-    	    margin-left: 1em;
-        	margin-right: 1em;
+            margin-left: 1em;
+            margin-right: 1em;
 		}
 
         &:first-child {

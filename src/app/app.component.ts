@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { AppService } from './app.service';
 import { Team } from 'src/app/model/teams';
 import { TeamService } from './team-select/team.service';
@@ -8,7 +8,7 @@ import { TeamService } from './team-select/team.service';
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
 
 	@ViewChild('app')
 	element: ElementRef | undefined;
@@ -24,6 +24,9 @@ export class AppComponent implements OnInit {
 		document.addEventListener("selectstart", (ev: Event) => {
 			ev.preventDefault();
 		});
+	}
+
+	ngAfterViewInit(): void {
 		if (this.element !== undefined) {
 			this.appService.registerFullScreenElement(this.element.nativeElement);
 		}

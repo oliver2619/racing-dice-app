@@ -32,6 +32,10 @@ export class RacePhysicalComponent implements OnInit {
 		return this.currentCar.canArmSpeedJoker(this.raceService.weather);
 	}
 
+	get canHorn(): boolean {
+		return this.audioService.hornAudible;
+	}
+
 	get maxSpeedInCurve(): number {
 		return this.currentCar.getMaxSpeedInCurve(this.currentCurve, this.raceService.weather);
 	}
