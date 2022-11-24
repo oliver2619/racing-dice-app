@@ -25,6 +25,12 @@ import { environment } from '../environments/environment';
 import { NumberDisplayValueComponent } from './number-display-value/number-display-value.component';
 import { ParcourComponent } from './parcour/parcour.component';
 import { EditParcourElementComponent } from './edit-parcour-element/edit-parcour-element.component';
+import { SettingsComponent } from './settings/settings.component';
+import { RaceDigitalComponent } from './race-digital/race-digital.component';
+import { RacePhysicalComponent } from './race-physical/race-physical.component';
+import { ParcourDigitalComponent } from './parcour-digital/parcour-digital.component';
+import { ParcourPhysicalComponent } from './parcour-physical/parcour-physical.component';
+import { ParcourCanvasComponent } from './parcour-canvas/parcour-canvas.component';
 
 
 @NgModule({
@@ -43,7 +49,13 @@ import { EditParcourElementComponent } from './edit-parcour-element/edit-parcour
         CanvasComponent,
         NumberDisplayValueComponent,
         ParcourComponent,
-        EditParcourElementComponent
+        EditParcourElementComponent,
+        SettingsComponent,
+        RaceDigitalComponent,
+        RacePhysicalComponent,
+        ParcourDigitalComponent,
+        ParcourPhysicalComponent,
+        ParcourCanvasComponent
     ],
     imports: [
         BrowserModule,

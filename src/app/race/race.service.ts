@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Race, Weather } from '../model/race';
 import { LocalStoreService } from 'src/app/local-store.service';
-import { CarSetupService } from '../car-setup/car-setup.service';
 
 interface RaceJson {
 	version: number;

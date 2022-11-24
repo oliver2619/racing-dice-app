@@ -9,12 +9,16 @@ import { TeamService, TeamSelectionChangeObserver } from '../team-select/team.se
 })
 export class CanvasComponent implements OnInit, OnDestroy {
 
-	@ViewChild('canvas', { static: true }) element: ElementRef;
+	@ViewChild('canvas', { static: true }) element: ElementRef<HTMLCanvasElement>;
 
 	private canvas: HTMLCanvasElement;
 	private context: CanvasRenderingContext2D;
 	private pattern: CanvasPattern;
 	private callback: TeamSelectionChangeObserver = t => this.repaint();
+	private resizeCallback = (ev: UIEvent) => {
+		this.resize();
+		this.repaint();
+	};
 
 	get backgroundColor(): string {
 		switch (this.teamService.team) {
@@ -55,14 +59,12 @@ export class CanvasComponent implements OnInit, OnDestroy {
 	}
 
 	constructor(private readonly teamService: TeamService) {
-		window.addEventListener('resize', (ev: UIEvent) => {
-			this.resize();
-			this.repaint();
-		});
+		window.addEventListener('resize', this.resizeCallback);
 	}
 
 	ngOnDestroy(): void {
 		this.teamService.removeTeamSelectionEvent(this.callback);
+		window.removeEventListener('resize', this.resizeCallback);
 	}
 
 	ngOnInit(): void {

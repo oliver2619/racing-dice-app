@@ -2,12 +2,12 @@
     <div class="page-header">
         <app-nav-bar>
             <div class="btn-list">
-                <button [disabled]="!needsRepair" (click)="repair()"><img src="assets/icons/bandaid.png" [ngClass]="{'blink-warn': needsRepair}"></button>
+                <button *ngIf="!driving" [disabled]="!needsRepair" (click)="repair()"><img src="assets/icons/bandaid.png" [ngClass]="{'blink-warn': needsRepair}"></button>
                 <button (click)="about()"><img src="assets/icons/help.png"></button>
             </div>
         </app-nav-bar>
     </div>
-    <div class="page-content">
+    <div *ngIf="!driving" class="page-content">
         <div class="form">
             <label><img src="assets/icons/tire.png">Reifen</label>
             <div class="btn-group">
@@ -46,6 +46,7 @@
             </div>
         </div>
     </div>
+    <div *ngIf="driving" class="page-content error">Das Auto kann nicht bearbeitet werden, solange ein Rennen läuft.</div>
     <div class="page-footer">
         <div class="footer-item">
             <label><img src="assets/icons/arrow_up.png"><!-- Gerade --></label>

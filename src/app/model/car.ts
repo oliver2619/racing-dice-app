@@ -3,7 +3,6 @@ import { Weather } from './race';
 import { CarInfo, JokerState, BrakeJokerState } from './car-info';
 import { CarJson } from './car-json';
 import { Team } from './teams';
-import { CarSetupInfo } from './car-setup-info';
 
 interface UndoElement {
 	speed: number;

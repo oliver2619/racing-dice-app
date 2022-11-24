@@ -46,6 +46,10 @@ export class CarSetupComponent implements OnInit {
 		return this.carSetupService.car.totalHealth < CarSetup.maxHealth;
 	}
 
+	get driving(): boolean {
+		return this.carSetupService.car.driving;
+	}
+
 	constructor(private carSetupService: CarSetupService, private raceService: RaceService, private parcourService: ParcourService) { }
 	
 	ngOnInit(): void {

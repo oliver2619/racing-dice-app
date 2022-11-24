@@ -1,15 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { version } from '../../../package.json';
 
 @Component({
-  selector: 'app-start',
-  templateUrl: './start.component.html',
-  styleUrls: ['./start.component.css']
+	selector: 'app-start',
+	templateUrl: './start.component.html',
+	styleUrls: ['./start.component.css']
 })
-export class StartComponent implements OnInit {
+export class StartComponent {
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+	get version(): string { return version; }
 }

@@ -11,7 +11,7 @@ export class ParcourElement {
 		return this.curve !== undefined;
 	}
 
-	constructor(public readonly length: number, curve?: number) {
+	constructor(public readonly length: number, public readonly x: number, public readonly y: number, public readonly orientation: number, curve?: number) {
 		this.curve = curve;
 	}
 
@@ -48,7 +48,7 @@ export class Parcour {
 	rounds = 1;
 
 	private _curvesCache: Array<number | undefined> | undefined;
-	private _elements: ParcourElement[] = [new ParcourElement(4)];
+	private _elements: ParcourElement[] = [new ParcourElement(4, 0, 0, 0)];
 
 	get elements(): ParcourElement[] {
 		return this._elements.slice(0);
@@ -64,17 +64,19 @@ export class Parcour {
 	}
 
 	appendStraight(length: number): void {
+		const last = this._elements[this._elements.length - 1];
 		this._elements.push(new ParcourElement(length));
 		this._curvesCache = undefined;
 	}
 
 	appendCurve(length: number, curve: number): void {
+		const last = this._elements[this._elements.length - 1];
 		this._elements.push(new ParcourElement(length, curve));
 		this._curvesCache = undefined;
 	}
 
 	clear(): void {
-		this._elements = [new ParcourElement(4)];
+		this._elements = [new ParcourElement(4, 0, 0, 0)];
 		this._curvesCache = undefined;
 	}
 

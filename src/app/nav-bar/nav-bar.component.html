@@ -3,32 +3,19 @@
         <button routerLink="/dice" routerLinkActive="checked"><img src="assets/icons/dice.png"></button>
         <button routerLink="/team" routerLinkActive="checked"><img src="assets/icons/user_racer.png"></button>
         <button routerLink="/weather" routerLinkActive="checked"><img src="assets/icons/weather_cloudy.png"></button>
-        <button routerLink="/parcour" routerLinkActive="checked" [disabled]="driving"><img src="assets/icons/map.png"></button>
-        <button routerLink="/carSetup" routerLinkActive="checked" [disabled]="driving"><img src="assets/icons/wrench_orange.png"></button>
+        <button routerLink="/parcour" routerLinkActive="checked"><img src="assets/icons/map.png"></button>
+        <button routerLink="/carSetup" routerLinkActive="checked"><img src="assets/icons/wrench_orange.png"></button>
         <button routerLink="/race" routerLinkActive="checked"><img src="assets/icons/steering_wheel_racing.png"></button>
     </div>
     <div class="nav-item">
         <ng-content></ng-content>
     </div>
     <div class="btn-group nav-item">
-        <button (click)="toggleSoundLevel()">
-            <img *ngIf="soundLevel == 0" src="assets/icons/sound_mute.png">
-            <img *ngIf="soundLevel == 1" src="assets/icons/sound_none.png">
-            <img *ngIf="soundLevel &gt; 1" src="assets/icons/sound.png">
-        </button>
-        <button (click)="showAbout()"><img src="assets/icons/information.png"></button>
+        <button routerLink="/settings" routerLinkActive="checked"><img src="assets/icons/cog.png"></button>
+        <button routerLink="/about" routerLinkActive="checked"><img src="assets/icons/information.png"></button>
         <button (click)="toggleFullscreen()">
             <img *ngIf="!fullscreen" src="assets/icons/panel_resize.png">
             <img *ngIf="fullscreen" src="assets/icons/panel_resize_actual.png">
         </button>
     </div>
 </div>
-<app-dialog title="Information">
-    <h1>Racing</h1>
-    <p>
-        Die Würfel App zum Brettspiel.
-    </p>
-    <p>
-        Aktuelle Version: {{version}}.
-    </p>
-</app-dialog>

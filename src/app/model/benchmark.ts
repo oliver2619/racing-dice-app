@@ -4,6 +4,8 @@ import { Weather } from './race';
 
 export class Benchmark {
 
+	private static readonly SIMULATIONS = 5000;
+
 	private position: number;
 	private time: number;
 	private distance: number;
@@ -13,10 +15,10 @@ export class Benchmark {
 
 	run(): number {
 		let ret = 0;
-		for (let i = 0; i < 1000; ++i) {
+		for (let i = 0; i < Benchmark.SIMULATIONS; ++i) {
 			ret += this.process();
 		}
-		return ret / 1000;
+		return ret / Benchmark.SIMULATIONS;
 	}
 
 	private process(): number {
@@ -37,10 +39,10 @@ export class Benchmark {
 		const maxSpeed = this.getMaxSpeed();
 		const curve = this.getMinCurve(this.position, this.position + maxSpeed);
 		this.car.curve = curve;
-		if(this.car.canArmCurveJoker && this.car.tiresHealth > 1) {
+		if (this.car.canArmCurveJoker && this.car.tiresHealth > 1) {
 			this.car.armCurveJoker();
 		}
-		if(this.car.canArmSpeedJoker &&  this.car.motorHealth > 1) {
+		if (this.car.canArmSpeedJoker && this.car.motorHealth > 1) {
 			this.car.armSpeedJoker();
 		}
 		const speed = this.car.getNextMaxSpeed(this.weather);
