@@ -3,6 +3,7 @@
 ## todo
 
 * Rebalance teams
+* icons pwa (72, 96, 128, 144, 152, 192, 384, 512)
 
 ## maybe
 
