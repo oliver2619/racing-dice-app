@@ -6,8 +6,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "buildLocal": "ng build --prod --base-href /racing/",
-    "buildPublic": "ng build --prod --base-href /racing-dice-app/",
+    "buildLocal": "ng build -c production --base-href /racing/",
+    "buildPublic": "ng build -c production --base-href /racing-dice-app/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
