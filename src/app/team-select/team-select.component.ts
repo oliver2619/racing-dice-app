@@ -5,7 +5,7 @@ import { TeamService } from './team.service';
 @Component({
 	selector: 'app-team-select',
 	templateUrl: './team-select.component.html',
-	styleUrls: ['./team-select.component.css']
+	styleUrls: ['./team-select.component.scss']
 })
 export class TeamSelectComponent {
 
