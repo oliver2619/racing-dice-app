@@ -9,14 +9,14 @@ import { CarSetupInfo } from '../model/car-setup-info';
 @Component({
 	selector: 'app-car-setup',
 	templateUrl: './car-setup.component.html',
-	styleUrls: ['./car-setup.component.css']
+	styleUrls: ['./car-setup.component.scss']
 })
 export class CarSetupComponent implements OnInit {
 
 	private _benchmark = 0;
 
-	@ViewChild(DialogComponent, { static: true })
-	private dlgTeams: DialogComponent;
+	@ViewChild(DialogComponent)
+	private dlgTeams: DialogComponent | undefined;
 
 	get avgAcceleration(): number {
 		return this.carSetupService.car.getAvgAcceleration(this.raceService.weather);
@@ -51,13 +51,15 @@ export class CarSetupComponent implements OnInit {
 	}
 
 	constructor(private carSetupService: CarSetupService, private raceService: RaceService, private parcourService: ParcourService) { }
-	
+
 	ngOnInit(): void {
 		this.updateBenchmark();
 	}
 
 	about(): void {
-		this.dlgTeams.show();
+		if (this.dlgTeams !== undefined) {
+			this.dlgTeams.show();
+		}
 	}
 
 	canDecFuel(): boolean {

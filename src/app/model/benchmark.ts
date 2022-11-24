@@ -6,10 +6,10 @@ export class Benchmark {
 
 	private static readonly SIMULATIONS = 5000;
 
-	private position: number;
-	private time: number;
-	private distance: number;
-	private finished: boolean;
+	private position = 0;
+	private time = 0;
+	private distance = 0;
+	private finished = false;
 
 	constructor(private readonly car: Car, private readonly parcour: Parcour, private readonly weather: Weather) { }
 
@@ -39,10 +39,10 @@ export class Benchmark {
 		const maxSpeed = this.getMaxSpeed();
 		const curve = this.getMinCurve(this.position, this.position + maxSpeed);
 		this.car.curve = curve;
-		if (this.car.canArmCurveJoker && this.car.tiresHealth > 1) {
+		if (this.car.canArmCurveJoker(this.weather) && this.car.tiresHealth > 1) {
 			this.car.armCurveJoker();
 		}
-		if (this.car.canArmSpeedJoker && this.car.motorHealth > 1) {
+		if (this.car.canArmSpeedJoker(this.weather) && this.car.motorHealth > 1) {
 			this.car.armSpeedJoker();
 		}
 		const speed = this.car.getNextMaxSpeed(this.weather);

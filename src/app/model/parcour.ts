@@ -16,7 +16,7 @@ export class ParcourElement {
 	}
 
 	static load(json: ParcourElementJson): ParcourElement {
-		return new ParcourElement(json.length, json.curve);
+		return new ParcourElement(json.length, 0, 0, 0, json.curve);
 	}
 
 	getCurve(relPosition: number): number | undefined {
@@ -56,7 +56,7 @@ export class Parcour {
 
 	get fields(): number {
 		this.ensureCurvesCache();
-		return this._curvesCache.length;
+		return this._curvesCache?.length ?? 0;
 	}
 
 	get length(): number {
@@ -65,13 +65,13 @@ export class Parcour {
 
 	appendStraight(length: number): void {
 		const last = this._elements[this._elements.length - 1];
-		this._elements.push(new ParcourElement(length));
+		this._elements.push(new ParcourElement(length, 0, 0, 0));
 		this._curvesCache = undefined;
 	}
 
 	appendCurve(length: number, curve: number): void {
 		const last = this._elements[this._elements.length - 1];
-		this._elements.push(new ParcourElement(length, curve));
+		this._elements.push(new ParcourElement(length, 0, 0, 0, curve));
 		this._curvesCache = undefined;
 	}
 
@@ -82,7 +82,7 @@ export class Parcour {
 
 	getCurve(position: number): number | undefined {
 		this.ensureCurvesCache();
-		return this._curvesCache[position % this._curvesCache.length];
+		return this._curvesCache![position % this._curvesCache!.length];
 	}
 
 	insert(index: number, element: ParcourElement): void {
@@ -119,10 +119,10 @@ export class Parcour {
 			this._curvesCache = [];
 			this._elements.forEach(el => {
 				if (el.isCurve && el.length === 1) {
-					this._curvesCache.push(undefined, el.curve, undefined);
+					this._curvesCache!.push(undefined, el.curve, undefined);
 				} else {
 					for (let i = 0; i < el.length; ++i) {
-						this._curvesCache.push(el.curve);
+						this._curvesCache!.push(el.curve);
 					}
 				}
 			});

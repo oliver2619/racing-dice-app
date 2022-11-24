@@ -20,7 +20,9 @@ interface CarListAndTeamSetupJson {
 	black: CarJson;
 }
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class CarSetupService {
 
 	private static readonly STORE_KEY: string = 'carSetup';
@@ -91,7 +93,7 @@ export class CarSetupService {
 		this.save();
 	}
 
-	setCurve(curve: number): void {
+	setCurve(curve: number | undefined): void {
 		this._car[this.teamService.team].curve = curve;
 		this.save();
 	}

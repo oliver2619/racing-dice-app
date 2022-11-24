@@ -11,9 +11,9 @@ interface ParcourComponentElement {
 }
 
 @Component({
-  selector: 'app-parcour-physical',
-  templateUrl: './parcour-physical.component.html',
-  styleUrls: ['./parcour-physical.component.scss']
+	selector: 'app-parcour-physical',
+	templateUrl: './parcour-physical.component.html',
+	styleUrls: ['./parcour-physical.component.scss']
 })
 export class ParcourPhysicalComponent {
 
@@ -21,19 +21,19 @@ export class ParcourPhysicalComponent {
 
 	scrollPos = 0;
 
-	@ViewChild('question', { static: true })
-	private questionDialog: DialogComponent;
+	@ViewChild('question')
+	private questionDialog: DialogComponent | undefined;
 
-	@ViewChild('curve', { static: true })
-	private curveDialog: DialogComponent;
+	@ViewChild('curve')
+	private curveDialog: DialogComponent | undefined;
 
-	@ViewChild('editElement', { static: true })
-	private editElementDialog: EditParcourElementComponent;
+	@ViewChild('editElement')
+	private editElementDialog: EditParcourElementComponent | undefined;
 
-	@ViewChild('elementOptions', { static: true })
-	private elementOptionsDialog: DialogComponent;
+	@ViewChild('elementOptions')
+	private elementOptionsDialog: DialogComponent | undefined;
 
-	private _selectionIndex: number;
+	private _selectionIndex: number | undefined;
 
 	get rounds(): number {
 		return this.parcourService.rounds;
@@ -72,7 +72,7 @@ export class ParcourPhysicalComponent {
 	get parcourLength(): number {
 		return this.parcourService.length;
 	}
-	
+
 	get driving(): boolean {
 		return this.carSetupService.car.driving;
 	}
@@ -94,7 +94,7 @@ export class ParcourPhysicalComponent {
 	}
 
 	insertCurve(length: number): void {
-		this.curveDialog.show().subscribe({
+		this.curveDialog?.show<number>().subscribe({
 			next: (curve: number) => {
 				this.parcourService.appendCurve(length, curve);
 				this.scrollToEnd();
@@ -103,7 +103,7 @@ export class ParcourPhysicalComponent {
 	}
 
 	clear(): void {
-		this.questionDialog.question().subscribe({
+		this.questionDialog?.question().subscribe({
 			next: result => {
 				if (result) {
 					this.parcourService.clear();
@@ -118,11 +118,11 @@ export class ParcourPhysicalComponent {
 			return;
 		}
 		this._selectionIndex = index;
-		this.elementOptionsDialog.show();
+		this.elementOptionsDialog?.show();
 	}
 
 	selectCurveSpeed(speed: number): void {
-		this.curveDialog.ok(speed);
+		this.curveDialog?.ok(speed);
 	}
 
 	decRounds(): void {
@@ -134,34 +134,40 @@ export class ParcourPhysicalComponent {
 	}
 
 	editSelected(): void {
-		this.elementOptionsDialog.cancel();
-		const el = this.parcourService.elements[this._selectionIndex];
-		this.editElementDialog.show(el).subscribe({
-			next: value => {
-				if (value !== undefined) {
-					this.parcourService.replace(this._selectionIndex, value);
+		if (this.elementOptionsDialog !== undefined && this._selectionIndex !== undefined) {
+			this.elementOptionsDialog.cancel();
+			const el = this.parcourService.elements[this._selectionIndex];
+			this.editElementDialog?.show(el).subscribe({
+				next: value => {
+					if (value !== undefined) {
+						this.parcourService.replace(this._selectionIndex!, value);
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	insertBeforeSelection(): void {
-		this.elementOptionsDialog.cancel();
-		const el = this.parcourService.elements[this._selectionIndex];
-		this.editElementDialog.show().subscribe({
-			next: value => {
-				if (value !== undefined) {
-					this.parcourService.insert(this._selectionIndex, value);
+		if (this.elementOptionsDialog !== undefined && this._selectionIndex !== undefined) {
+			this.elementOptionsDialog.cancel();
+			const el = this.parcourService.elements[this._selectionIndex];
+			this.editElementDialog?.show().subscribe({
+				next: value => {
+					if (value !== undefined) {
+						this.parcourService.insert(this._selectionIndex!, value);
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	deleteSelected(): void {
-		this.elementOptionsDialog.cancel();
-		this.parcourService.remove(this._selectionIndex);
+		this.elementOptionsDialog?.cancel();
+		if(this._selectionIndex !== undefined) {
+			this.parcourService.remove(this._selectionIndex);
+		}
 	}
-	
+
 	private scrollToEnd(): void {
 		this.scrollPos = Math.max(0, this.parcourService.length - ParcourPhysicalComponent.BLOCK_SIZE);
 	}

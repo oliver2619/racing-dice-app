@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ParcourService } from './parcour.service';
+import { LocalStoreService } from './local-store.service';
 
-describe('ParcourService', () => {
-  let service: ParcourService;
+describe('LocalStoreService', () => {
+  let service: LocalStoreService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ParcourService);
+    service = TestBed.inject(LocalStoreService);
   });
 
   it('should be created', () => {

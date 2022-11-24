@@ -6,12 +6,12 @@ import { CarSetupService } from '../car-setup/car-setup.service';
 @Component({
 	selector: 'app-weather',
 	templateUrl: './weather.component.html',
-	styleUrls: ['./weather.component.css']
+	styleUrls: ['./weather.component.scss']
 })
 export class WeatherComponent {
 
-	private _weatherShuffleInterval: number;
-	private _weatherShuffleTimeout: number;
+	private _weatherShuffleInterval: number | undefined;
+	private _weatherShuffleTimeout: number | undefined;
 
 	get weather(): Weather {
 		return this.raceService.weather;

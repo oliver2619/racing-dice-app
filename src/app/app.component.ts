@@ -6,26 +6,26 @@ import { TeamService } from './team-select/team.service';
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
-	styleUrls: ['./app.component.css']
+	styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
 
-	@ViewChild('app', { static: true }) element: ElementRef;
+	@ViewChild('app')
+	element: ElementRef | undefined;
 
-	get team(): string {
-		return Team[this.teamService.team].toLowerCase();
-	}
+	get team(): string { return Team[this.teamService.team].toLowerCase(); }
 
 	constructor(private appService: AppService, private readonly teamService: TeamService) { }
 
 	ngOnInit(): void {
-		document.addEventListener("contextmenu", (ev: PointerEvent) => {
+		document.addEventListener("contextmenu", (ev: MouseEvent) => {
 			ev.preventDefault();
 		});
 		document.addEventListener("selectstart", (ev: Event) => {
 			ev.preventDefault();
 		});
-		this.appService.registerFullScreenElement(this.element.nativeElement);
+		if (this.element !== undefined) {
+			this.appService.registerFullScreenElement(this.element.nativeElement);
+		}
 	}
-
 }

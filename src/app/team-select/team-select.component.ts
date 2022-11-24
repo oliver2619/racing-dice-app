@@ -9,10 +9,10 @@ import { TeamService } from './team.service';
 })
 export class TeamSelectComponent {
 
-	@ViewChild(DialogComponent, { static: true })
-	private dlgTeams: DialogComponent;
+	@ViewChild(DialogComponent)
+	private dlgTeams: DialogComponent | undefined;
 
-	constructor(private readonly teamService: TeamService) {  }
+	constructor(private readonly teamService: TeamService) { }
 
 	get team(): number {
 		return this.teamService.team;
@@ -23,6 +23,6 @@ export class TeamSelectComponent {
 	}
 
 	about(): void {
-		this.dlgTeams.show();
+		this.dlgTeams?.show();
 	}
 }

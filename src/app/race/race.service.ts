@@ -7,12 +7,14 @@ interface RaceJson {
 	weather: string;
 }
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class RaceService {
 
 	private static readonly STORE_KEY = 'race';
 
-	private _weather: Weather;
+	private _weather: Weather | undefined;
 
 	private _race: Race = new Race();
 
@@ -21,6 +23,9 @@ export class RaceService {
 	}
 
 	get weather(): Weather {
+		if (this._weather === undefined) {
+			throw new Error('No wather set');
+		}
 		return this._weather;
 	}
 
@@ -36,12 +41,12 @@ export class RaceService {
 	constructor(private localStoreService: LocalStoreService) {
 		const data = <RaceJson>localStoreService.load(RaceService.STORE_KEY);
 		if (data !== undefined) {
-			this._weather = Weather[data.weather];
+			this._weather = (Weather as any)[data.weather];
 		} else {
 			this.shuffleWeather(false);
 		}
 	}
-	
+
 	shuffleWeather(isDriving: boolean): void {
 		if (isDriving) {
 			const w = this.weather;

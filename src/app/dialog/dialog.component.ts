@@ -4,19 +4,19 @@ import { Observable, Subject } from 'rxjs';
 @Component({
 	selector: 'app-dialog',
 	templateUrl: './dialog.component.html',
-	styleUrls: ['./dialog.component.css']
+	styleUrls: ['./dialog.component.scss']
 })
 export class DialogComponent {
 
 	@Input()
 	title: string = '';
-	
+
 	@Input()
 	scrolling = false;
 
 	private _visible = false;
-	private _question: boolean;
-	private _questionSubject: Subject<any>;
+	private _question = false;
+	private _questionSubject: Subject<any> | undefined;
 
 	constructor() { }
 

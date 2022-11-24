@@ -5,17 +5,18 @@ import { TeamService, TeamSelectionChangeObserver } from '../team-select/team.se
 @Component({
 	selector: 'app-canvas',
 	templateUrl: './canvas.component.html',
-	styleUrls: ['./canvas.component.css']
+	styleUrls: ['./canvas.component.scss']
 })
 export class CanvasComponent implements OnInit, OnDestroy {
 
-	@ViewChild('canvas', { static: true }) element: ElementRef<HTMLCanvasElement>;
+	@ViewChild('canvas')
+	element: ElementRef<HTMLCanvasElement> | undefined;
 
-	private canvas: HTMLCanvasElement;
-	private context: CanvasRenderingContext2D;
-	private pattern: CanvasPattern;
-	private callback: TeamSelectionChangeObserver = t => this.repaint();
-	private resizeCallback = (ev: UIEvent) => {
+	private canvas: HTMLCanvasElement | undefined;
+	private context: CanvasRenderingContext2D | undefined;
+	private pattern: CanvasPattern | undefined;
+	private callback: TeamSelectionChangeObserver = () => this.repaint();
+	private resizeCallback = () => {
 		this.resize();
 		this.repaint();
 	};
@@ -39,7 +40,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	get backgroundOperation(): string {
+	get backgroundOperation(): GlobalCompositeOperation {
 		switch (this.teamService.team) {
 			case Team.YELLOW:
 				return 'color';
@@ -69,39 +70,43 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.teamService.addTeamSelectionEvent(this.callback);
-		this.canvas = this.element.nativeElement;
-		this.context = this.canvas.getContext('2d');
+		this.canvas = this.element?.nativeElement;
+		this.context = this.canvas?.getContext('2d') ?? undefined;
 		this.resize();
 		const image: HTMLImageElement = new Image();
 		image.src = 'assets/alu.jpg';
 		image.onload = (ev: Event) => {
-			this.pattern = this.context.createPattern(image, 'repeat');
+			this.pattern = this.context?.createPattern(image, 'repeat') ?? undefined;
 			this.repaint();
 		};
 	}
 
 	private resize(): void {
-		this.canvas.width = this.canvas.clientWidth;
-		this.canvas.height = this.canvas.clientHeight;
+		if (this.canvas !== undefined) {
+			this.canvas.width = this.canvas.clientWidth;
+			this.canvas.height = this.canvas.clientHeight;
+		}
 	}
 
 	private repaint(): void {
-		this.context.save();
-		this.context.fillStyle = this.pattern;
-		this.context.globalCompositeOperation = 'source-over';
-		this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-		this.context.globalCompositeOperation = this.backgroundOperation;
-		this.context.fillStyle = this.backgroundColor;
-		this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-		this.context.globalCompositeOperation = 'lighter';
-		this.context.fillStyle = 'black';
-		this.context.shadowColor = 'white';
-		this.context.shadowBlur = 5;
-		this.context.strokeRect(-1, -1, this.canvas.width + 2, this.canvas.height + 2);
-		this.context.shadowBlur = 10;
-		this.context.strokeRect(-1, -1, this.canvas.width + 2, this.canvas.height + 2);
-		this.context.shadowBlur = 20;
-		this.context.strokeRect(-1, -1, this.canvas.width + 2, this.canvas.height + 2);
-		this.context.restore();
+		if (this.context !== undefined && this.canvas !== undefined && this.pattern !== undefined && this.backgroundOperation !== undefined) {
+			this.context.save();
+			this.context.fillStyle = this.pattern;
+			this.context.globalCompositeOperation = 'source-over';
+			this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+			this.context.globalCompositeOperation = this.backgroundOperation;
+			this.context.fillStyle = this.backgroundColor;
+			this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+			this.context.globalCompositeOperation = 'lighter';
+			this.context.fillStyle = 'black';
+			this.context.shadowColor = 'white';
+			this.context.shadowBlur = 5;
+			this.context.strokeRect(-1, -1, this.canvas.width + 2, this.canvas.height + 2);
+			this.context.shadowBlur = 10;
+			this.context.strokeRect(-1, -1, this.canvas.width + 2, this.canvas.height + 2);
+			this.context.shadowBlur = 20;
+			this.context.strokeRect(-1, -1, this.canvas.width + 2, this.canvas.height + 2);
+			this.context.restore();
+		}
 	}
 }

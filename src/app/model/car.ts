@@ -164,7 +164,7 @@ export class Car implements CarInfo {
 	}
 
 	drive(speed: number, weather: Weather): void {
-		if (this.canGo(speed, weather)) {
+		if (this.canGo(speed, weather) && this._dice !== undefined) {
 			this._undo = {
 				brakeJoker: this._brakeJoker,
 				curveJoker: this._curveJoker,
@@ -197,10 +197,13 @@ export class Car implements CarInfo {
 	}
 
 	// 1 .. 5
-	getMaxSpeedInCurve(curve: number, weather: Weather): number {
+	getMaxSpeedInCurve(curve: number | undefined, weather: Weather): number {
+		if(this._dice === undefined) {
+			throw new Error('No dice was thrown');
+		}
+		const ms = this.getMaxSpeedForDice(this._dice);
 		if (curve === undefined)
-			return this.getMaxSpeedForDice(this._dice);
-		const ms = this.getMaxSpeedForDice(.5);
+			return ms;
 		let ret = .3 + this.setup.getBonusTires(weather) * (2 + this.setup.getBonusFlaps() / 2) * (curve / 20) * 1.8 - .2 * this.setup.getBonusDurability();
 		if (this.setup.team === Team.RED)
 			ret += .1;
@@ -246,9 +249,9 @@ export class Car implements CarInfo {
 		this._motorHealth = json.motorHealth;
 		this._tiresHealth = json.tiresHealth;
 		this.curve = json.currentCurve;
-		this._curveJoker = JokerState[json.curvesJoker];
-		this._speedJoker = JokerState[json.speedJoker];
-		this._brakeJoker = BrakeJokerState[json.brakeJoker];
+		this._curveJoker = (JokerState as any)[json.curvesJoker];
+		this._speedJoker = (JokerState as any)[json.speedJoker];
+		this._brakeJoker = (BrakeJokerState as any)[json.brakeJoker];
 		this._dice = json.dice;
 		this.setup.load(json);
 	}

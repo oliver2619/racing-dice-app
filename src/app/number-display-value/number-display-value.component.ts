@@ -8,19 +8,19 @@ import {Component, Input} from '@angular/core';
 export class NumberDisplayValueComponent {
 
     @Input()
-    value: number;
+    value: number | undefined;
 
     @Input()
-    decimals: number;
+    decimals: number | undefined;
 
     @Input()
-    max: number;
+    max: number | undefined;
 
     @Input()
-    thresholds: number[];
+    thresholds: number[] | undefined;
     
     @Input()
-    width: number;
+    width: number | undefined;
 
     get isCritical(): boolean {
         return this.thresholds !== undefined && this.thresholds.length > 0 && this.value !== undefined && this.value <= this.thresholds[0];

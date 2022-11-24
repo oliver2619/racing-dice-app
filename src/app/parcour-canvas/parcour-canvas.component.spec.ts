@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ParcourCanvasComponent } from './parcour-canvas.component';
 
@@ -6,14 +6,12 @@ describe('ParcourCanvasComponent', () => {
   let component: ParcourCanvasComponent;
   let fixture: ComponentFixture<ParcourCanvasComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [ ParcourCanvasComponent ]
     })
     .compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ParcourCanvasComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -8,7 +8,7 @@ import { Subject, Subscription } from 'rxjs';
 })
 export class ParcourCanvasComponent implements AfterViewInit, OnDestroy {
 
-	@ViewChild('canvas', { static: true }) element: ElementRef<HTMLCanvasElement>;
+	@ViewChild('canvas') element: ElementRef<HTMLCanvasElement> | undefined;
 
 	private static G3: HTMLImageElement | undefined;
 	private static G4: HTMLImageElement | undefined;
@@ -21,9 +21,9 @@ export class ParcourCanvasComponent implements AfterViewInit, OnDestroy {
 	private static unitX = 0;
 	private static unitY = 0;
 
-	private subscription: Subscription;
-	private canvas: HTMLCanvasElement;
-	private context: CanvasRenderingContext2D;
+	private subscription: Subscription | undefined;
+	private canvas: HTMLCanvasElement | undefined;
+	private context: CanvasRenderingContext2D | undefined;
 
 	static get imagesLoaded(): boolean {
 		return ParcourCanvasComponent._imagesLoaded === 6;
@@ -39,8 +39,8 @@ export class ParcourCanvasComponent implements AfterViewInit, OnDestroy {
 	}
 
 	ngAfterViewInit(): void {
-		this.canvas = this.element.nativeElement;
-		this.context = this.canvas.getContext('2d', { alpha: false });
+		this.canvas = this.element?.nativeElement;
+		this.context = this.canvas?.getContext('2d', { alpha: false }) ?? undefined;
 		this.resize();
 		if (ParcourCanvasComponent.imagesLoaded) {
 			this.repaint();
@@ -56,43 +56,51 @@ export class ParcourCanvasComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private repaint(): void {
-		this.context.save();
-		this.context.translate(100, 100);
-		this.context.scale(.75, .75);
-		try {
-			this.drawElement(ParcourCanvasComponent.Z, 0, 0, 1);
-			this.drawElement(ParcourCanvasComponent.K3, 4.5, 0.5, 0);
-			this.drawElement(ParcourCanvasComponent.G3, 5, 4.5, 0);
-			this.drawElement(ParcourCanvasComponent.K2, 5, 8, 2);
-			this.drawElement(ParcourCanvasComponent.K1, 9, 8, 1);
-			this.drawElement(ParcourCanvasComponent.G4, 9, 4, 0);
-			
-			this.context.fillStyle = "white";
-			this.context.fillRect(-10, -10, 20, 20);
-		} finally {
-			this.context.restore();
+		if (this.context !== undefined) {
+			this.context.save();
+			this.context.translate(100, 100);
+			this.context.scale(.75, .75);
+			try {
+				if (ParcourCanvasComponent.imagesLoaded) {
+					this.drawElement(ParcourCanvasComponent.Z!, 0, 0, 1);
+					this.drawElement(ParcourCanvasComponent.K3!, 4.5, 0.5, 0);
+					this.drawElement(ParcourCanvasComponent.G3!, 5, 4.5, 0);
+					this.drawElement(ParcourCanvasComponent.K2!, 5, 8, 2);
+					this.drawElement(ParcourCanvasComponent.K1!, 9, 8, 1);
+					this.drawElement(ParcourCanvasComponent.G4!, 9, 4, 0);
+				}
+
+				this.context.fillStyle = "white";
+				this.context.fillRect(-10, -10, 20, 20);
+			} finally {
+				this.context.restore();
+			}
 		}
 	}
 
 	private drawElement(image: HTMLImageElement, x: number, y: number, rotation: number): void {
-		this.context.save();
-		this.context.translate(x * ParcourCanvasComponent.unitX, y * ParcourCanvasComponent.unitY);
-		this.context.rotate(Math.PI * rotation / 2);
-		this.context.translate(-image.width / 2, -image.height / 2);
-		this.context.drawImage(image, 0, 0);
-		this.context.restore();
+		if (this.context !== undefined) {
+			this.context.save();
+			this.context.translate(x * ParcourCanvasComponent.unitX, y * ParcourCanvasComponent.unitY);
+			this.context.rotate(Math.PI * rotation / 2);
+			this.context.translate(-image.width / 2, -image.height / 2);
+			this.context.drawImage(image, 0, 0);
+			this.context.restore();
+		}
 	}
-	
+
 	private resize(): void {
-		this.canvas.width = this.canvas.clientWidth;
-		this.canvas.height = this.canvas.clientHeight;
+		if (this.canvas !== undefined) {
+			this.canvas.width = this.canvas.clientWidth;
+			this.canvas.height = this.canvas.clientHeight;
+		}
 	}
 
 	private static onLoadCallback = () => {
 		++ParcourCanvasComponent._imagesLoaded;
 		if (ParcourCanvasComponent.imagesLoaded) {
-			ParcourCanvasComponent.unitX = ParcourCanvasComponent.G4.width / 4;
-			ParcourCanvasComponent.unitY = ParcourCanvasComponent.G4.height / 4;
+			ParcourCanvasComponent.unitX = ParcourCanvasComponent.G4!.width / 4;
+			ParcourCanvasComponent.unitY = ParcourCanvasComponent.G4!.height / 4;
 			ParcourCanvasComponent.onImagesLoaded.next();
 		}
 	};

@@ -13,11 +13,11 @@ import { CarInfo, JokerState, BrakeJokerState } from '../model/car-info';
 })
 export class RacePhysicalComponent implements OnInit {
 
-	@ViewChild('curve', { static: true })
-	private selectCurveDialog: DialogComponent;
+	@ViewChild('curve')
+	private selectCurveDialog: DialogComponent | undefined;
 
-	@ViewChild('question', { static: true })
-	private questionDialog: DialogComponent;
+	@ViewChild('question')
+	private questionDialog: DialogComponent | undefined;
 
 	private _nextSpeed: number = 0;
 
@@ -108,13 +108,13 @@ export class RacePhysicalComponent implements OnInit {
 		return ret;
 	}
 
-	get currentCurve(): number {
+	get currentCurve(): number | undefined {
 		return this.currentCar.curve;
 	}
 
-	set currentCurve(curve: number) {
+	set currentCurve(curve: number | undefined) {
 		this.carSetupService.setCurve(curve);
-		this.selectCurveDialog.cancel();
+		this.selectCurveDialog?.cancel();
 	}
 
 	get curvesJokerNoFx(): boolean {
@@ -200,7 +200,7 @@ export class RacePhysicalComponent implements OnInit {
 	}
 
 	selectCurve(): void {
-		this.selectCurveDialog.show();
+		this.selectCurveDialog?.show();
 	}
 
 	isDriving(): boolean {
@@ -229,7 +229,7 @@ export class RacePhysicalComponent implements OnInit {
 	}
 
 	stop(): void {
-		this.questionDialog.question().subscribe({
+		this.questionDialog?.question().subscribe({
 			next: result => {
 				if (result) {
 					this.carSetupService.stop();

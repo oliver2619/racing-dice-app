@@ -12,8 +12,8 @@ import { AudioService } from '../audio.service';
 })
 export class RaceDigitalComponent {
 
-	@ViewChild('question', { static: true })
-	private questionDialog: DialogComponent;
+	@ViewChild('question')
+	private questionDialog: DialogComponent | undefined;
 
 	isDriving(): boolean {
 		return this.currentCar.driving;
@@ -34,7 +34,7 @@ export class RaceDigitalComponent {
 	}
 
 	stop(): void {
-		this.questionDialog.question().subscribe({
+		this.questionDialog?.question().subscribe({
 			next: result => {
 				if (result) {
 					this.carSetupService.stop();

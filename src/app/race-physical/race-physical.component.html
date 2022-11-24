@@ -19,11 +19,11 @@
             <div class="btn-list">
                 <app-number [value]="maxSpeedInCurve" [decimals]="0"></app-number>
                 <button *ngIf="canArmCurvesJoker() && !isCurvesJokerArmed()" class="silent" (click)="armCurvesJoker()">
-                	<div class="composite-icon">
-                		<img src="assets/icons/dynamite.png">
-                		<img src="assets/icons/tire.png" class="bottom-left">
-		                <img *ngIf="tiresHealthCritical" src="assets/icons/warning.png" class="top-right">
-                	</div>
+                    <div class="composite-icon">
+                        <img src="assets/icons/dynamite.png">
+                        <img src="assets/icons/tire.png" class="bottom-left">
+                        <img *ngIf="tiresHealthCritical" src="assets/icons/warning.png" class="top-right">
+                    </div>
                 </button>
                 <div *ngIf="curvesJokerNoFx"><img src="assets/icons/snail.png" class="blink-warn"></div>
                 <div *ngIf="curvesJokerFailure"><img src="assets/icons/caution_high_voltage.png" class="blink-critical"></div>
@@ -31,22 +31,22 @@
             <label><img src="assets/icons/dashboard.png">Geschw. wählen</label>
             <div class="btn-list">
                 <button *ngIf="canArmBrakeJoker && !isBrakeJokerArmed" class="silent" (click)="armBrakeJoker()">
-                	<div class="composite-icon">
-                		<img src="assets/icons/dynamite.png">
-                		<img src="assets/icons/tire.png" class="bottom-left">
-		                <img *ngIf="tiresHealthCritical" src="assets/icons/warning.png" class="top-right">
-                	</div>
+                    <div class="composite-icon">
+                        <img src="assets/icons/dynamite.png">
+                        <img src="assets/icons/tire.png" class="bottom-left">
+                        <img *ngIf="tiresHealthCritical" src="assets/icons/warning.png" class="top-right">
+                    </div>
                 </button>
                 <div *ngIf="brakeJokerFailure"><img src="assets/icons/caution_high_voltage.png" class="blink-critical"></div>
                 <div class="btn-group">
                     <button *ngFor="let s of nextSpeedOptions" [ngClass]="{checked: nextSpeed === s}" (click)="nextSpeed = s">{{s}}</button>
                 </div>
                 <button *ngIf="canArmSpeedJoker && !isSpeedJokerArmed" class="silent" (click)="armSpeedJoker()">
-                	<div class="composite-icon">
-		                <img src="assets/icons/dynamite.png">
-		                <img src="assets/icons/heart.png" class="bottom-left">
-		                <img *ngIf="motorHealthCritical" src="assets/icons/warning.png" class="top-right">
-                	</div>
+                    <div class="composite-icon">
+                        <img src="assets/icons/dynamite.png">
+                        <img src="assets/icons/heart.png" class="bottom-left">
+                        <img *ngIf="motorHealthCritical" src="assets/icons/warning.png" class="top-right">
+                    </div>
                 </button>
                 <div *ngIf="speedJokerNoFx"><img src="assets/icons/snail.png" class="blink-warn"></div>
                 <div *ngIf="speedJokerFailure"><img src="assets/icons/caution_high_voltage.png" class="blink-critical"></div>

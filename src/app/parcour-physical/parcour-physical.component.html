@@ -7,38 +7,38 @@
         </app-nav-bar>
     </div>
     <div *ngIf="!driving" class="page-content">
-	    <div class="form">
+        <div class="form">
             <label><img src="assets/icons/flag_finish.png">Runden</label>
             <div class="btn-group">
                 <button (click)="decRounds()" [disabled]="!canDecRounds"><img src="assets/icons/delete.png"></button>
                 <app-number [value]="rounds" [max]="20" [decimals]="0" [width]="2"></app-number>
                 <button (click)="incRounds()" [disabled]="!canIncRounds"><img src="assets/icons/add.png"></button>
             </div>
-    	</div>
-    	<div class="parcour">
-    		<button (click)="scroll(-1)" [disabled]="!canScroll(-1)"><img src="assets/icons/resultset_previous.png"></button>
-    		<ng-container *ngFor="let el of parcourElements">
-	    		<a href="javascript:;" (click)="editElementByIndex(el.index)" class="button parcour-tile">
-	    			<img *ngIf="el.index === 0" src="assets/icons/flag_finish.png">
-	    			<img *ngIf="el.index > 0 && el.element.isCurve" src="assets/icons/arrow_turn_right.png">
-	    			<img *ngIf="el.index > 0 && !el.element.isCurve" src="assets/icons/arrow_up.png">
-	    			<span>{{el.element.length}}</span>
-	    			<img *ngIf="el.element.isCurve" src="assets/icons/dashboard.png">
-	    			<span>{{el.element.curve}}</span>
-	    		</a>
-    		</ng-container>
-    		<button (click)="scroll(1)" [disabled]="!canScroll(1)"><img src="assets/icons/resultset_next.png"></button>
-    	</div>
-	    <div class="form">
+        </div>
+        <div class="parcour">
+            <button (click)="scroll(-1)" [disabled]="!canScroll(-1)"><img src="assets/icons/resultset_previous.png"></button>
+            <ng-container *ngFor="let el of parcourElements">
+                <a href="javascript:;" (click)="editElementByIndex(el.index)" class="button parcour-tile">
+                    <img *ngIf="el.index === 0" src="assets/icons/flag_finish.png">
+                    <img *ngIf="el.index > 0 && el.element.isCurve" src="assets/icons/arrow_turn_right.png">
+                    <img *ngIf="el.index > 0 && !el.element.isCurve" src="assets/icons/arrow_up.png">
+                    <span>{{el.element.length}}</span>
+                    <img *ngIf="el.element.isCurve" src="assets/icons/dashboard.png">
+                    <span>{{el.element.curve}}</span>
+                </a>
+            </ng-container>
+            <button (click)="scroll(1)" [disabled]="!canScroll(1)"><img src="assets/icons/resultset_next.png"></button>
+        </div>
+        <div class="form">
             <label><img src="assets/icons/add.png">Anhängen</label>
-		   	<div class="btn-list">
-	   			<button (click)="insertStraight(3)" class="parcour-tile"><img src="assets/icons/arrow_up.png">3</button>
-	   			<button (click)="insertStraight(4)" class="parcour-tile"><img src="assets/icons/arrow_up.png">4</button>
-	   			<button (click)="insertCurve(1)" class="parcour-tile"><img src="assets/icons/arrow_turn_right.png">1</button>
-	   			<button (click)="insertCurve(3)" class="parcour-tile"><img src="assets/icons/arrow_turn_right.png">3</button>
-	   			<button (click)="insertCurve(4)" class="parcour-tile"><img src="assets/icons/arrow_turn_right.png">4</button>
-		   	</div>
-	    </div>
+            <div class="btn-list">
+                <button (click)="insertStraight(3)" class="parcour-tile"><img src="assets/icons/arrow_up.png">3</button>
+                <button (click)="insertStraight(4)" class="parcour-tile"><img src="assets/icons/arrow_up.png">4</button>
+                <button (click)="insertCurve(1)" class="parcour-tile"><img src="assets/icons/arrow_turn_right.png">1</button>
+                <button (click)="insertCurve(3)" class="parcour-tile"><img src="assets/icons/arrow_turn_right.png">3</button>
+                <button (click)="insertCurve(4)" class="parcour-tile"><img src="assets/icons/arrow_turn_right.png">4</button>
+            </div>
+        </div>
     </div>
     <div *ngIf="driving" class="page-content error">Rennstrecke kann nicht editiert werden, solange ein Rennen läuft.</div>
     <div class="page-footer">

@@ -51,10 +51,10 @@ export class CarSetup implements CarSetupInfo {
 	}
 
 	load(json: CarJson): void {
-		this.durability = DurabilityType[json.durability];
+		this.durability = (DurabilityType as any)[json.durability];
 		this.flaps = json.flaps;
 		this.gear = json.gear;
-		this.tires = TireType[json.tires];
+		this.tires = (TireType as any)[json.tires];
 	}
 
 	save(json: CarJson): void {

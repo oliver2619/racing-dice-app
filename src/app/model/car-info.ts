@@ -19,7 +19,7 @@ export interface CarInfo {
 
 	readonly canUndo: boolean;
 
-	readonly curve: number;
+	readonly curve: number | undefined;
 
 	readonly curveJoker: JokerState;
 
@@ -53,7 +53,7 @@ export interface CarInfo {
 
 	getAvgSpeedInCurve(weather: Weather): number;
 
-	getMaxSpeedInCurve(curve: number, weather: Weather): number;
+	getMaxSpeedInCurve(curve: number | undefined, weather: Weather): number;
 
 	getNextSpeedOptions(weather: Weather): number[];
 }

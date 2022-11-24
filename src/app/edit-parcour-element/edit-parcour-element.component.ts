@@ -10,9 +10,9 @@ import { ParcourElement } from '../model/parcour';
 })
 export class EditParcourElementComponent {
 
-	@ViewChild('dialog', { static: true })
-	private dialog: DialogComponent;
-	
+	@ViewChild('dialog')
+	private dialog: DialogComponent | undefined;
+
 	curveLength: number | undefined;
 
 	get curves(): number[] {
@@ -26,22 +26,29 @@ export class EditParcourElementComponent {
 	constructor() { }
 
 	show(element?: ParcourElement): Observable<ParcourElement> {
-		if(element !== undefined) {
+		if (element !== undefined) {
 			this.curveLength = element.isCurve ? element.length : undefined;
-		}else {
+		} else {
 			this.curveLength = undefined;
+		}
+		if (this.dialog === undefined) {
+			throw new Error('Dialog container not found');
 		}
 		return this.dialog.show();
 	}
-	
+
 	selectCurve(curve: number): void {
-		this.dialog.ok(new ParcourElement(this.curveLength, curve));
+		if (this.dialog !== undefined) {
+			this.dialog.ok(new ParcourElement(this.curveLength!, 0, 0, 0, curve));
+		}
 	}
-	
+
 	setStraight(length: number): void {
-		this.dialog.ok(new ParcourElement(length));
+		if (this.dialog !== undefined) {
+			this.dialog.ok(new ParcourElement(length, 0, 0, 0));
+		}
 	}
-	
+
 	setCurve(length: number): void {
 		this.curveLength = length;
 	}

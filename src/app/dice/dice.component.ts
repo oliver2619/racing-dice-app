@@ -9,14 +9,14 @@ interface DiceJson {
 @Component({
 	selector: 'app-dice',
 	templateUrl: './dice.component.html',
-	styleUrls: ['./dice.component.css']
+	styleUrls: ['./dice.component.scss']
 })
 export class DiceComponent {
 
 	private static readonly STORE_KEY = 'dice';
 
 	private _score = 0;
-	private _interval: number;
+	private _interval: number | undefined;
 
 	constructor(private localStoreService: LocalStoreService) {
 		const json = <DiceJson>localStoreService.load(DiceComponent.STORE_KEY);

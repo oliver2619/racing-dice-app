@@ -1,18 +1,12 @@
-import {Component, OnInit, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'app-health',
     templateUrl: './health.component.html',
-    styleUrls: ['./health.component.css']
+    styleUrls: ['./health.component.scss']
 })
-export class HealthComponent implements OnInit {
+export class HealthComponent {
 
     @Input()
-    health: number;
-
-    ngOnInit(): void {
-        if (typeof this.health !== 'number')
-            throw new Error('Attribute health of health component must be of type number');
-    }
-
+    health: number = 0;
 }

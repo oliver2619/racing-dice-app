@@ -4,7 +4,7 @@ import { AppService } from '../app.service';
 @Component({
 	selector: 'app-race',
 	templateUrl: './race.component.html',
-	styleUrls: ['./race.component.css']
+	styleUrls: ['./race.component.scss']
 })
 export class RaceComponent {
 
