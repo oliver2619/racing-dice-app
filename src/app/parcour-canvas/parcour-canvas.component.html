@@ -1,1 +1,24 @@
-<canvas #canvas class="parcour" (window:resize)="onResize()"></canvas>
+<div class="parcour">
+    <div *ngFor="let t of tiles; let i = index" (mousedown)="selectTile(i)" class="{{t.element}} {{t.rot}}" [ngStyle]="{left: t.x + 'px', top: t.y + 'px'}"></div>
+    <div *ngFor="let t of curves" class="speed-tile {{t.rot}}" [ngStyle]="{left: t.x + 'px', top: t.y + 'px', width: t.width + 'px', height: t.height + 'px'}">
+        <div class="speed">{{t.speed}}</div>
+    </div>
+    <div *ngIf="hasSelection" class="selection" [ngStyle]="{left: selectedTile!.x + 'px', top: selectedTile!.y + 'px', width: selectedTile!.width + 'px', height: selectedTile!.height + 'px'}"></div>
+    <div *ngIf="!isRaceMode" class="tile-input center" [ngStyle]="{left: startTile.x + 'px', top: startTile.y + 'px'}">
+        <div class="btn-group">
+            <button type="button" (click)="rotateLeft()"><img src="assets/icons/rotate_left.png"></button>
+            <button type="button" (click)="rotateRight()"><img src="assets/icons/rotate_right.png"></button>
+        </div>
+    </div>
+    <div *ngIf="!isRaceMode">
+        <div *ngFor="let t of tiles; let i = index" class="tile-input edge {{t.endDirection}}" [ngStyle]="{left: t.x + 'px', top: t.y + 'px'}">
+            <button *ngIf="canInsertAfter(i)" type="button" (click)="insertLeftCurve(i)"><img src="assets/icons/arrow_turn_left.png"></button>
+            <button *ngIf="canInsertAfter(i)" type="button" (click)="insertStraight(i)"><img src="assets/icons/arrow_up.png"></button>
+            <button *ngIf="canInsertAfter(i)" type="button" (click)="insertRightCurve(i)"><img src="assets/icons/arrow_turn_right.png"></button>
+        </div>
+        <div *ngFor="let t of tiles; let i = index" class="tile-input center" [ngStyle]="{left: t.x + 'px', top: t.y + 'px'}">
+            <button *ngIf="i > 0" type="button" (click)="remove(i)"><img src="assets/icons/cross.png"></button>
+        </div>
+    </div>
+    <div *ngFor="let c of cars" class="car {{c.team}}" [ngClass]="{active: c.active}" [ngStyle]="{left: c.x + 'px', top: c.y + 'px'}"></div>
+</div>

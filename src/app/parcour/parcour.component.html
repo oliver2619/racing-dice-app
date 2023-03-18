@@ -1,2 +1,40 @@
-<app-parcour-physical *ngIf="!raceDigital"></app-parcour-physical>
-<app-parcour-digital *ngIf="raceDigital"></app-parcour-digital>
+<div class="page">
+    <div class="page-header">
+        <app-nav-bar>
+            <div *ngIf="!driving" class="btn-list">
+                <button (click)="clear()" [disabled]="!canClear"><img src="assets/icons/bin.png"></button>
+            </div>
+        </app-nav-bar>
+    </div>
+    <div class="page-content row">
+		<div class="inset resize">
+			<app-parcour-canvas [race-mode]="false" (select)="onSelectTile($event)"></app-parcour-canvas>
+		</div>
+		<div class="form-1 inset">
+			<div class="form-group" [ngClass]="{hidden: !hasSelection}">
+				<label><img src="assets/icons/ruler.png">Länge</label>
+				<div class="btn-group">
+					<button *ngFor="let l of lengthValues" type="button" (click)="setLength(l)" [ngClass]="{checked: length == l}">{{l}}</button>
+				</div>
+			</div>
+			<div class="form-group" [ngClass]="{hidden: !hasCurveSelection}">
+				<label><img src="assets/icons/dashboard.png">Kurve</label>
+				<div class="btn-group">
+					<button *ngFor="let c of curveValues" type="button" (click)="setCurve(c)" [ngClass]="{checked: curve == c}">{{c}}</button>
+				</div>
+			</div>
+			<div class="form-group" [ngClass]="{hidden: !isComplete}">
+				<label><img src="assets/icons/flag_finish.png">Runden</label>
+				<div class="btn-group">
+					<button type="button" (click)="decRounds()" [disabled]="!canDecRounds"><img src="assets/icons/delete.png"></button>
+					<app-number [value]="rounds" [max]="20" [decimals]="0" [width]="2"></app-number>
+					<button type="button" (click)="incRounds()" [disabled]="!canIncRounds"><img src="assets/icons/add.png"></button>
+				</div>
+			</div>
+			<div class="footer-item">
+				<label><img src="assets/icons/ruler.png"></label>
+				<app-number [value]="fields" [decimals]="0" [width]="3"></app-number>
+			</div>
+		</div>
+	</div>
+</div>

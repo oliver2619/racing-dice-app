@@ -3,19 +3,15 @@
         <app-nav-bar></app-nav-bar>
     </div>
     <div class="page-content">
-        <div class="form">
+        <form [formGroup]="formGroup" class="form">
             <label>Sound</label>
             <div class="btn-group">
                 <button [ngClass]="{checked: soundLevel == 0}" (click)="setSoundLevel(0)"><img src="assets/icons/sound_mute.png"></button>
                 <button [ngClass]="{checked: soundLevel == 1}" (click)="setSoundLevel(1)"><img src="assets/icons/sound_none.png"></button>
                 <button [ngClass]="{checked: soundLevel == 2}" (click)="setSoundLevel(2)"><img src="assets/icons/sound.png"></button>
             </div>
-            <label>Rennen</label>
-            <div *ngIf="!driving" class="btn-group">
-                <button [ngClass]="{checked: raceDigital == false}" (click)="setRaceDigital(false)">Real</button>
-                <button [ngClass]="{checked: raceDigital == true}" (click)="setRaceDigital(true)">Digital</button>
-            </div>
-            <div *ngIf="driving" class="error">Einstellung ist deaktiviert, solange ein Rennen läuft.</div>
-        </div>
+            <label for="settings.name">Name</label>
+            <input id="settings.name" type="text" formControlName="name" (change)="onChangeName()">
+        </form>
     </div>
 </div>

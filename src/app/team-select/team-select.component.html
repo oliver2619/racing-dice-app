@@ -3,14 +3,19 @@
         <app-nav-bar><button (click)="about()"><img src="assets/icons/help.png"></button></app-nav-bar>
     </div>
     <div class="page-content">
+        <h1>Wähle den Spielmodus</h1>
+        <div class="btn-group">
+            <button [ngClass]="{checked: mode === 0}" (click)="mode = 0">Einfaches Rennen</button>
+            <button disabled [ngClass]="{checked: mode === 1}" (click)="mode = 1">Weltmeisterschaft</button>
+        </div>
         <h1>Wähle dein Team</h1>
         <div class="btn-group">
-            <button [ngClass]="{checked: team === 0}" (click)="team=0" class="team-select yellow">Renault</button>
-            <button [ngClass]="{checked: team === 1}" (click)="team=1" class="team-select red">Ferrari</button>
-            <button [ngClass]="{checked: team === 2}" (click)="team=2" class="team-select green">Lotus</button>
-            <button [ngClass]="{checked: team === 3}" (click)="team=3" class="team-select blue">BMW</button>
-            <button [ngClass]="{checked: team === 4}" (click)="team=4" class="team-select violet">Honda</button>
-            <button [ngClass]="{checked: team === 5}" (click)="team=5" class="team-select black">Mercedes</button>
+            <button [ngClass]="{checked: team === 0}" (click)="team = 0" class="team-select yellow">Renault</button>
+            <button [ngClass]="{checked: team === 1}" (click)="team = 1" class="team-select red">Ferrari</button>
+            <button [ngClass]="{checked: team === 2}" (click)="team = 2" class="team-select green">Lotus</button>
+            <button [ngClass]="{checked: team === 3}" (click)="team = 3" class="team-select blue">BMW</button>
+            <button [ngClass]="{checked: team === 4}" (click)="team = 4" class="team-select violet">Honda</button>
+            <button [ngClass]="{checked: team === 5}" (click)="team = 5" class="team-select black">Mercedes</button>
         </div>
     </div>
 </div>

@@ -1,76 +1,132 @@
 import { Injectable } from '@angular/core';
-import { Parcour, ParcourElement, ParcourJson } from '../model/parcour';
+import { Parcour } from '../model/parcour';
 import { LocalStoreService } from '../local-store.service';
+import { ParcourJson } from '../model/parcour-json';
+import { CurveLength, CurveTurn, Lane, ParcourElementRotation, StraightLength } from '../model/parcour-types';
+import { ParcourInfo } from '../model/parcour-info';
+import { ParcourElementInfo } from '../model/parcour-element-info';
+import { FieldInfo } from '../model/field-info';
+import { CarPositionInfo } from '../model/car-position-info';
+import { Subject } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class ParcourService {
 
+	readonly onChangeStructure = new Subject<void>();
+
 	private static readonly STORE_KEY: string = 'parcour';
 
-	readonly parcour = new Parcour();
+	private readonly _parcour = new Parcour();
 
-	get elements(): ParcourElement[] {
-		return this.parcour.elements;
+	get elements(): ParcourElementInfo[] {
+		return this._parcour.elements;
+	}
+
+	get fields(): number {
+		return this._parcour.fields;
+	}
+
+	get isComplete(): boolean {
+		return this._parcour.isComplete;
 	}
 
 	get isEmpty(): boolean {
-		return this.parcour.length < 2;
+		return this._parcour.isEmpty;
 	}
 
-	get length(): number {
-		return this.parcour.length;
+	get numberOfElements(): number {
+		return this._parcour.numberOfElements;
+	}
+
+	get parcour(): ParcourInfo {
+		return this._parcour;
 	}
 
 	get rounds(): number {
-		return this.parcour.rounds;
+		return this._parcour.rounds;
 	}
 
 	set rounds(rounds: number) {
-		this.parcour.rounds = rounds;
+		this._parcour.rounds = rounds;
 		this.save();
+	}
+
+	get startElementRotation(): ParcourElementRotation {
+		return this._parcour.startElementRotation;
 	}
 
 	constructor(private readonly localStoreService: LocalStoreService) {
 		const json: ParcourJson = <ParcourJson>this.localStoreService.load(ParcourService.STORE_KEY);
 		if (json !== undefined) {
-			this.parcour.load(json);
+			this._parcour.load(json);
 		}
 	}
 
-	appendStraight(length: number): void {
-		this.parcour.appendStraight(length);
+	appendStraight(afterIndex: number, length: 3 | 4): void {
+		this._parcour.appendStraight(afterIndex, length);
 		this.save();
+		this.onChangeStructure.next();
 	}
 
-	appendCurve(length: number, curve: number): void {
-		this.parcour.appendCurve(length, curve);
+	appendCurve(afterIndex: number, length: 1 | 3 | 4, speed: number, turn: CurveTurn): void {
+		this._parcour.appendCurve(afterIndex, length, speed, turn);
 		this.save();
+		this.onChangeStructure.next();
 	}
 
 	clear(): void {
-		this.parcour.clear();
+		this._parcour.clear();
 		this.save();
+		this.onChangeStructure.next();
 	}
 
-	insert(index: number, element: ParcourElement): void {
-		this.parcour.insert(index, element);
-		this.save();
+	getField(position: CarPositionInfo): FieldInfo {
+		return this._parcour.getField(position);
 	}
 
-	remove(index: number): void {
-		this.parcour.remove(index);
+	remove(i: number): void {
+		this._parcour.remove(i);
 		this.save();
+		this.onChangeStructure.next();
 	}
 
-	replace(index: number, element: ParcourElement): void {
-		this.parcour.replace(index, element);
+	rotateStartElement(rotation: ParcourElementRotation) {
+		this._parcour.rotateStartElement(rotation);
 		this.save();
+		this.onChangeStructure.next();
+	}
+
+	setCurveSpeed(curve: number, speed: number) {
+		const el = this._parcour.elements[curve];
+		if (el.isCurve) {
+			this._parcour.setCurveSpeed(curve, speed);
+			this.save();
+			this.onChangeStructure.next();
+		}
+	}
+
+	setElementLength(element: number, length: CurveLength | StraightLength) {
+		const el = this._parcour.elements[element];
+		if (el.isCurve && el.length !== length) {
+			let speed = 0;
+			if (length === 1) {
+				speed = 11;
+			} else if (length === 4) {
+				speed = 19;
+			} else {
+				speed = 15;
+			}
+			this._parcour.setCurveSpeed(element, speed);
+		}
+		this._parcour.setElementLength(element, length);
+		this.save();
+		this.onChangeStructure.next();
 	}
 
 	private save(): void {
-		const json = this.parcour.save();
+		const json = this._parcour.save();
 		this.localStoreService.save(ParcourService.STORE_KEY, json);
 	}
 }

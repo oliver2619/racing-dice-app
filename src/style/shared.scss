@@ -1,0 +1,29 @@
+@use "sass:math";
+
+$fontFamily: Segoe UI, sans-serif;
+$font-family-mono: 'Courier New', Courier, monospace;
+$boxShadow: 2px;
+$boxShadow2: 1.5rem;
+$buttonTextShadow: .6rem;
+$borderRadius: 1vh;
+$warn-color: #ffa040;
+$critical-color: #ff4040;
+$font-rel-size: 2.2;
+
+$color-yellow: rgb(255,212,0);
+$color-red: rgb(255,4,0);
+$color-green: rgb(21,194,0);
+$color-blue: rgb(44,47,224);
+$color-violet: rgb(128,26,224);
+$color-black: rgb(50,50,50);
+
+@mixin fontSize($factor) {
+    @media all and (max-width: 1023px) {
+        font-size: $font-rel-size * 1vw * $factor;
+    }
+
+    @media all and (min-width: 1024px) {
+        font-size: math.div(1024px * $font-rel-size, 100) * $factor;
+    }
+}
+

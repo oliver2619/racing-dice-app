@@ -1,7 +1,314 @@
+@import "../../style/shared.scss";
+
+$grid-size: 48px;
+
+@mixin rotation {
+	&.r0 {
+		transform: rotate(0deg);
+	}
+
+	&.r1 {
+		transform: rotate(-90deg);
+	}
+
+	&.r2 {
+		transform: rotate(-180deg);
+	}
+
+	&.r3 {
+		transform: rotate(-270deg);
+	}
+}
+
+@mixin tile($img, $width, $height) {
+	@include rotation;
+	position: absolute;
+	width: $grid-size * $width;
+	height: $grid-size * $height;
+	background-image: url("/assets/images/" + $img + ".png");
+	background-size: $grid-size * $width $grid-size * $height;
+}
+
+@mixin conic-gradient($color) {
+	border: 1px solid rgba(black, 0.5);
+	box-shadow: 3px 3px 9px black;
+	background-color: $color;
+	background: conic-gradient(
+		from -45deg,
+		lighten($color, 40%),
+		$color,
+		darken($color, 25%),
+		$color,
+		lighten($color, 40%)
+	);
+}
+
+@mixin conic-gradient-active($color) {
+	border-color: lighten($color, 20%);
+	background-color: lighten($color, 20%);
+	background: conic-gradient(
+		from -45deg,
+		lighten($color, 40%),
+		lighten($color, 20%),
+		lighten($color, 20%),
+		lighten($color, 20%),
+		lighten($color, 40%)
+	);
+	box-shadow: 0 0 9px $color;
+}
+
+@keyframes animate-yellow {
+	from {
+		@include conic-gradient($color-yellow);
+	}
+
+	to {
+		@include conic-gradient-active($color-yellow);
+	}
+}
+
+@keyframes animate-red {
+	from {
+		@include conic-gradient($color-red);
+	}
+
+	to {
+		@include conic-gradient-active($color-red);
+	}
+}
+
+@keyframes animate-green {
+	from {
+		@include conic-gradient($color-green);
+	}
+
+	to {
+		@include conic-gradient-active($color-green);
+	}
+}
+
+@keyframes animate-blue {
+	from {
+		@include conic-gradient($color-blue);
+	}
+
+	to {
+		@include conic-gradient-active($color-blue);
+	}
+}
+
+@keyframes animate-violet {
+	from {
+		@include conic-gradient($color-violet);
+	}
+
+	to {
+		@include conic-gradient-active($color-violet);
+	}
+}
+
+@keyframes animate-black {
+	from {
+		@include conic-gradient($color-black);
+	}
+
+	to {
+		@include conic-gradient-active($color-black);
+	}
+}
+
+@mixin car($color) {
+	position: absolute;
+	margin: $grid-size * 0.1;
+	width: $grid-size * 0.8;
+	height: $grid-size * 0.8;
+	box-sizing: border-box;
+	border-radius: $grid-size * 0.5;
+
+	@include conic-gradient($color);
+
+	&.active {
+		animation-duration: 400ms;
+		animation-iteration-count: infinite;
+		animation-timing-function: ease-in-out;
+		animation-direction: alternate;
+	}
+}
+
 :host {
 	width: 100%;
 	height: 100%;
+	position: relative;
+	overflow: scroll;
+	border: 1px solid black;
+	border-radius: $borderRadius;
+	box-shadow: 0px 0px $boxShadow black;
+	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
-	align-items: stretch;
+	align-items: flex-start;
+	background-color: black;
+}
+
+.parcour {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.g3 {
+	@include tile("g3", 4, 3);
+
+	&.r1,
+	&.r3 {
+		transform: rotate(-90deg) translate(-$grid-size * 0.5, -$grid-size * 0.5);
+	}
+}
+
+.g4 {
+	@include tile("g4", 4, 4);
+}
+
+.k1 {
+	@include tile("k1", 4, 4);
+}
+
+.k3 {
+	@include tile("k3", 4, 4);
+}
+
+.k4 {
+	@include tile("k4", 5, 5);
+}
+
+.z {
+	@include tile("z", 4, 4);
+}
+
+.tile-input {
+	@include rotation;
+	pointer-events: none;
+	position: absolute;
+	width: $grid-size * 4;
+	height: $grid-size * 4;
+	display: flex;
+
+	button {
+		pointer-events: all;
+	}
+
+	&.center {
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+
+	&.edge {
+		flex-direction: row;
+		align-items: flex-start;
+		justify-content: center;
+	}
+}
+
+.selection {
+	pointer-events: none;
+	position: absolute;
+	box-sizing: border-box;
+	border: 2px solid #80ff00;
+	background-color: rgba(white, 0.5);
+}
+
+.speed-tile {
+	pointer-events: none;
+	position: absolute;
+	display: flex;
+	box-sizing: border-box;
+	flex-direction: row;
+	padding: 0.4em;
+
+	&.r0 {
+		align-items: flex-start;
+		justify-content: flex-end;
+	}
+
+	&.r1 {
+		align-items: flex-start;
+		justify-content: flex-start;
+	}
+
+	&.r2 {
+		align-items: flex-end;
+		justify-content: flex-start;
+	}
+
+	&.r3 {
+		align-items: flex-end;
+		justify-content: flex-end;
+	}
+}
+
+.speed {
+	@include fontSize(1);
+	border: 0.35em solid #ff0000;
+	border-radius: 4em;
+	box-shadow: 0 0 3px black, 0 0 8px black, inset 0 0 4px #ff0000;
+	box-sizing: border-box;
+	font-weight: bold;
+	text-shadow: 0 0 3px black;
+	background-color: white;
+	padding: 0.6em;
+}
+
+.car {
+	&.yellow {
+		@include car($color-yellow);
+
+		&.active {
+			animation-name: animate-yellow;
+		}
+	}
+
+	&.red {
+		@include car($color-red);
+
+		&.active {
+			animation-name: animate-red;
+		}
+	}
+
+	&.green {
+		@include car($color-green);
+
+		&.active {
+			animation-name: animate-green;
+		}
+	}
+
+	&.blue {
+		@include car($color-blue);
+
+		&.active {
+			animation-name: animate-blue;
+		}
+	}
+
+	&.violet {
+		@include car($color-violet);
+
+		&.active {
+			animation-name: animate-violet;
+		}
+	}
+
+	&.black {
+		@include car($color-black);
+
+		&.active {
+			animation-name: animate-black;
+		}
+	}
 }

@@ -1,6 +1,6 @@
-import { Parcour } from './parcour';
 import { Car } from './car';
 import { Weather } from './race';
+import { ParcourInfo } from './parcour-info';
 
 export class Benchmark {
 
@@ -11,7 +11,7 @@ export class Benchmark {
 	private distance = 0;
 	private finished = false;
 
-	constructor(private readonly car: Car, private readonly parcour: Parcour, private readonly weather: Weather) { }
+	constructor(private readonly car: Car, private readonly parcour: ParcourInfo, private readonly weather: Weather) { }
 
 	run(): number {
 		let ret = 0;

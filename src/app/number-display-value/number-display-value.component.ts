@@ -41,7 +41,4 @@ export class NumberDisplayValueComponent {
         }
         return ret;
     }
-    
-    constructor() {}
-
 }

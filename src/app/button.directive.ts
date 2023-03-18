@@ -1,4 +1,4 @@
-import { Directive, ElementRef } from '@angular/core';
+import { Directive, ElementRef, HostListener } from '@angular/core';
 import { AudioService } from './audio.service';
 
 @Directive({
@@ -8,14 +8,15 @@ export class ButtonDirective {
 
   private readonly button: HTMLButtonElement;
 
-  constructor(el: ElementRef, audioService: AudioService) {
+  constructor(el: ElementRef<HTMLButtonElement>, private readonly audioService: AudioService) {
     this.button = el.nativeElement;
+  }
 
-    this.button.addEventListener('mousedown', _ => {
-      const cl = this.button.classList;
-      if (cl.contains('checked') || cl.contains('disabled') || cl.contains('silent'))
-        return;
-      audioService.click();
-    });
+  @HostListener('mousedown')
+  onMouseDown() {
+    const cl = this.button.classList;
+    if (cl.contains('checked') || cl.contains('disabled') || cl.contains('silent'))
+      return;
+    this.audioService.click();
   }
 }

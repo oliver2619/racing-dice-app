@@ -2,13 +2,17 @@
     <div class="page-header">
         <app-nav-bar>
             <div class="btn-list">
+                <div *ngIf="!isDriving()" class="btn-group">
+                    <button (click)="startQualifying()"><img src="assets/icons/stopwatch_start.png"></button>
+                    <button (click)="startRace()"><img src="assets/icons/flag_finish.png"></button>
+                </div>
+                <button *ngIf="isDriving()" (click)="stop()"><img src="assets/icons/traffic_lights_red.png"></button>
                 <button class="silent" [ngClass]="{checked: isHorn()}" (click)="horn()"><img src="assets/icons/horn.png"></button>
-                <button [disabled]="!isDriving()" (click)="stop()"><img src="assets/icons/traffic_lights_red.png"></button>
             </div>
         </app-nav-bar>
     </div>
     <div class="page-content">
-    	<app-parcour-canvas></app-parcour-canvas>
+        <app-parcour-canvas [race-mode]="true"></app-parcour-canvas>
     </div>
 </div>
 <app-dialog #question title="Frage">

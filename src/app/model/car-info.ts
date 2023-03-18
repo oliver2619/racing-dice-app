@@ -1,5 +1,7 @@
 import { Weather } from './race';
 import { CarSetupInfo } from './car-setup-info';
+import { Team } from './teams';
+import { CarPositionInfo } from './car-position-info';
 
 export enum JokerState {
 	UNSET, DAMAGE, NO_EFFECT, SUCCESS, DAMAGE_SUCCESS
@@ -33,12 +35,16 @@ export interface CarInfo {
 
 	readonly motorHealth: number;
 
+	readonly position: CarPositionInfo;
+
 	readonly setup: CarSetupInfo;
 
 	readonly speed: number;
 
 	readonly speedJoker: JokerState;
 
+	readonly team: Team;
+	
 	readonly tiresHealth: number;
 
 	readonly totalHealth: number;

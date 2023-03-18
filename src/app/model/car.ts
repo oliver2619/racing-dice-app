@@ -3,6 +3,8 @@ import { Weather } from './race';
 import { CarInfo, JokerState, BrakeJokerState } from './car-info';
 import { CarJson } from './car-json';
 import { Team } from './teams';
+import { Lane } from './parcour-types';
+import { CarPositionInfo } from './car-position-info';
 
 interface UndoElement {
 	speed: number;
@@ -16,6 +18,10 @@ export class Car implements CarInfo {
 
 	fuel: number = Math.floor(CarSetup.maxFuel * .8);
 	curve: number | undefined;
+	tile = 0;
+	field = 0;
+	lane: Lane = Lane.LEFT;
+	isFinished = true;
 
 	private _speed: number = 0;
 	private _curveJoker: JokerState = JokerState.UNSET;
@@ -70,12 +76,26 @@ export class Car implements CarInfo {
 		return Math.max(this._speed - (this._brakeJoker !== BrakeJokerState.UNSET ? 3 : 2), 0);
 	}
 
+	get position(): CarPositionInfo {
+		return { field: this.field, lane: this.lane, tile: this.tile };
+	}
+
+	set position(p: CarPositionInfo) {
+		this.field = p.field;
+		this.lane = p.lane;
+		this.tile = p.tile;
+	}
+
 	get speed(): number {
 		return this._speed;
 	}
 
 	get speedJoker(): JokerState {
 		return this._speedJoker;
+	}
+
+	get team(): Team {
+		return this.setup.team;
 	}
 
 	get tiresHealth(): number {
@@ -86,8 +106,7 @@ export class Car implements CarInfo {
 		return Math.min(this._tiresHealth, this._motorHealth);
 	}
 
-	constructor(readonly setup: CarSetup) {
-	}
+	constructor(readonly setup: CarSetup) { }
 
 	armBrakeJoker(): void {
 		if (this._brakeJoker === BrakeJokerState.UNSET && this.alive) {

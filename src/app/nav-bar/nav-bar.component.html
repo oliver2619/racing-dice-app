@@ -1,11 +1,12 @@
 <div class="nav-bar">
     <div class="btn-group nav-item">
-        <button routerLink="/dice" routerLinkActive="checked"><img src="assets/icons/dice.png"></button>
         <button routerLink="/team" routerLinkActive="checked"><img src="assets/icons/user_racer.png"></button>
-        <button routerLink="/weather" routerLinkActive="checked"><img src="assets/icons/weather_cloudy.png"></button>
-        <button routerLink="/parcour" routerLinkActive="checked"><img src="assets/icons/map.png"></button>
+        <button *ngIf="isSingleRaceMode" routerLink="/weather" routerLinkActive="checked"><img src="assets/icons/weather_cloudy.png"></button>
+        <button *ngIf="isSingleRaceMode" routerLink="/parcour" routerLinkActive="checked"><img src="assets/icons/map.png"></button>
+        <button *ngIf="!isSingleRaceMode" routerLinkActive="checked"><img src="assets/icons/cup_gold.png"></button>
         <button routerLink="/carSetup" routerLinkActive="checked"><img src="assets/icons/wrench_orange.png"></button>
-        <button routerLink="/race" routerLinkActive="checked"><img src="assets/icons/steering_wheel_racing.png"></button>
+        <button *ngIf="isSingleRaceMode" routerLink="/dice" routerLinkActive="checked"><img src="assets/icons/dice.png"></button>
+        <button [disabled]="!canRace" routerLink="/race" routerLinkActive="checked"><img src="assets/icons/steering_wheel_racing.png"></button>
     </div>
     <div class="nav-item">
         <ng-content></ng-content>

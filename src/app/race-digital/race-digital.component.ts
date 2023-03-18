@@ -4,6 +4,7 @@ import { CarSetupService } from '../car-setup/car-setup.service';
 import { DialogComponent } from '../dialog/dialog.component';
 import { TeamService } from '../team-select/team.service';
 import { AudioService } from '../audio.service';
+import { RaceService } from '../race/race.service';
 
 @Component({
 	selector: 'app-race-digital',
@@ -23,7 +24,7 @@ export class RaceDigitalComponent {
 		return this.carSetupService.car;
 	}
 
-	constructor(private carSetupService: CarSetupService, private teamService: TeamService, private audioService: AudioService) { }
+	constructor(private readonly carSetupService: CarSetupService, private readonly teamService: TeamService, private readonly audioService: AudioService, private readonly raceService: RaceService) { }
 
 	horn(): void {
 		this.audioService.horn(this.teamService.team);
@@ -33,11 +34,19 @@ export class RaceDigitalComponent {
 		return this.audioService.hornPlayed;
 	}
 
+	startQualifying() {
+	}
+
+	startRace() {
+		this.raceService.startRace();
+	}
+
 	stop(): void {
 		this.questionDialog?.question().subscribe({
 			next: result => {
 				if (result) {
 					this.carSetupService.stop();
+					this.raceService.stop();
 				}
 			}
 		});

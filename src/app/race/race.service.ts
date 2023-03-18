@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Race, Weather } from '../model/race';
 import { LocalStoreService } from 'src/app/local-store.service';
+import { CarInfo } from '../model/car-info';
+import { ParcourService } from '../parcour/parcour.service';
 
 interface RaceJson {
 	version: number;
@@ -14,37 +16,41 @@ export class RaceService {
 
 	private static readonly STORE_KEY = 'race';
 
-	private _weather: Weather | undefined;
+	private readonly _race: Race = new Race();
 
-	private _race: Race = new Race();
-
-	getRace(): Race {
-		return this._race;
+	get cars(): CarInfo[] {
+		return this._race.cars;
 	}
 
 	get weather(): Weather {
-		if (this._weather === undefined) {
-			throw new Error('No wather set');
-		}
-		return this._weather;
+		return this._race.weather;
 	}
 
 	set weather(weather: Weather) {
-		this._weather = weather;
+		this._race.weather = weather;
 		const json: RaceJson = {
 			version: 1,
-			weather: Weather[this._weather]
+			weather: Weather[this._race.weather]
 		};
 		this.localStoreService.save(RaceService.STORE_KEY, json);
 	}
 
-	constructor(private localStoreService: LocalStoreService) {
+	constructor(private localStoreService: LocalStoreService, parcourService: ParcourService) {
+		this._race.parcour = parcourService.parcour;
 		const data = <RaceJson>localStoreService.load(RaceService.STORE_KEY);
 		if (data !== undefined) {
-			this._weather = (Weather as any)[data.weather];
+			this._race.weather = (Weather as any)[data.weather];
 		} else {
 			this.shuffleWeather(false);
 		}
+	}
+
+	startRace() {
+		this._race.start();
+	}
+
+	stop() {
+		this._race.stop();
 	}
 
 	shuffleWeather(isDriving: boolean): void {

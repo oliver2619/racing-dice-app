@@ -1,23 +1,4 @@
-// variables
-
-$fontFamily: Segoe UI, sans-serif;
-$boxShadow: 2px;
-$boxShadow2: 1.5rem;
-$buttonTextShadow: .6rem;
-$borderRadius: 1vh;
-$warn-color: #ffa040;
-$critical-color: #ff4040;
-$font-rel-size: 2.2;
-
-@mixin fontSize($factor) {
-    @media all and (max-width: 1023px) {
-        font-size: $font-rel-size * 1vw * $factor;
-    }
-
-    @media all and (min-width: 1024px) {
-        font-size: 1024px * $font-rel-size / 100 * $factor;
-    }
-}
+@import "style/shared.scss";
 
 // animations
 
@@ -122,7 +103,7 @@ h1 {
     @include fontSize(1.2);
 }
 
-body, label, button, a.button, .label, h2, .value-progress {
+body, label, button, a.button, .label, input[type=text], h2, .value-progress {
     @include fontSize(1);
 }
 
@@ -153,16 +134,6 @@ canvas.background {
     margin: 0px;
 }
 
-canvas.parcour {
-    display: block;
-	height: 100%;
-	width: 100%;
-	box-sizing: border-box;
-	border: 1px solid black;
-	border-radius: $borderRadius;
-	box-shadow: 0px 0px $boxShadow black;
-}
-
 .page {
     display: flex;
     flex-direction: column;
@@ -190,6 +161,12 @@ canvas.parcour {
     justify-content: space-evenly;
     align-items: center;
     overflow: auto;
+
+    .resize {
+        flex-grow: 1;
+        flex-shrink: 1;
+        align-self: stretch;
+    }
 
 	&.row {
         flex-direction: row;
@@ -269,9 +246,27 @@ canvas.parcour {
 
 .inset {
 	box-sizing: border-box;
-	width: 100%;
-	height: 100%;
 	padding: .25em;
+}
+
+// input
+
+input[type=text] {
+    outline: 0px none black;
+    border: 1px solid black;
+    border-radius: $borderRadius;
+    box-shadow: inset 0 0 1rem rgba(black,.5), inset 0 0 4px black;
+    padding: 0.7ex 0.7em;
+    font-family: $font-family-mono;
+    color: black;
+    text-shadow: 0 0 3px black;
+    background-color: white;
+    background: radial-gradient(circle, white 50%, #c0c0c0 100%);
+
+    &:focus {
+        box-shadow: 0 0 1rem white, inset 0 0 1rem rgba(black,.5), inset 0 0 4px white;
+        border-color: white;
+    }
 }
 
 // buttons
@@ -294,13 +289,13 @@ button, .button {
 	&.large {
         padding: 1em 1em;
 	}
-}
 
-button.checked, .button.checked {
-    background: rgb(255,255,255);
-    background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(208,208,208,1) 100%);
-    box-shadow: 0px 0px $boxShadow white;
-    border-color: white;
+    &.checked {
+        background: rgb(255,255,255);
+        background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(208,208,208,1) 100%);
+        box-shadow: 0px 0px $boxShadow white;
+        border-color: white;
+    }
 }
 
 .disabled, button[disabled], a[disabled] {
@@ -388,11 +383,29 @@ button.checked, .button.checked {
 
 .form {
     display: grid;
-    grid-template-columns: repeat(2, auto);
+    grid-template-columns: auto auto;
     grid-column-gap: 1em;
     grid-row-gap: 1.2ex;
     justify-items: start;
+    justify-content: center;
+    align-content: center;
     align-items: center;
+    align-self: center;
+    flex-grow: 0;
+}
+
+.form-1 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: 1.2ex;
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        row-gap: 0.4ex;
+    }
 }
 
 // image
@@ -420,8 +433,8 @@ img {
 
 .team-select.yellow, .yellow .dialog {
     color: black;
-    background: rgb(255,212,0);
-    background: radial-gradient(circle, rgba(255,212,0,1) 0%, rgba(215,179,0,1) 100%);
+    background: $color-yellow;
+    background: radial-gradient(circle, $color-yellow 0%, rgba(215,179,0,1) 100%);
 
     &.checked {
         background: rgb(255,244,203);
@@ -434,8 +447,8 @@ img {
 
 .team-select.red, .red .dialog {
     color: black;
-    background: rgb(255,4,0);
-    background: radial-gradient(circle, rgba(255,4,0,1) 0%, rgba(214,3,0,1) 100%);
+    background: $color-red;
+    background: radial-gradient(circle, $color-red 0%, rgba(214,3,0,1) 100%);
 
     &.checked {
         background: rgb(255,92,90);
@@ -448,8 +461,8 @@ img {
 
 .team-select.green, .green .dialog {
     color: black;
-    background: rgb(21,194,0);
-    background: radial-gradient(circle, rgba(21,194,0,1) 0%, rgba(26,130,13,1) 100%);
+    background: $color-green;
+    background: radial-gradient(circle, $color-green 0%, rgba(26,130,13,1) 100%);
 
     &.checked {
         background: rgb(158,255,147);
@@ -462,8 +475,8 @@ img {
 
 .team-select.blue, .blue .dialog {
     color: white;
-    background: rgb(44,47,224);
-    background: radial-gradient(circle, rgba(44,47,224,1) 0%, rgba(47,48,110,1) 100%);
+    background: $color-blue;
+    background: radial-gradient(circle, $color-blue 0%, rgba(47,48,110,1) 100%);
 
     &.checked {
         color: black;
@@ -477,8 +490,8 @@ img {
 
 .team-select.violet, .violet .dialog {
     color: white;
-    background: rgb(128,26,224);
-    background: radial-gradient(circle, rgba(128,26,224,1) 0%, rgba(69,32,103,1) 100%);
+    background: $color-violet;
+    background: radial-gradient(circle, $color-violet 0%, rgba(69,32,103,1) 100%);
 
     &.checked {
         color: black;
@@ -492,8 +505,8 @@ img {
 
 .team-select.black, .black .dialog {
     color: white;
-    background: rgb(50,50,50);
-    background: radial-gradient(circle, rgba(50,50,50,1) 0%, rgba(0,0,0,1) 100%);
+    background: $color-black;
+    background: radial-gradient(circle, $color-black 0%, rgba(0,0,0,1) 100%);
 
     &.checked {
         color: black;
@@ -529,6 +542,10 @@ img {
 }
 
 // other
+
+.hidden {
+    visibility: hidden;
+}
 
 label, div.label {
     display: inline;

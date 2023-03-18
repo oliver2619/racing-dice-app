@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { AppService, GameMode } from '../app.service';
 import { DialogComponent } from '../dialog/dialog.component';
 import { TeamService } from './team.service';
 
@@ -12,7 +13,15 @@ export class TeamSelectComponent {
 	@ViewChild(DialogComponent)
 	private dlgTeams: DialogComponent | undefined;
 
-	constructor(private readonly teamService: TeamService) { }
+	constructor(private readonly teamService: TeamService, private readonly appService: AppService) { }
+
+	get mode(): GameMode {
+		return this.appService.mode;
+	}
+
+	set mode(m: GameMode) {
+		this.appService.setMode(m);
+	}
 
 	get team(): number {
 		return this.teamService.team;

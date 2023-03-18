@@ -7,8 +7,8 @@ import { TeamService } from '../team-select/team.service';
 import { RaceService } from '../race/race.service';
 import { CarInfo } from '../model/car-info';
 import { CarJson } from '../model/car-json';
-import { Parcour } from '../model/parcour';
 import { Benchmark } from '../model/benchmark';
+import { ParcourInfo } from '../model/parcour-info';
 
 interface CarListAndTeamSetupJson {
 	version: number;
@@ -67,7 +67,7 @@ export class CarSetupService {
 		this.save();
 	}
 
-	benchmark(parcour: Parcour): number {
+	benchmark(parcour: ParcourInfo): number {
 		const car = this._car[this.teamService.team].clone();
 		const b = new Benchmark(car, parcour, this.raceService.weather);
 		return b.run();
